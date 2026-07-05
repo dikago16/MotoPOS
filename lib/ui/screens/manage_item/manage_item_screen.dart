@@ -327,7 +327,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              item.itemCode,
+                              '${item.itemCode} • ${item.category}',
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: _kTxtMid,
