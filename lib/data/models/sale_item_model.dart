@@ -1,12 +1,14 @@
 class SaleItemModel {
   final String id;
   final String name;
+  final String category;
   final double price;
   int quantity;
 
   SaleItemModel({
     required this.id,
     required this.name,
+    this.category = '',
     required this.price,
     this.quantity = 1,
   });

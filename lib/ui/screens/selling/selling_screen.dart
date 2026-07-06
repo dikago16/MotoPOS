@@ -4,6 +4,12 @@ import 'package:intl/intl.dart';
 import '../../../providers/selling_provider.dart';
 import '../manage_item/manage_item_screen.dart';
 import '../manage_category/manage_category_screen.dart';
+import '../../../data/db_helper.dart';
+import '../../../data/models/product_model.dart';
+import '../../../data/models/sale_item_model.dart';
+import 'payment_dialog.dart';
+import '../../../data/models/transaction_model.dart';
+import '../../../data/models/transaction_item_model.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -36,18 +42,32 @@ class SellingScreen extends StatefulWidget {
 }
 
 class _SellingScreenState extends State<SellingScreen> {
-  final TextEditingController _itemInputController = TextEditingController();
-  final TextEditingController _cashController = TextEditingController();
+  TextEditingController? _autoCompleteController;
+  List<Product> _products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts();
+  }
+
+  Future<void> _fetchProducts() async {
+    final products = await DBHelper.getProducts();
+    setState(() {
+      _products = products;
+    });
+  }
 
   @override
   void dispose() {
-    _itemInputController.dispose();
-    _cashController.dispose();
+    _autoCompleteController?.dispose();
     super.dispose();
   }
 
   String _formatRupiah(double v) =>
       'Rp ${NumberFormat('#,###', 'id_ID').format(v)}';
+
+  String _formatNumber(double v) => NumberFormat('#,###', 'id_ID').format(v);
 
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
@@ -119,22 +139,25 @@ class _SellingScreenState extends State<SellingScreen> {
         child: Column(
           children: [
             Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildFormCard(),
-                  const SizedBox(height: 10),
-                  _buildItemsTable(),
-                  const SizedBox(height: 8),
-                ],
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFormCard(),
+                    const SizedBox(height: 10),
+                    _buildItemsTable(),
+                    const SizedBox(height: 8),
+                  ],
+                ),
               ),
             ),
-          ),
-          _buildBottomBar(),
-        ],
-      ),
+            _buildBottomBar(),
+          ],
+        ),
       ),
     );
   }
@@ -174,21 +197,23 @@ class _SellingScreenState extends State<SellingScreen> {
         PopupMenuButton<String>(
           icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
           color: _kBgCard,
-          onSelected: (value) {
+          onSelected: (value) async {
             if (value == 'manage_item') {
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ManageItemScreen(),
                 ),
               );
+              _fetchProducts();
             } else if (value == 'manage_category') {
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ManageCategoryScreen(),
                 ),
               );
+              _fetchProducts();
             }
           },
           itemBuilder: (BuildContext context) {
@@ -231,10 +256,132 @@ class _SellingScreenState extends State<SellingScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: TextFormField(
-                  controller: _itemInputController,
-                  style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco('Code / Name'),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Autocomplete<Product>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<Product>.empty();
+                        }
+                        final query = textEditingValue.text.toLowerCase();
+                        return _products.where((Product product) {
+                          return product.itemName.toLowerCase().contains(
+                                query,
+                              ) ||
+                              product.itemCode.toLowerCase().contains(query);
+                        });
+                      },
+                      displayStringForOption: (Product option) =>
+                          option.itemName,
+                      onSelected: (Product selection) {
+                        final provider = context.read<SellingProvider>();
+                        provider.addItem(
+                          SaleItemModel(
+                            id: selection.id.toString(),
+                            name: selection.itemName,
+                            category: selection.category,
+                            price: selection.sellingPrice,
+                            quantity: 1,
+                          ),
+                        );
+                        // Clear the input after selection
+                        Future.delayed(Duration.zero, () {
+                          _autoCompleteController?.clear();
+                        });
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                            _autoCompleteController = controller;
+                            return TextFormField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: _inputDeco(
+                                'Code / Name (Type to search)',
+                              ),
+                              onEditingComplete: onEditingComplete,
+                            );
+                          },
+                      optionsViewBuilder: (context, onSelected, options) {
+                        return Align(
+                          alignment: Alignment.topLeft,
+                          child: Material(
+                            elevation: 4,
+                            borderRadius: BorderRadius.circular(6),
+                            child: Container(
+                              width: constraints.maxWidth,
+                              constraints: const BoxConstraints(maxHeight: 250),
+                              decoration: BoxDecoration(
+                                color: _kBgCard,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: _kBorder),
+                              ),
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: options.length,
+                                separatorBuilder: (context, index) =>
+                                    const Divider(height: 1, color: _kBorder),
+                                itemBuilder: (context, index) {
+                                  final Product option = options.elementAt(
+                                    index,
+                                  );
+                                  return InkWell(
+                                    onTap: () {
+                                      onSelected(option);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 10,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  option.itemName,
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: _kTxtHigh,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  option.category,
+                                                  style: const TextStyle(
+                                                    fontSize: 10,
+                                                    color: _kTxtMid,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Text(
+                                            'Rp ${NumberFormat('#,###', 'id_ID').format(option.sellingPrice)}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              color: _kAccent,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 8),
@@ -349,7 +496,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                'Line ${idx + 1}',
+                                item.category,
                                 style: const TextStyle(
                                   fontSize: 9,
                                   color: _kTxtLow,
@@ -390,7 +537,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              _formatRupiah(item.price),
+                              _formatNumber(item.price),
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: _kTxtMid,
@@ -403,7 +550,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              _formatRupiah(item.total),
+                              _formatNumber(item.total),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -454,7 +601,7 @@ class _SellingScreenState extends State<SellingScreen> {
                       border: Border.all(color: _kBorderMid),
                     ),
                     child: Text(
-                      '${items.length} Line${items.length != 1 ? 's' : ''}',
+                      '${items.length} Items${items.length != 1 ? 's' : ''}',
                       style: const TextStyle(
                         fontSize: 10,
                         color: _kTxtMid,
@@ -474,7 +621,7 @@ class _SellingScreenState extends State<SellingScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    _formatRupiah(provider.totalAmount),
+                    _formatNumber(provider.totalAmount),
                     style: const TextStyle(
                       fontSize: 14,
                       color: _kAccent,
@@ -528,70 +675,30 @@ class _SellingScreenState extends State<SellingScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'TOTAL',
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: _kTxtLow,
-                        letterSpacing: 0.6,
-                        fontWeight: FontWeight.w600,
-                      ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    'TOTAL',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: _kTxtLow,
+                      letterSpacing: 0.6,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      _formatRupiah(provider.totalAmount),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: _kTxtHigh,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: TextFormField(
-                  controller: _cashController,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
                   ),
-                  decoration: _inputDeco('Cash (Rp)'),
-                  onChanged: (val) {
-                    provider.updateCash(val);
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Text(
-                'CHANGE :',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: _kTxtMid,
-                  letterSpacing: 0.6,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                _formatRupiah(provider.changeAmount),
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: _kAccent,
-                  fontWeight: FontWeight.w800,
-                ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _formatRupiah(provider.totalAmount),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: _kTxtHigh,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -602,8 +709,8 @@ class _SellingScreenState extends State<SellingScreen> {
                 onTap: () {},
                 borderRadius: BorderRadius.circular(6),
                 child: Container(
-                  height: 46,
-                  width: 46,
+                  height: 38,
+                  width: 38,
                   decoration: BoxDecoration(
                     color: _kAccentSoft,
                     borderRadius: BorderRadius.circular(6),
@@ -615,11 +722,10 @@ class _SellingScreenState extends State<SellingScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: SizedBox(
-                  height: 46,
+                  height: 38,
                   child: ElevatedButton(
                     onPressed: () {
                       provider.clearTransaction();
-                      _cashController.clear();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _kBgPage,
@@ -644,9 +750,51 @@ class _SellingScreenState extends State<SellingScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: SizedBox(
-                  height: 46,
+                  height: 38,
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: provider.items.isEmpty ? null : () async {
+                      final result = await showDialog<Map<String, dynamic>>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => PaymentDialog(totalAmount: provider.totalAmount),
+                      );
+
+                      if (result != null) {
+                        final double cashAmount = result['cashAmount'];
+                        final String vehicleNo = result['vehicleNo'];
+
+                        // User confirmed payment
+                        final trx = TransactionModel(
+                          transactionDate: DateTime.now().toIso8601String(),
+                          totalAmount: provider.totalAmount,
+                          cashAmount: cashAmount,
+                          changeAmount: cashAmount - provider.totalAmount,
+                          vehicleNo: vehicleNo.isEmpty ? null : vehicleNo,
+                        );
+                        
+                        final items = provider.items.map((item) => TransactionItemModel(
+                          transactionId: 0,
+                          itemName: item.name,
+                          category: item.category,
+                          price: item.price,
+                          quantity: item.quantity,
+                          subtotal: item.total,
+                        )).toList();
+
+                        await DBHelper.saveTransaction(trx, items);
+                        provider.clearTransaction();
+                        
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Transaksi Berhasil!'),
+                              backgroundColor: Colors.green,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    },
                     icon: const Icon(Icons.check, size: 16),
                     label: const Text(
                       'PROCESS',

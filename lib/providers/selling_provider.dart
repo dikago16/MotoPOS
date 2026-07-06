@@ -18,7 +18,12 @@ class SellingProvider with ChangeNotifier {
   }
 
   void addItem(SaleItemModel item) {
-    _items.add(item);
+    final existingIndex = _items.indexWhere((element) => element.id == item.id);
+    if (existingIndex != -1) {
+      _items[existingIndex].quantity += item.quantity;
+    } else {
+      _items.add(item);
+    }
     notifyListeners();
   }
 

@@ -7,9 +7,7 @@ import 'core/constants/app_colors.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => SellingProvider()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => SellingProvider())],
       child: const MyApp(),
     ),
   );
@@ -21,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MotoPOS',
+      title: 'Moto POS',
       theme: ThemeData(
         primaryColor: AppColors.primary,
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),

@@ -2,12 +2,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'models/product_model.dart';
 import 'models/category_model.dart';
+import 'models/transaction_model.dart';
+import 'models/transaction_item_model.dart';
 
 class DBHelper {
   static Database? _db;
-  static const int _version = 3;
+  static const int _version = 5;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
+  static const String _transactionTable = 'transactions';
+  static const String _transactionItemsTable = 'transaction_items';
 
   static Future<Database> get db async {
     if (_db != null) return _db!;
@@ -51,6 +55,31 @@ class DBHelper {
           )
           ''',
         );
+        await db.execute(
+          '''
+          CREATE TABLE $_transactionTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transactionDate TEXT,
+            totalAmount REAL,
+            cashAmount REAL,
+            changeAmount REAL,
+            vehicleNo TEXT
+          )
+          ''',
+        );
+        await db.execute(
+          '''
+          CREATE TABLE $_transactionItemsTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transactionId INTEGER,
+            itemName TEXT,
+            category TEXT,
+            price REAL,
+            quantity INTEGER,
+            subtotal REAL
+          )
+          ''',
+        );
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -67,6 +96,38 @@ class DBHelper {
         if (oldVersion < 3) {
           await db.execute(
             'ALTER TABLE $_tableName ADD COLUMN category TEXT DEFAULT "uncategorized"',
+          );
+        }
+        if (oldVersion < 4) {
+          await db.execute(
+            '''
+            CREATE TABLE $_transactionTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              transactionDate TEXT,
+              totalAmount REAL,
+              cashAmount REAL,
+              changeAmount REAL,
+              vehicleNo TEXT
+            )
+            ''',
+          );
+          await db.execute(
+            '''
+            CREATE TABLE $_transactionItemsTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              transactionId INTEGER,
+              itemName TEXT,
+              category TEXT,
+              price REAL,
+              quantity INTEGER,
+              subtotal REAL
+            )
+            ''',
+          );
+        }
+        if (oldVersion < 5) {
+          await db.execute(
+            'ALTER TABLE $_transactionTable ADD COLUMN vehicleNo TEXT',
           );
         }
       },
@@ -175,5 +236,20 @@ class DBHelper {
       int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
       return 'CAT${nextNumber.toString().padLeft(5, '0')}';
     }
+  }
+
+  // --- Transactions ---
+
+  static Future<int> saveTransaction(TransactionModel transaction, List<TransactionItemModel> items) async {
+    final dbClient = await db;
+    return await dbClient.transaction((txn) async {
+      int id = await txn.insert(_transactionTable, transaction.toMap());
+      for (var item in items) {
+        var itemMap = item.toMap();
+        itemMap['transactionId'] = id;
+        await txn.insert(_transactionItemsTable, itemMap);
+      }
+      return id;
+    });
   }
 }
