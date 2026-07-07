@@ -27,6 +27,7 @@ class ItemDetailScreen extends StatefulWidget {
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   bool _autoItemCode = true;
+  bool _isSaving = false;
   bool _countStock = false;
   String _discountType = 'Percent';
   String _generatedCode = '';
@@ -613,49 +614,82 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             child: SizedBox(
               height: 40,
               child: ElevatedButton.icon(
-                onPressed: () async {
-                  if (_itemNameCtrl.text.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Item name cannot be empty!'),
-                        backgroundColor: Colors.red.shade600,
-                      ),
-                    );
-                    return;
-                  }
+                onPressed: _isSaving
+                    ? null
+                    : () async {
+                        if (_itemNameCtrl.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('Item name cannot be empty!'),
+                              backgroundColor: Colors.red.shade600,
+                            ),
+                          );
+                          return;
+                        }
 
-                  final product = Product(
-                    id: widget.product?.id,
-                    itemCode: _itemCodeCtrl.text,
-                    itemName: _itemNameCtrl.text,
-                    category: _selectedCategory,
-                    buyingPrice: double.tryParse(_buyingPriceCtrl.text) ?? 0,
-                    packetBuyPrice:
-                        double.tryParse(_packetBuyPriceCtrl.text) ?? 0,
-                    packetBuyQty: int.tryParse(_packetBuyQtyCtrl.text) ?? 0,
-                    sellingPrice: double.tryParse(_sellingPriceCtrl.text) ?? 0,
-                    packetSellPrice:
-                        double.tryParse(_packetSellPriceCtrl.text) ?? 0,
-                    packetSellQty: int.tryParse(_packetSellQtyCtrl.text) ?? 0,
-                    discountType: _discountType,
-                    discountValue:
-                        double.tryParse(_discountValueCtrl.text) ?? 0,
-                    unit: _unitCtrl.text,
-                    isCountStock: _countStock,
-                    stockQty: int.tryParse(_stockQtyCtrl.text) ?? 0,
-                  );
-                  if (widget.product != null) {
-                    await DBHelper.updateProduct(product);
-                  } else {
-                    await DBHelper.insertProduct(product);
-                  }
-                  if (!mounted) return;
-                  Navigator.pop(context, true);
-                },
-                icon: const Icon(Icons.check, size: 16),
-                label: const Text(
-                  'SAVE',
-                  style: TextStyle(
+                        setState(() => _isSaving = true);
+
+                        try {
+                          final product = Product(
+                            id: widget.product?.id,
+                            itemCode: _itemCodeCtrl.text,
+                            itemName: _itemNameCtrl.text,
+                            category: _selectedCategory,
+                            buyingPrice: double.tryParse(_buyingPriceCtrl.text) ?? 0,
+                            packetBuyPrice:
+                                double.tryParse(_packetBuyPriceCtrl.text) ?? 0,
+                            packetBuyQty: int.tryParse(_packetBuyQtyCtrl.text) ?? 0,
+                            sellingPrice: double.tryParse(_sellingPriceCtrl.text) ?? 0,
+                            packetSellPrice:
+                                double.tryParse(_packetSellPriceCtrl.text) ?? 0,
+                            packetSellQty: int.tryParse(_packetSellQtyCtrl.text) ?? 0,
+                            discountType: _discountType,
+                            discountValue:
+                                double.tryParse(_discountValueCtrl.text) ?? 0,
+                            unit: _unitCtrl.text,
+                            isCountStock: _countStock,
+                            stockQty: int.tryParse(_stockQtyCtrl.text) ?? 0,
+                          );
+                          if (widget.product != null) {
+                            await DBHelper.updateProduct(product);
+                          } else {
+                            await DBHelper.insertProduct(product);
+                          }
+                          
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Item saved successfully!'),
+                              backgroundColor: Color(0xFF16A34A),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                          Navigator.pop(context, true);
+                        } catch (e) {
+                          if (!mounted) return;
+                          setState(() => _isSaving = false);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Failed to save item: $e'),
+                              backgroundColor: const Color(0xFFDC2626),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      },
+                icon: _isSaving
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.check, size: 16),
+                label: Text(
+                  _isSaving ? 'SAVING...' : 'SAVE',
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,

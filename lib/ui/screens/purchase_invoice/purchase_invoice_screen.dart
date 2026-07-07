@@ -50,7 +50,6 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
   @override
   void dispose() {
-    _autoCompleteController?.dispose();
     _notesCtrl.dispose();
     super.dispose();
   }
@@ -183,7 +182,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
       if (!mounted) return;
       _showSnackBar('Invoice $_invoiceCode saved successfully!');
-      _clearForm();
+      Navigator.pop(context, true);
     } catch (e) {
       _showSnackBar('Failed to save: $e', isError: true);
     } finally {

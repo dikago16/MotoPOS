@@ -25,6 +25,7 @@ class CategoryDetailScreen extends StatefulWidget {
 
 class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   bool _autoCategoryCode = true;
+  bool _isSaving = false;
   String _generatedCode = '';
 
   final _categoryCodeCtrl = TextEditingController();
@@ -293,34 +294,67 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
             child: SizedBox(
               height: 40,
               child: ElevatedButton.icon(
-                onPressed: () async {
-                  if (_categoryNameCtrl.text.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Category name cannot be empty!'),
-                        backgroundColor: Colors.red.shade600,
-                      ),
-                    );
-                    return;
-                  }
+                onPressed: _isSaving
+                    ? null
+                    : () async {
+                        if (_categoryNameCtrl.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('Category name cannot be empty!'),
+                              backgroundColor: Colors.red.shade600,
+                            ),
+                          );
+                          return;
+                        }
 
-                  final category = CategoryModel(
-                    id: widget.category?.id,
-                    categoryCode: _categoryCodeCtrl.text,
-                    categoryName: _categoryNameCtrl.text,
-                  );
-                  if (widget.category != null) {
-                    await DBHelper.updateCategory(category);
-                  } else {
-                    await DBHelper.insertCategory(category);
-                  }
-                  if (!mounted) return;
-                  Navigator.pop(context, true);
-                },
-                icon: const Icon(Icons.check, size: 16),
-                label: const Text(
-                  'SAVE',
-                  style: TextStyle(
+                        setState(() => _isSaving = true);
+
+                        try {
+                          final category = CategoryModel(
+                            id: widget.category?.id,
+                            categoryCode: _categoryCodeCtrl.text,
+                            categoryName: _categoryNameCtrl.text,
+                          );
+                          if (widget.category != null) {
+                            await DBHelper.updateCategory(category);
+                          } else {
+                            await DBHelper.insertCategory(category);
+                          }
+                          
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Category saved successfully!'),
+                              backgroundColor: Color(0xFF16A34A),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                          Navigator.pop(context, true);
+                        } catch (e) {
+                          if (!mounted) return;
+                          setState(() => _isSaving = false);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Failed to save category: $e'),
+                              backgroundColor: const Color(0xFFDC2626),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      },
+                icon: _isSaving
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.check, size: 16),
+                label: Text(
+                  _isSaving ? 'SAVING...' : 'SAVE',
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,

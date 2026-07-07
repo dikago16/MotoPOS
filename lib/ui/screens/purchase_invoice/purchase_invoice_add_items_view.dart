@@ -122,14 +122,6 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
               ],
             ),
           ),
-          InkWell(
-            onTap: onGoBack,
-            borderRadius: BorderRadius.circular(4),
-            child: const Padding(
-              padding: EdgeInsets.all(2),
-              child: Icon(Icons.edit, size: 12, color: kAccent),
-            ),
-          ),
         ],
       ),
     );
@@ -309,8 +301,8 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                _colHeader('ITEM', flex: 4),
-                _colHeaderCenter('QTY', flex: 1),
+                _colHeader('ITEM', flex: 3),
+                _colHeaderCenter('QTY', flex: 2),
                 _colHeaderRight('PRICE', flex: 3),
                 _colHeaderRight('SUBTOTAL', flex: 3),
                 const SizedBox(width: 26),
@@ -354,7 +346,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 4,
+                          flex: 3,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -380,7 +372,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Center(
                             child: InkWell(
                               onTap: () => onShowQtyDialog(idx, item),
@@ -405,6 +397,8 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                                     fontWeight: FontWeight.w800,
                                   ),
                                   textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
                                 ),
                               ),
                             ),

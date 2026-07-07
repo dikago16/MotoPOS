@@ -5,7 +5,7 @@ import '../../../providers/selling_provider.dart';
 import '../manage_item/manage_item_screen.dart';
 import '../manage_category/manage_category_screen.dart';
 import '../manage_supplier/manage_supplier_screen.dart';
-import '../purchase_invoice/purchase_invoice_screen.dart';
+import '../purchase_invoice/manage_purchase_invoice_screen.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/sale_item_model.dart';
@@ -195,7 +195,7 @@ class _SellingScreenState extends State<SellingScreen> {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PurchaseInvoiceScreen(),
+                  builder: (context) => const ManagePurchaseInvoiceScreen(),
                 ),
               );
               _fetchProducts();
