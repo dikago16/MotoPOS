@@ -14,6 +14,7 @@ import '../daily_report/daily_report_screen.dart';
 import '../transaction_history/transaction_history_screen.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
+import '../manage_customer/manage_customer_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -215,7 +216,14 @@ class _SellingScreenState extends State<SellingScreen> {
           icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
           color: _kBgCard,
           onSelected: (value) async {
-            if (value == 'manage_item') {
+            if (value == 'manage_customer') {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ManageCustomerScreen(),
+                ),
+              );
+            } else if (value == 'manage_item') {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -265,6 +273,13 @@ class _SellingScreenState extends State<SellingScreen> {
           },
           itemBuilder: (BuildContext context) {
             return [
+              const PopupMenuItem(
+                value: 'manage_customer',
+                child: Text(
+                  'Manage Customer',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
               const PopupMenuItem(
                 value: 'manage_item',
                 child: Text(

@@ -7,10 +7,11 @@ import 'models/transaction_item_model.dart';
 import 'models/supplier_model.dart';
 import 'models/purchase_invoice_model.dart';
 import 'models/purchase_invoice_item_model.dart';
+import 'models/customer_model.dart';
 
 class DBHelper {
   static Database? _db;
-  static const int _version = 7;
+  static const int _version = 8;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
   static const String _transactionTable = 'transactions';
@@ -18,6 +19,7 @@ class DBHelper {
   static const String _supplierTable = 'suppliers';
   static const String _purchaseInvoiceTable = 'purchase_invoices';
   static const String _purchaseInvoiceItemsTable = 'purchase_invoice_items';
+  static const String _customerTable = 'customers';
 
   static Future<Database> get db async {
     if (_db != null) return _db!;
@@ -212,6 +214,21 @@ class DBHelper {
               quantity INTEGER,
               buyingPrice REAL,
               subtotal REAL
+            )
+            ''',
+          );
+        }
+        if (oldVersion < 8) {
+          await db.execute(
+            '''
+            CREATE TABLE $_customerTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              customerCode TEXT,
+              name TEXT,
+              phone TEXT,
+              vehicleNo TEXT,
+              vehicleType TEXT,
+              address TEXT
             )
             ''',
           );
@@ -560,6 +577,58 @@ class DBHelper {
       String numberPart = lastCode.substring(4);
       int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
       return 'PINV${nextNumber.toString().padLeft(5, '0')}';
+    }
+  }
+
+  // --- Customers ---
+
+  static Future<int> insertCustomer(CustomerModel customer) async {
+    final dbClient = await db;
+    return await dbClient.insert(
+      _customerTable,
+      customer.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<int> updateCustomer(CustomerModel customer) async {
+    final dbClient = await db;
+    return await dbClient.update(
+      _customerTable,
+      customer.toMap(),
+      where: 'id = ?',
+      whereArgs: [customer.id],
+    );
+  }
+
+  static Future<int> deleteCustomer(int id) async {
+    final dbClient = await db;
+    return await dbClient.delete(
+      _customerTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  static Future<List<CustomerModel>> getCustomers() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(_customerTable);
+    return List.generate(maps.length, (i) {
+      return CustomerModel.fromMap(maps[i]);
+    });
+  }
+
+  static Future<String> getNextCustomerCode() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT customerCode FROM $_customerTable WHERE customerCode LIKE "CUST%" ORDER BY id DESC LIMIT 1');
+    if (result.isEmpty) {
+      return 'CUST00001';
+    } else {
+      String lastCode = result.first['customerCode'] as String;
+      String numberPart = lastCode.substring(4);
+      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+      return 'CUST${nextNumber.toString().padLeft(5, '0')}';
     }
   }
 }

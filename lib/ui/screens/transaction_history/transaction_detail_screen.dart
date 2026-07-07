@@ -7,7 +7,6 @@ import '../../../data/db_helper.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
 const _kBgPage = Color(0xFFF1F5F9);
 const _kBgCard = Color(0xFFFFFFFF);
 const _kBorder = Color(0xFFE2E8F0);
@@ -46,7 +45,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   }
 
   Future<void> _fetchItems() async {
-    final items = await DBHelper.getTransactionItems(widget.transaction.id ?? 0);
+    final items = await DBHelper.getTransactionItems(
+      widget.transaction.id ?? 0,
+    );
     setState(() {
       _items = items;
       _isLoading = false;
@@ -127,7 +128,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     const Text('VEHICLE NO.', style: _kColHeader),
                     const SizedBox(height: 4),
                     Text(
-                      (widget.transaction.vehicleNo == null || widget.transaction.vehicleNo!.isEmpty)
+                      (widget.transaction.vehicleNo == null ||
+                              widget.transaction.vehicleNo!.isEmpty)
                           ? '-'
                           : widget.transaction.vehicleNo!,
                       style: const TextStyle(
@@ -317,20 +319,20 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   }
 
   Widget _colHeader(String label, {required int flex}) => Expanded(
-        flex: flex,
-        child: Text(label, style: _kColHeader),
-      );
+    flex: flex,
+    child: Text(label, style: _kColHeader),
+  );
 
   Widget _colHeaderCenter(String label, {required int flex}) => Expanded(
-        flex: flex,
-        child: Center(child: Text(label, style: _kColHeader)),
-      );
+    flex: flex,
+    child: Center(child: Text(label, style: _kColHeader)),
+  );
 
   Widget _colHeaderRight(String label, {required int flex}) => Expanded(
-        flex: flex,
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Text(label, style: _kColHeader),
-        ),
-      );
+    flex: flex,
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: Text(label, style: _kColHeader),
+    ),
+  );
 }
