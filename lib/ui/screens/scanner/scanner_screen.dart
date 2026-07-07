@@ -1,0 +1,256 @@
+import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+
+const Color _kAccent = Color(0xFF00B0FF);
+const Color _kBgPage = Color(0xFFF8F9FA);
+
+class ScannerScreen extends StatefulWidget {
+  const ScannerScreen({super.key});
+
+  @override
+  State<ScannerScreen> createState() => _ScannerScreenState();
+}
+
+class _ScannerScreenState extends State<ScannerScreen> {
+  final MobileScannerController cameraController = MobileScannerController();
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    cameraController.dispose();
+    super.dispose();
+  }
+
+  void _onDetect(BarcodeCapture capture) {
+    if (_isDisposed) return;
+    
+    final List<Barcode> barcodes = capture.barcodes;
+    if (barcodes.isNotEmpty) {
+      final String? code = barcodes.first.rawValue;
+      if (code != null) {
+        _isDisposed = true; // Prevent multiple pops
+        Navigator.pop(context, code);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Scan Barcode', style: TextStyle(color: Colors.white, fontSize: 16)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          MobileScanner(
+            controller: cameraController,
+            onDetect: _onDetect,
+          ),
+          // Scanner overlay box
+          Container(
+            decoration: ShapeDecoration(
+              shape: QrScannerOverlayShape(
+                borderColor: _kAccent,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 10,
+                cutOutSize: MediaQuery.of(context).size.width * 0.7,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 60,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'Align barcode within the frame',
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// A custom shape for the scanner overlay
+class QrScannerOverlayShape extends ShapeBorder {
+  QrScannerOverlayShape({
+    this.borderColor = Colors.blue,
+    this.borderWidth = 3.0,
+    this.overlayColor = const Color.fromRGBO(0, 0, 0, 80),
+    this.borderRadius = 0,
+    this.borderLength = 40,
+    this.cutOutSize = 250,
+    this.cutOutBottomOffset = 0,
+  }) : assert(borderLength <= cutOutSize / 2 + borderWidth * 2,
+            "Border can't be larger than ${cutOutSize / 2 + borderWidth * 2}");
+
+  final Color borderColor;
+  final double borderWidth;
+  final Color overlayColor;
+  final double borderRadius;
+  final double borderLength;
+  final double cutOutSize;
+  final double cutOutBottomOffset;
+
+  @override
+  EdgeInsetsGeometry get dimensions => const EdgeInsets.all(10.0);
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    return Path()
+      ..fillType = PathFillType.evenOdd
+      ..addPath(getOuterPath(rect), Offset.zero);
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
+    Path _getLeftTopPath(Rect rect) {
+      return Path()
+        ..moveTo(rect.left, rect.bottom)
+        ..lineTo(rect.left, rect.top)
+        ..lineTo(rect.right, rect.top);
+    }
+
+    return _getLeftTopPath(rect)
+      ..lineTo(
+        rect.right,
+        rect.bottom,
+      )
+      ..lineTo(
+        rect.left,
+        rect.bottom,
+      )
+      ..lineTo(
+        rect.left,
+        rect.top,
+      );
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    final width = rect.width;
+    final borderWidthSize = width / 2;
+    final height = rect.height;
+    final borderOffset = borderWidth / 2;
+    final _borderLength = borderLength > cutOutSize / 2 + borderWidth * 2
+        ? borderWidthSize / 2
+        : borderLength;
+    final _cutOutSize = cutOutSize < width
+        ? cutOutSize
+        : width - borderOffset;
+
+    final backgroundPaint = Paint()
+      ..color = overlayColor
+      ..style = PaintingStyle.fill;
+
+    final borderPaint = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = borderWidth;
+
+    final boxPaint = Paint()
+      ..color = overlayColor
+      ..style = PaintingStyle.fill
+      ..blendMode = BlendMode.dstOut;
+
+    final cutOutRect = Rect.fromLTWH(
+      rect.left + width / 2 - _cutOutSize / 2 + borderOffset,
+      -cutOutBottomOffset +
+          rect.top +
+          height / 2 -
+          _cutOutSize / 2 +
+          borderOffset,
+      _cutOutSize - borderOffset * 2,
+      _cutOutSize - borderOffset * 2,
+    );
+
+    canvas
+      ..saveLayer(
+        rect,
+        backgroundPaint,
+      )
+      ..drawRect(
+        rect,
+        backgroundPaint,
+      )
+      ..drawRRect(
+        RRect.fromRectAndRadius(
+          cutOutRect,
+          Radius.circular(borderRadius),
+        ),
+        boxPaint,
+      )
+      ..restore();
+
+    canvas
+      ..drawPath(
+        Path()
+          ..moveTo(cutOutRect.left, cutOutRect.top + _borderLength)
+          ..lineTo(cutOutRect.left, cutOutRect.top + borderRadius)
+          ..arcToPoint(
+            Offset(cutOutRect.left + borderRadius, cutOutRect.top),
+            radius: Radius.circular(borderRadius),
+          )
+          ..lineTo(cutOutRect.left + _borderLength, cutOutRect.top),
+        borderPaint,
+      )
+      ..drawPath(
+        Path()
+          ..moveTo(cutOutRect.right, cutOutRect.top + _borderLength)
+          ..lineTo(cutOutRect.right, cutOutRect.top + borderRadius)
+          ..arcToPoint(
+            Offset(cutOutRect.right - borderRadius, cutOutRect.top),
+            radius: Radius.circular(borderRadius),
+            clockwise: false,
+          )
+          ..lineTo(cutOutRect.right - _borderLength, cutOutRect.top),
+        borderPaint,
+      )
+      ..drawPath(
+        Path()
+          ..moveTo(cutOutRect.left, cutOutRect.bottom - _borderLength)
+          ..lineTo(cutOutRect.left, cutOutRect.bottom - borderRadius)
+          ..arcToPoint(
+            Offset(cutOutRect.left + borderRadius, cutOutRect.bottom),
+            radius: Radius.circular(borderRadius),
+            clockwise: false,
+          )
+          ..lineTo(cutOutRect.left + _borderLength, cutOutRect.bottom),
+        borderPaint,
+      )
+      ..drawPath(
+        Path()
+          ..moveTo(cutOutRect.right, cutOutRect.bottom - _borderLength)
+          ..lineTo(cutOutRect.right, cutOutRect.bottom - borderRadius)
+          ..arcToPoint(
+            Offset(cutOutRect.right - borderRadius, cutOutRect.bottom),
+            radius: Radius.circular(borderRadius),
+          )
+          ..lineTo(cutOutRect.right - _borderLength, cutOutRect.bottom),
+        borderPaint,
+      );
+  }
+
+  @override
+  ShapeBorder scale(double t) {
+    return QrScannerOverlayShape(
+      borderColor: borderColor,
+      borderWidth: borderWidth,
+      overlayColor: overlayColor,
+    );
+  }
+}

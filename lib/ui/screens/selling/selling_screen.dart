@@ -16,6 +16,7 @@ import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 import '../manage_customer/manage_customer_screen.dart';
 import '../../../data/models/customer_model.dart';
+import '../scanner/scanner_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -607,8 +608,18 @@ class _SellingScreenState extends State<SellingScreen> {
               ),
               const SizedBox(width: 8),
               InkWell(
-                onTap: () {
-                  // Scanner action
+                onTap: () async {
+                  final String? barcode = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ScannerScreen(),
+                    ),
+                  );
+                  if (barcode != null && barcode.isNotEmpty) {
+                    if (_autoCompleteController != null) {
+                      _autoCompleteController!.text = barcode;
+                    }
+                  }
                 },
                 borderRadius: BorderRadius.circular(6),
                 child: Container(
