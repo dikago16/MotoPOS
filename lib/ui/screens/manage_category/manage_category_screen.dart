@@ -59,7 +59,10 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,7 +99,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
             ),
           ),
           Text(
-            'Catalog Settings',
+            'Add / Edit Item Catalogue',
             style: TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
@@ -263,7 +266,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
             ),
           ),
           const Divider(height: 1, color: _kBorder),
-          
+
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
@@ -294,11 +297,15 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _categories.length,
-              separatorBuilder: (context, index) => const Divider(height: 1, color: _kBorder),
+              separatorBuilder: (context, index) =>
+                  const Divider(height: 1, color: _kBorder),
               itemBuilder: (context, index) {
                 final category = _categories[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
                   child: Row(
                     children: [
                       Expanded(
@@ -307,7 +314,9 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              category.categoryName.isEmpty ? 'Unknown Category' : category.categoryName,
+                              category.categoryName.isEmpty
+                                  ? 'Unknown Category'
+                                  : category.categoryName,
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -327,7 +336,11 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                       ),
                       const SizedBox(width: 8),
                       PopupMenuButton<String>(
-                        icon: const Icon(Icons.more_vert, size: 16, color: _kTxtMid),
+                        icon: const Icon(
+                          Icons.more_vert,
+                          size: 16,
+                          color: _kTxtMid,
+                        ),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onSelected: (value) async {
@@ -335,7 +348,8 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CategoryDetailScreen(category: category),
+                                builder: (context) =>
+                                    CategoryDetailScreen(category: category),
                               ),
                             );
                             if (result == true) {
@@ -345,16 +359,26 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                             _showDeleteConfirmation(category);
                           }
                         },
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Text('Edit', style: TextStyle(fontSize: 13)),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'delete',
-                            child: Text('Delete', style: TextStyle(fontSize: 13, color: Colors.red)),
-                          ),
-                        ],
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                              const PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Text(
+                                  'Edit',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
                       ),
                     ],
                   ),
@@ -389,24 +413,38 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
           ),
           content: RichText(
             text: TextSpan(
-              style: const TextStyle(fontSize: 13, color: _kTxtMid, height: 1.5),
+              style: const TextStyle(
+                fontSize: 13,
+                color: _kTxtMid,
+                height: 1.5,
+              ),
               children: [
                 const TextSpan(text: 'Are you sure you want to delete\n'),
                 TextSpan(
-                  text: '${category.categoryName.isEmpty ? 'Unknown Category' : category.categoryName} (${category.categoryCode})',
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: _kTxtHigh),
+                  text:
+                      '${category.categoryName.isEmpty ? 'Unknown Category' : category.categoryName} (${category.categoryCode})',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: _kTxtHigh,
+                  ),
                 ),
                 const TextSpan(text: '?\nThis action cannot be undone.'),
               ],
             ),
           ),
-          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
               style: TextButton.styleFrom(
                 foregroundColor: _kTxtMid,
-                textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                textStyle: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               child: const Text('CANCEL'),
             ),
@@ -423,7 +461,11 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
               ),
               child: const Text(
                 'DELETE',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.8),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
+                ),
               ),
             ),
           ],

@@ -4,14 +4,20 @@ import 'models/product_model.dart';
 import 'models/category_model.dart';
 import 'models/transaction_model.dart';
 import 'models/transaction_item_model.dart';
+import 'models/supplier_model.dart';
+import 'models/purchase_invoice_model.dart';
+import 'models/purchase_invoice_item_model.dart';
 
 class DBHelper {
   static Database? _db;
-  static const int _version = 5;
+  static const int _version = 7;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
   static const String _transactionTable = 'transactions';
   static const String _transactionItemsTable = 'transaction_items';
+  static const String _supplierTable = 'suppliers';
+  static const String _purchaseInvoiceTable = 'purchase_invoices';
+  static const String _purchaseInvoiceItemsTable = 'purchase_invoice_items';
 
   static Future<Database> get db async {
     if (_db != null) return _db!;
@@ -80,6 +86,44 @@ class DBHelper {
           )
           ''',
         );
+        await db.execute(
+          '''
+          CREATE TABLE $_supplierTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            supplierCode TEXT,
+            supplierName TEXT,
+            phone TEXT,
+            address TEXT
+          )
+          ''',
+        );
+        await db.execute(
+          '''
+          CREATE TABLE $_purchaseInvoiceTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            invoiceCode TEXT,
+            invoiceDate TEXT,
+            supplierId INTEGER,
+            supplierName TEXT,
+            totalAmount REAL,
+            notes TEXT
+          )
+          ''',
+        );
+        await db.execute(
+          '''
+          CREATE TABLE $_purchaseInvoiceItemsTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            invoiceId INTEGER,
+            productId INTEGER,
+            itemCode TEXT,
+            itemName TEXT,
+            quantity INTEGER,
+            buyingPrice REAL,
+            subtotal REAL
+          )
+          ''',
+        );
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -128,6 +172,48 @@ class DBHelper {
         if (oldVersion < 5) {
           await db.execute(
             'ALTER TABLE $_transactionTable ADD COLUMN vehicleNo TEXT',
+          );
+        }
+        if (oldVersion < 6) {
+          await db.execute(
+            '''
+            CREATE TABLE $_supplierTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              supplierCode TEXT,
+              supplierName TEXT,
+              phone TEXT,
+              address TEXT
+            )
+            ''',
+          );
+        }
+        if (oldVersion < 7) {
+          await db.execute(
+            '''
+            CREATE TABLE $_purchaseInvoiceTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              invoiceCode TEXT,
+              invoiceDate TEXT,
+              supplierId INTEGER,
+              supplierName TEXT,
+              totalAmount REAL,
+              notes TEXT
+            )
+            ''',
+          );
+          await db.execute(
+            '''
+            CREATE TABLE $_purchaseInvoiceItemsTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              invoiceId INTEGER,
+              productId INTEGER,
+              itemCode TEXT,
+              itemName TEXT,
+              quantity INTEGER,
+              buyingPrice REAL,
+              subtotal REAL
+            )
+            ''',
           );
         }
       },
@@ -316,5 +402,133 @@ class DBHelper {
       WHERE t.transactionDate LIKE ?
       ORDER BY t.id DESC
     ''', ['$date%']);
+  }
+
+  // --- Suppliers ---
+
+  static Future<int> insertSupplier(SupplierModel supplier) async {
+    final dbClient = await db;
+    return await dbClient.insert(
+      _supplierTable,
+      supplier.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<int> updateSupplier(SupplierModel supplier) async {
+    final dbClient = await db;
+    return await dbClient.update(
+      _supplierTable,
+      supplier.toMap(),
+      where: 'id = ?',
+      whereArgs: [supplier.id],
+    );
+  }
+
+  static Future<int> deleteSupplier(int id) async {
+    final dbClient = await db;
+    return await dbClient.delete(
+      _supplierTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  static Future<List<SupplierModel>> getSuppliers() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(_supplierTable);
+    return List.generate(maps.length, (i) {
+      return SupplierModel.fromMap(maps[i]);
+    });
+  }
+
+  static Future<String> getNextSupplierCode() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT supplierCode FROM $_supplierTable WHERE supplierCode LIKE "SUPP%" ORDER BY id DESC LIMIT 1');
+    if (result.isEmpty) {
+      return 'SUPP00001';
+    } else {
+      String lastCode = result.first['supplierCode'] as String;
+      String numberPart = lastCode.substring(4);
+      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+      return 'SUPP${nextNumber.toString().padLeft(5, '0')}';
+    }
+  }
+
+  // --- Purchase Invoices ---
+
+  static Future<int> savePurchaseInvoice(
+    PurchaseInvoiceModel invoice,
+    List<PurchaseInvoiceItemModel> items,
+  ) async {
+    final dbClient = await db;
+    return await dbClient.transaction((txn) async {
+      int invoiceId = await txn.insert(_purchaseInvoiceTable, invoice.toMap());
+      for (var item in items) {
+        var itemMap = item.toMap();
+        itemMap['invoiceId'] = invoiceId;
+        await txn.insert(_purchaseInvoiceItemsTable, itemMap);
+
+        // Update stock for stockable products
+        final productRows = await txn.query(
+          _tableName,
+          where: 'id = ?',
+          whereArgs: [item.productId],
+        );
+        if (productRows.isNotEmpty) {
+          final product = Product.fromMap(productRows.first);
+          if (product.isCountStock) {
+            await txn.update(
+              _tableName,
+              {'stockQty': product.stockQty + item.quantity},
+              where: 'id = ?',
+              whereArgs: [item.productId],
+            );
+          }
+        }
+      }
+      return invoiceId;
+    });
+  }
+
+  static Future<List<PurchaseInvoiceModel>> getPurchaseInvoices() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _purchaseInvoiceTable,
+      orderBy: 'id DESC',
+    );
+    return List.generate(maps.length, (i) {
+      return PurchaseInvoiceModel.fromMap(maps[i]);
+    });
+  }
+
+  static Future<List<PurchaseInvoiceItemModel>> getPurchaseInvoiceItems(
+    int invoiceId,
+  ) async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _purchaseInvoiceItemsTable,
+      where: 'invoiceId = ?',
+      whereArgs: [invoiceId],
+    );
+    return List.generate(maps.length, (i) {
+      return PurchaseInvoiceItemModel.fromMap(maps[i]);
+    });
+  }
+
+  static Future<String> getNextPurchaseInvoiceCode() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+      'SELECT invoiceCode FROM $_purchaseInvoiceTable WHERE invoiceCode LIKE "PINV%" ORDER BY id DESC LIMIT 1',
+    );
+    if (result.isEmpty) {
+      return 'PINV00001';
+    } else {
+      String lastCode = result.first['invoiceCode'] as String;
+      String numberPart = lastCode.substring(4);
+      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+      return 'PINV${nextNumber.toString().padLeft(5, '0')}';
+    }
   }
 }

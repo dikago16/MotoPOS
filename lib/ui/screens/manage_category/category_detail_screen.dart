@@ -89,8 +89,41 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     );
   }
 
+  Widget _sectionLabel(String text, {IconData? icon}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12, top: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 3,
+            height: 14,
+            decoration: BoxDecoration(
+              color: _kAccent,
+              borderRadius: BorderRadius.circular(2),
+            ),
+            margin: const EdgeInsets.only(right: 8),
+          ),
+          if (icon != null) ...[
+            Icon(icon, size: 14, color: _kAccent),
+            const SizedBox(width: 5),
+          ],
+          Text(
+            text.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+              color: _kTxtMid,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isEdit = widget.category != null;
     return Scaffold(
       backgroundColor: _kBgPage,
       appBar: AppBar(
@@ -101,18 +134,18 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
-              'Category Detail',
-              style: TextStyle(
+              isEdit ? 'Edit Category' : 'New Category',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
-              'Add or edit category',
-              style: TextStyle(
+              isEdit ? 'Update Details' : 'Add New Category',
+              style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
@@ -137,18 +170,23 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Auto Category Code Checkbox
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Checkbox(
-                              value: _autoCategoryCode,
-                              activeColor: _kAccent,
-                              onChanged: widget.category != null
-                                  ? null
-                                  : (val) {
+                          _sectionLabel(
+                            'Basic Information',
+                            icon: Icons.info_outline,
+                          ),
+                          if (widget.category == null)
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: Checkbox(
+                                    value: _autoCategoryCode,
+                                    activeColor: _kAccent,
+                                    onChanged: (val) {
                                       setState(() {
                                         _autoCategoryCode = val ?? true;
                                         if (_autoCategoryCode) {
@@ -159,31 +197,28 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                         }
                                       });
                                     },
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Text(
+                                  'Auto Code',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: _kTxtMid,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Auto category code',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: widget.category != null
-                                  ? Colors.grey
-                                  : _kTxtHigh,
-                            ),
-                          ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-
                       // Category Code
                       TextFormField(
                         controller: _categoryCodeCtrl,
-                        enabled: widget.category == null
-                            ? !_autoCategoryCode
-                            : false,
-                        style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco('Category Code'),
+                        readOnly: _autoCategoryCode,
+                        style: const TextStyle(fontSize: 13, color: _kTxtMid),
+                        decoration: _inputDeco('Category Code').copyWith(
+                          fillColor: _autoCategoryCode ? _kBgPage : _kBgCard,
+                        ),
                       ),
                       const SizedBox(height: 12),
 
@@ -262,7 +297,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   if (_categoryNameCtrl.text.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('Category Name tidak boleh kosong!'),
+                        content: const Text('Category name cannot be empty!'),
                         backgroundColor: Colors.red.shade600,
                       ),
                     );

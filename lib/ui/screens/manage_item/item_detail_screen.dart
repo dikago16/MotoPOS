@@ -55,13 +55,18 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       _itemNameCtrl.text = widget.product!.itemName;
       _selectedCategory = widget.product!.category;
       _buyingPriceCtrl.text = widget.product!.buyingPrice.toStringAsFixed(0);
-      _packetBuyPriceCtrl.text = widget.product!.packetBuyPrice.toStringAsFixed(0);
+      _packetBuyPriceCtrl.text = widget.product!.packetBuyPrice.toStringAsFixed(
+        0,
+      );
       _packetBuyQtyCtrl.text = widget.product!.packetBuyQty.toString();
       _sellingPriceCtrl.text = widget.product!.sellingPrice.toStringAsFixed(0);
-      _packetSellPriceCtrl.text = widget.product!.packetSellPrice.toStringAsFixed(0);
+      _packetSellPriceCtrl.text = widget.product!.packetSellPrice
+          .toStringAsFixed(0);
       _packetSellQtyCtrl.text = widget.product!.packetSellQty.toString();
       _discountType = widget.product!.discountType;
-      _discountValueCtrl.text = widget.product!.discountValue.toStringAsFixed(0);
+      _discountValueCtrl.text = widget.product!.discountValue.toStringAsFixed(
+        0,
+      );
       _unitCtrl.text = widget.product!.unit;
       _countStock = widget.product!.isCountStock;
       _stockQtyCtrl.text = widget.product!.stockQty.toString();
@@ -142,8 +147,41 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
+  Widget _sectionLabel(String text, {IconData? icon}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12, top: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 3,
+            height: 14,
+            decoration: BoxDecoration(
+              color: _kAccent,
+              borderRadius: BorderRadius.circular(2),
+            ),
+            margin: const EdgeInsets.only(right: 8),
+          ),
+          if (icon != null) ...[
+            Icon(icon, size: 14, color: _kAccent),
+            const SizedBox(width: 5),
+          ],
+          Text(
+            text.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+              color: _kTxtMid,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isEdit = widget.product != null;
     return Scaffold(
       backgroundColor: _kBgPage,
       appBar: AppBar(
@@ -154,18 +192,18 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
-              'Item Detail',
-              style: TextStyle(
+              isEdit ? 'Edit Item' : 'New Item',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
-              'Add or edit product',
-              style: TextStyle(
+              isEdit ? 'Update Details' : 'Add New Item',
+              style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
@@ -190,18 +228,23 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Auto Item Code Checkbox
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Checkbox(
-                              value: _autoItemCode,
-                              activeColor: _kAccent,
-                              onChanged: widget.product != null
-                                  ? null
-                                  : (val) {
+                          _sectionLabel(
+                            'Basic Information',
+                            icon: Icons.info_outline,
+                          ),
+                          if (widget.product == null)
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: Checkbox(
+                                    value: _autoItemCode,
+                                    activeColor: _kAccent,
+                                    onChanged: (val) {
                                       setState(() {
                                         _autoItemCode = val ?? true;
                                         if (_autoItemCode) {
@@ -211,21 +254,20 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                         }
                                       });
                                     },
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Text(
+                                  'Auto Code',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: _kTxtMid,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Auto item code',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: widget.product != null ? Colors.grey : _kTxtHigh,
-                            ),
-                          ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-
                       // Item Code with Barcode Button
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,9 +275,14 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _itemCodeCtrl,
-                              enabled: widget.product == null ? !_autoItemCode : false,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco('Item Code'),
+                              readOnly: _autoItemCode,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: _kTxtMid,
+                              ),
+                              decoration: _inputDeco('Item Code').copyWith(
+                                fillColor: _autoItemCode ? _kBgPage : _kBgCard,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -282,12 +329,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             value: 'uncategorized',
                             child: Text('Uncategorized'),
                           ),
-                          ..._categories.map((c) => DropdownMenuItem(
-                            value: c.categoryName,
-                            child: Text(
-                              c.categoryName.isEmpty ? 'Unknown Category' : c.categoryName,
+                          ..._categories.map(
+                            (c) => DropdownMenuItem(
+                              value: c.categoryName,
+                              child: Text(
+                                c.categoryName.isEmpty
+                                    ? 'Unknown Category'
+                                    : c.categoryName,
+                              ),
                             ),
-                          )),
+                          ),
                         ],
                         onChanged: (val) {
                           if (val != null) {
@@ -474,7 +525,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           ),
                         ],
                       ),
-                      
+
                       // Conditionally show Stock Quantity
                       if (_countStock) ...[
                         const SizedBox(height: 8),
@@ -566,7 +617,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   if (_itemNameCtrl.text.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text('Item Name tidak boleh kosong!'),
+                        content: const Text('Item name cannot be empty!'),
                         backgroundColor: Colors.red.shade600,
                       ),
                     );
@@ -579,13 +630,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     itemName: _itemNameCtrl.text,
                     category: _selectedCategory,
                     buyingPrice: double.tryParse(_buyingPriceCtrl.text) ?? 0,
-                    packetBuyPrice: double.tryParse(_packetBuyPriceCtrl.text) ?? 0,
+                    packetBuyPrice:
+                        double.tryParse(_packetBuyPriceCtrl.text) ?? 0,
                     packetBuyQty: int.tryParse(_packetBuyQtyCtrl.text) ?? 0,
                     sellingPrice: double.tryParse(_sellingPriceCtrl.text) ?? 0,
-                    packetSellPrice: double.tryParse(_packetSellPriceCtrl.text) ?? 0,
+                    packetSellPrice:
+                        double.tryParse(_packetSellPriceCtrl.text) ?? 0,
                     packetSellQty: int.tryParse(_packetSellQtyCtrl.text) ?? 0,
                     discountType: _discountType,
-                    discountValue: double.tryParse(_discountValueCtrl.text) ?? 0,
+                    discountValue:
+                        double.tryParse(_discountValueCtrl.text) ?? 0,
                     unit: _unitCtrl.text,
                     isCountStock: _countStock,
                     stockQty: int.tryParse(_stockQtyCtrl.text) ?? 0,

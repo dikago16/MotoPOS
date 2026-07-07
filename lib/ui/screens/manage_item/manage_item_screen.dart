@@ -59,7 +59,10 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,7 +99,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
             ),
           ),
           Text(
-            'Inventory & Pricing',
+            'Add / Edit Item',
             style: TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
@@ -111,9 +114,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
           onPressed: () async {
             final result = await Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const ItemDetailScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const ItemDetailScreen()),
             );
             if (result == true) {
               _fetchProducts();
@@ -260,7 +261,10 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                 Expanded(flex: 3, child: Text('ITEM', style: _kColHeader)),
                 Expanded(
                   flex: 1,
-                  child: Center(child: Text('STOCK', style: _kColHeader)),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('STOCK', style: _kColHeader),
+                  ),
                 ),
                 Expanded(
                   flex: 2,
@@ -274,7 +278,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
             ),
           ),
           const Divider(height: 1, color: _kBorder),
-          
+
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
@@ -305,11 +309,15 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _products.length,
-              separatorBuilder: (context, index) => const Divider(height: 1, color: _kBorder),
+              separatorBuilder: (context, index) =>
+                  const Divider(height: 1, color: _kBorder),
               itemBuilder: (context, index) {
                 final item = _products[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
                   child: Row(
                     children: [
                       Expanded(
@@ -318,7 +326,9 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.itemName.isEmpty ? 'Unknown Item' : item.itemName,
+                              item.itemName.isEmpty
+                                  ? 'Unknown Item'
+                                  : item.itemName,
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -327,7 +337,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              '${item.itemCode} • ${item.category}',
+                              item.category,
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: _kTxtMid,
@@ -340,32 +350,51 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                         flex: 1,
                         child: Center(
                           child: Text(
-                            item.isCountStock ? '${item.stockQty}' : '-',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: _kTxtMid,
+                            item.isCountStock ? '${item.stockQty}' : 'Non Stok',
+                            style: TextStyle(
+                              fontSize: item.isCountStock ? 12 : 10,
+                              fontWeight: item.isCountStock
+                                  ? FontWeight.w500
+                                  : FontWeight.w600,
+                              color: item.isCountStock ? _kTxtMid : _kTxtLow,
                             ),
                           ),
                         ),
                       ),
                       Expanded(
                         flex: 2,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Rp ${item.sellingPrice.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: _kTxtHigh,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Rp ${item.sellingPrice.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: _kTxtHigh,
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 2),
+                            Text(
+                              item.buyingPrice > 0
+                                  ? 'Buy: Rp ${item.buyingPrice.toStringAsFixed(0)}'
+                                  : 'Not set',
+                              style: const TextStyle(
+                                fontSize: 9,
+                                color: _kTxtMid,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(width: 8),
                       PopupMenuButton<String>(
-                        icon: const Icon(Icons.more_vert, size: 16, color: _kTxtMid),
+                        icon: const Icon(
+                          Icons.more_vert,
+                          size: 16,
+                          color: _kTxtMid,
+                        ),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onSelected: (value) async {
@@ -373,7 +402,8 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ItemDetailScreen(product: item),
+                                builder: (context) =>
+                                    ItemDetailScreen(product: item),
                               ),
                             );
                             if (result == true) {
@@ -383,16 +413,26 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                             _showDeleteConfirmation(item);
                           }
                         },
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Text('Edit', style: TextStyle(fontSize: 13)),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'delete',
-                            child: Text('Delete', style: TextStyle(fontSize: 13, color: Colors.red)),
-                          ),
-                        ],
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                              const PopupMenuItem<String>(
+                                value: 'edit',
+                                child: Text(
+                                  'Edit',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
                       ),
                     ],
                   ),
@@ -427,24 +467,38 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
           ),
           content: RichText(
             text: TextSpan(
-              style: const TextStyle(fontSize: 13, color: _kTxtMid, height: 1.5),
+              style: const TextStyle(
+                fontSize: 13,
+                color: _kTxtMid,
+                height: 1.5,
+              ),
               children: [
                 const TextSpan(text: 'Are you sure you want to delete\n'),
                 TextSpan(
-                  text: '${item.itemName.isEmpty ? 'Unknown Item' : item.itemName} (${item.itemCode})',
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: _kTxtHigh),
+                  text:
+                      '${item.itemName.isEmpty ? 'Unknown Item' : item.itemName} (${item.itemCode})',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: _kTxtHigh,
+                  ),
                 ),
                 const TextSpan(text: '?\nThis action cannot be undone.'),
               ],
             ),
           ),
-          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
               style: TextButton.styleFrom(
                 foregroundColor: _kTxtMid,
-                textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                textStyle: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               child: const Text('CANCEL'),
             ),
@@ -461,7 +515,11 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
               ),
               child: const Text(
                 'DELETE',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.8),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
+                ),
               ),
             ),
           ],

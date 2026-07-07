@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../../../providers/selling_provider.dart';
 import '../manage_item/manage_item_screen.dart';
 import '../manage_category/manage_category_screen.dart';
+import '../manage_supplier/manage_supplier_screen.dart';
+import '../purchase_invoice/purchase_invoice_screen.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/sale_item_model.dart';
@@ -181,6 +183,22 @@ class _SellingScreenState extends State<SellingScreen> {
                 ),
               );
               _fetchProducts();
+            } else if (value == 'manage_supplier') {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ManageSupplierScreen(),
+                ),
+              );
+              // potentially fetch suppliers if needed, though selling screen currently uses products
+            } else if (value == 'purchase_invoice') {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PurchaseInvoiceScreen(),
+                ),
+              );
+              _fetchProducts();
             } else if (value == 'daily_report') {
               Navigator.push(
                 context,
@@ -203,6 +221,20 @@ class _SellingScreenState extends State<SellingScreen> {
                 value: 'manage_category',
                 child: Text(
                   'Manage Category',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'manage_supplier',
+                child: Text(
+                  'Manage Supplier',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'purchase_invoice',
+                child: Text(
+                  'Purchase Invoice',
                   style: TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
@@ -245,10 +277,10 @@ class _SellingScreenState extends State<SellingScreen> {
                         }
                         final query = textEditingValue.text.toLowerCase();
                         return _products.where((Product product) {
-                          return product.itemName.toLowerCase().contains(
-                                query,
-                              ) ||
+                          final matchQuery = product.itemName.toLowerCase().contains(query) ||
                               product.itemCode.toLowerCase().contains(query);
+                          final hasStock = !product.isCountStock || product.stockQty > 0;
+                          return matchQuery && hasStock;
                         });
                       },
                       displayStringForOption: (Product option) =>
@@ -337,12 +369,31 @@ class _SellingScreenState extends State<SellingScreen> {
                                                     color: _kTxtHigh,
                                                   ),
                                                 ),
-                                                Text(
-                                                  option.category,
-                                                  style: const TextStyle(
-                                                    fontSize: 10,
-                                                    color: _kTxtMid,
-                                                  ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      option.category,
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: _kTxtMid,
+                                                      ),
+                                                    ),
+                                                    const Text(
+                                                      ' • ',
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: _kTxtLow,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      option.isCountStock ? 'Stok: ${option.stockQty}' : 'Non Stok',
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: option.isCountStock ? _kTxtMid : _kTxtLow,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
