@@ -32,6 +32,14 @@ class SellingProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateQuantity(SaleItemModel item, int newQuantity) {
+    final existingIndex = _items.indexWhere((element) => element.id == item.id);
+    if (existingIndex != -1) {
+      _items[existingIndex].quantity = newQuantity;
+      notifyListeners();
+    }
+  }
+
   void updateCash(String cashStr) {
     _cash = double.tryParse(cashStr) ?? 0.0;
     notifyListeners();

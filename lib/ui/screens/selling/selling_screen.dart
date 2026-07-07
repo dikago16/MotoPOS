@@ -11,6 +11,7 @@ import '../../../data/models/product_model.dart';
 import '../../../data/models/sale_item_model.dart';
 import 'payment_dialog.dart';
 import '../daily_report/daily_report_screen.dart';
+import '../transaction_history/transaction_history_screen.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 
@@ -70,6 +71,9 @@ class _SellingScreenState extends State<SellingScreen> {
   String _formatRupiah(double v) =>
       'Rp ${NumberFormat('#,###', 'id_ID').format(v)}';
 
+  String _formatNumber(double v) =>
+      NumberFormat('#,###', 'id_ID').format(v);
+
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
@@ -96,6 +100,50 @@ class _SellingScreenState extends State<SellingScreen> {
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       suffixIcon: suffixIcon,
+    );
+  }
+
+  void _showQtyDialog(SaleItemModel item, BuildContext context) {
+    final ctrl = TextEditingController(text: '${item.quantity}');
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: _kBgCard,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: const Text(
+          'Edit Quantity',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+        content: TextFormField(
+          controller: ctrl,
+          keyboardType: TextInputType.number,
+          autofocus: true,
+          style: const TextStyle(fontSize: 14),
+          decoration: _inputDeco('Quantity'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('CANCEL', style: TextStyle(color: _kTxtLow)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final qty = int.tryParse(ctrl.text) ?? 1;
+              context.read<SellingProvider>().updateQuantity(item, qty);
+              Navigator.pop(ctx);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _kNavy,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -206,6 +254,13 @@ class _SellingScreenState extends State<SellingScreen> {
                   builder: (context) => const DailyReportScreen(),
                 ),
               );
+            } else if (value == 'transaction_history') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransactionHistoryScreen(),
+                ),
+              );
             }
           },
           itemBuilder: (BuildContext context) {
@@ -242,6 +297,13 @@ class _SellingScreenState extends State<SellingScreen> {
                 value: 'daily_report',
                 child: Text(
                   'Daily Report',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'transaction_history',
+                child: Text(
+                  'Transaction History',
                   style: TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
@@ -525,8 +587,8 @@ class _SellingScreenState extends State<SellingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                _colHeader('ITEM', flex: 4),
-                _colHeaderCenter('QTY', flex: 1),
+                _colHeader('ITEM', flex: 3),
+                _colHeaderCenter('QTY', flex: 2),
                 _colHeaderRight('PRICE', flex: 3),
                 _colHeaderRight('SUBTOTAL', flex: 3),
                 const SizedBox(width: 26),
@@ -570,7 +632,7 @@ class _SellingScreenState extends State<SellingScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 4,
+                          flex: 3,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -594,28 +656,36 @@ class _SellingScreenState extends State<SellingScreen> {
                           ),
                         ),
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Center(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _kAccentSoft,
-                                borderRadius: BorderRadius.circular(3),
-                                border: Border.all(
-                                  color: _kAccent.withValues(alpha: 0.2),
+                            child: InkWell(
+                              onTap: () {
+                                _showQtyDialog(item, context);
+                              },
+                              borderRadius: BorderRadius.circular(3),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
                                 ),
-                              ),
-                              child: Text(
-                                '${item.quantity}',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: _kAccent,
-                                  fontWeight: FontWeight.w800,
+                                decoration: BoxDecoration(
+                                  color: _kAccentSoft,
+                                  borderRadius: BorderRadius.circular(3),
+                                  border: Border.all(
+                                    color: _kAccent.withValues(alpha: 0.2),
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
+                                child: Text(
+                                  '${item.quantity}',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: _kAccent,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
+                                ),
                               ),
                             ),
                           ),
@@ -625,7 +695,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              _formatRupiah(item.price),
+                              _formatNumber(item.price),
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: _kTxtMid,
@@ -638,7 +708,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              _formatRupiah(item.total),
+                              _formatNumber(item.total),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,

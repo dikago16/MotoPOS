@@ -339,6 +339,25 @@ class DBHelper {
     });
   }
 
+  static Future<List<TransactionModel>> getAllTransactions() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _transactionTable,
+      orderBy: 'id DESC',
+    );
+    return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
+  }
+
+  static Future<List<TransactionItemModel>> getTransactionItems(int transactionId) async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _transactionItemsTable,
+      where: 'transactionId = ?',
+      whereArgs: [transactionId],
+    );
+    return List.generate(maps.length, (i) => TransactionItemModel.fromMap(maps[i]));
+  }
+
   // --- Daily Report ---
 
   static Future<List<TransactionModel>> getTransactionsByDate(String date) async {
