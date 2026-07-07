@@ -87,7 +87,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
 // A custom shape for the scanner overlay
 class QrScannerOverlayShape extends ShapeBorder {
-  QrScannerOverlayShape({
+  const QrScannerOverlayShape({
     this.borderColor = Colors.blue,
     this.borderWidth = 3.0,
     this.overlayColor = const Color.fromRGBO(0, 0, 0, 80),

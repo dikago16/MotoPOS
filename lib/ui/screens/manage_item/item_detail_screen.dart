@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/db_helper.dart';
+import '../scanner/scanner_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -288,21 +289,37 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           ),
                           const SizedBox(width: 8),
                           InkWell(
-                            onTap: () {},
+                            onTap: _autoItemCode
+                                ? null
+                                : () async {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const ScannerScreen(),
+                                      ),
+                                    );
+                                    if (result != null && result is String) {
+                                      setState(() {
+                                        _itemCodeCtrl.text = result;
+                                      });
+                                    }
+                                  },
                             borderRadius: BorderRadius.circular(6),
                             child: Container(
                               height: 38,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: _kAccentSoft,
+                                color: _autoItemCode ? _kBgPage : _kAccentSoft,
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                  color: _kAccent.withValues(alpha: 0.2),
+                                  color: _autoItemCode
+                                      ? _kBorderMid
+                                      : _kAccent.withValues(alpha: 0.2),
                                 ),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.qr_code_scanner,
-                                color: _kAccent,
+                                color: _autoItemCode ? _kTxtLow : _kAccent,
                                 size: 20,
                               ),
                             ),

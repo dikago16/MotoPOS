@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../providers/printer_provider.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -60,6 +62,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final date = DateTime.parse(widget.transaction.transactionDate);
+    final printerProvider = context.watch<PrinterProvider>();
+    final bool isPrinterConnected = printerProvider.isConnected;
 
     return Scaffold(
       backgroundColor: _kBgPage,
@@ -90,6 +94,27 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: InkWell(
+              onTap: isPrinterConnected
+                  ? () => _showPrintConfirmationDialog(printerProvider)
+                  : null,
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.print,
+                  color: isPrinterConnected
+                      ? const Color(0xFF16A34A)
+                      : const Color(0xFFDC2626),
+                  size: 20,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -335,4 +360,84 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
       child: Text(label, style: _kColHeader),
     ),
   );
+
+  void _showPrintConfirmationDialog(PrinterProvider printerProvider) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: _kBgCard,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF16A34A).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.print,
+                color: Color(0xFF16A34A),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Cetak Nota',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: _kTxtHigh,
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'Apakah Anda yakin ingin mencetak nota untuk transaksi ini?',
+          style: TextStyle(fontSize: 13, color: _kTxtMid),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text(
+              'BATAL',
+              style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              final success = await printerProvider.printReceipt(
+                transaction: widget.transaction,
+                items: _items,
+                transactionId: widget.transaction.id ?? 0,
+              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(success ? 'Nota berhasil dicetak' : 'Gagal mencetak nota'),
+                    backgroundColor: success ? Colors.green : Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
+            icon: const Icon(Icons.print, size: 16),
+            label: const Text(
+              'CETAK',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF16A34A),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

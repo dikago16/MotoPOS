@@ -20,11 +20,15 @@ const _kRed = Color(0xFFDC2626);
 class PaymentDialog extends StatefulWidget {
   final double totalAmount;
   final String? initialVehicleNo;
+  final bool isPrinterConnected;
+  final bool initialPrintReceipt;
 
   const PaymentDialog({
     super.key,
     required this.totalAmount,
     this.initialVehicleNo,
+    this.isPrinterConnected = false,
+    this.initialPrintReceipt = false,
   });
 
   @override
@@ -35,6 +39,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
   final TextEditingController _cashController = TextEditingController();
   final TextEditingController _vehicleNoController = TextEditingController();
   double _cashAmount = 0.0;
+  late bool _printReceipt;
 
   @override
   void initState() {
@@ -43,6 +48,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
     if (widget.initialVehicleNo != null) {
       _vehicleNoController.text = widget.initialVehicleNo!;
     }
+    // Initialize print receipt based on printer connection and previous preference
+    _printReceipt = widget.isPrinterConnected && widget.initialPrintReceipt;
   }
 
   void _onCashChanged() {
@@ -369,7 +376,11 @@ class _PaymentDialogState extends State<PaymentDialog> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
+
+                    // ── Print Receipt Checkbox ──────────────────────────────
+                    _buildPrintReceiptOption(),
+                    const SizedBox(height: 14),
 
                     // Action Buttons
                     Row(
@@ -408,6 +419,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                       Navigator.pop(context, {
                                         'cashAmount': _cashAmount,
                                         'vehicleNo': _vehicleNoController.text,
+                                        'printReceipt': _printReceipt,
                                       });
                                     }
                                   : null,
@@ -440,6 +452,103 @@ class _PaymentDialogState extends State<PaymentDialog> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// Build the print receipt checkbox option
+  Widget _buildPrintReceiptOption() {
+    final bool canPrint = widget.isPrinterConnected;
+
+    return InkWell(
+      onTap: canPrint
+          ? () {
+              setState(() {
+                _printReceipt = !_printReceipt;
+              });
+            }
+          : null,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: canPrint ? (_printReceipt ? _kGreenSoft : _kBgCard) : _kBgPage,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: canPrint
+                ? (_printReceipt ? _kGreen.withValues(alpha: 0.3) : _kBorder)
+                : _kBorder.withValues(alpha: 0.5),
+          ),
+        ),
+        child: Row(
+          children: [
+            // Checkbox icon
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: canPrint
+                    ? (_printReceipt ? _kGreen : _kBgCard)
+                    : _kBgPage,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: canPrint
+                      ? (_printReceipt ? _kGreen : _kBorderMid)
+                      : _kBorder,
+                  width: 1.5,
+                ),
+              ),
+              child: _printReceipt && canPrint
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  : null,
+            ),
+            const SizedBox(width: 10),
+            // Label
+            Icon(Icons.print, size: 16, color: canPrint ? _kTxtMid : _kTxtLow),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Print Receipt',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: canPrint ? _kTxtHigh : _kTxtLow,
+                    ),
+                  ),
+                  Text(
+                    canPrint
+                        ? 'Printer is connected'
+                        : 'Printer is not connected',
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: canPrint ? _kTxtMid : _kTxtLow,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (!canPrint)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: _kRed.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: const Text(
+                  'OFFLINE',
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                    color: _kRed,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

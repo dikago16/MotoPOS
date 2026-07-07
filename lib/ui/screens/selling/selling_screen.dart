@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:bluetooth_classic/models/device.dart';
 import '../../../providers/selling_provider.dart';
+import '../../../providers/printer_provider.dart';
 import '../manage_item/manage_item_screen.dart';
 import '../manage_category/manage_category_screen.dart';
 import '../manage_supplier/manage_supplier_screen.dart';
@@ -947,8 +949,198 @@ class _SellingScreenState extends State<SellingScreen> {
     ),
   );
 
+  // ─── Printer Connection Flow ──────────────────────────────────────────────
+
+  Future<void> _handlePrinterTap() async {
+    final printerProvider = context.read<PrinterProvider>();
+
+    // If already connected, show info / disconnect option
+    if (printerProvider.isConnected) {
+      _showPrinterInfoDialog(printerProvider);
+      return;
+    }
+
+    // Check if Bluetooth is enabled
+    final isBluetoothOn = await printerProvider.isBluetoothEnabled();
+
+    if (!isBluetoothOn) {
+      // Show "Turn on Bluetooth" warning
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            backgroundColor: _kBgCard,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            title: Row(
+              children: const [
+                Icon(Icons.bluetooth_disabled, color: _kRed, size: 24),
+                SizedBox(width: 8),
+                Text(
+                  'Bluetooth Mati',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: _kTxtHigh,
+                  ),
+                ),
+              ],
+            ),
+            content: const Text(
+              'Bluetooth pada perangkat Anda belum aktif.\n\nSilakan aktifkan Bluetooth terlebih dahulu melalui pengaturan perangkat, kemudian coba lagi.',
+              style: TextStyle(fontSize: 13, color: _kTxtMid),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.pop(ctx),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _kNavy,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+      return;
+    }
+
+    // Bluetooth is ON — show paired devices dialog
+    if (mounted) {
+      _showPairedDevicesDialog(printerProvider);
+    }
+  }
+
+  void _showPairedDevicesDialog(PrinterProvider printerProvider) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => _PairedDevicesDialog(printerProvider: printerProvider),
+    );
+  }
+
+  void _showPrinterInfoDialog(PrinterProvider printerProvider) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: _kBgCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF16A34A).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.print,
+                color: Color(0xFF16A34A),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Printer Tersambung',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: _kTxtHigh,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0FDF4),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: const Color(0xFF16A34A).withValues(alpha: 0.2),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.bluetooth_connected,
+                      size: 18, color: Color(0xFF16A34A)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      printerProvider.connectedDeviceName,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: _kTxtHigh,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text(
+              'TUTUP',
+              style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              printerProvider.disconnect();
+              Navigator.pop(ctx);
+            },
+            icon: const Icon(Icons.bluetooth_disabled, size: 16),
+            label: const Text(
+              'DISCONNECT',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _kRed,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─── Bottom Bar ───────────────────────────────────────────────────────────
+
   Widget _buildBottomBar() {
     final provider = context.watch<SellingProvider>();
+    final printerProvider = context.watch<PrinterProvider>();
+    final bool isPrinterConnected = printerProvider.isConnected;
+
+    // Colors for printer button based on connection state
+    final Color printerBgColor = isPrinterConnected
+        ? const Color(0xFFF0FDF4) // green soft
+        : const Color(0xFFFEF2F2); // red soft
+    final Color printerBorderColor = isPrinterConnected
+        ? const Color(0xFF16A34A).withValues(alpha: 0.3)
+        : _kRed.withValues(alpha: 0.3);
+    final Color printerIconColor = isPrinterConnected
+        ? const Color(0xFF16A34A)
+        : _kRed;
 
     return Container(
       decoration: BoxDecoration(
@@ -968,18 +1160,19 @@ class _SellingScreenState extends State<SellingScreen> {
         children: [
           Row(
             children: [
+              // ── Printer Button (red/green) ──
               InkWell(
-                onTap: () {},
+                onTap: _handlePrinterTap,
                 borderRadius: BorderRadius.circular(6),
                 child: Container(
                   height: 38,
                   width: 38,
                   decoration: BoxDecoration(
-                    color: _kAccentSoft,
+                    color: printerBgColor,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: _kAccent.withValues(alpha: 0.3)),
+                    border: Border.all(color: printerBorderColor),
                   ),
-                  child: const Icon(Icons.print, color: _kAccent, size: 20),
+                  child: Icon(Icons.print, color: printerIconColor, size: 20),
                 ),
               ),
               const SizedBox(width: 8),
@@ -1026,12 +1219,18 @@ class _SellingScreenState extends State<SellingScreen> {
                                     totalAmount: provider.totalAmount,
                                     initialVehicleNo:
                                         provider.selectedCustomer?.vehicleNo,
+                                    isPrinterConnected: printerProvider.isConnected,
+                                    initialPrintReceipt: printerProvider.isPrintReceiptEnabled,
                                   ),
                                 );
 
                             if (result != null) {
                               final double cashAmount = result['cashAmount'];
                               final String vehicleNo = result['vehicleNo'];
+                              final bool printReceipt = result['printReceipt'] ?? false;
+
+                              // Update print receipt preference in provider
+                              printerProvider.setPrintReceiptEnabled(printReceipt);
 
                               // User confirmed payment
                               final trx = TransactionModel(
@@ -1058,18 +1257,47 @@ class _SellingScreenState extends State<SellingScreen> {
                                   )
                                   .toList();
 
-                              await DBHelper.saveTransaction(trx, items);
-                              provider.clearTransaction();
-
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Transaction Saved'),
-                                    backgroundColor: Colors.green,
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
+                              final transactionId = await DBHelper.saveTransaction(trx, items);
+                              
+                              // ── Print Receipt if enabled ──
+                              if (printReceipt && printerProvider.isConnected) {
+                                final printSuccess = await printerProvider.printReceipt(
+                                  transaction: trx,
+                                  items: items,
+                                  transactionId: transactionId,
                                 );
+                                if (mounted) {
+                                  if (printSuccess) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Transaksi disimpan & nota dicetak'),
+                                        backgroundColor: Colors.green,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Transaksi disimpan, tapi gagal cetak nota'),
+                                        backgroundColor: Colors.orange,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  }
+                                }
+                              } else {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Transaction Saved'),
+                                      backgroundColor: Colors.green,
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                }
                               }
+
+                              provider.clearTransaction();
                             }
                           },
                     icon: const Icon(Icons.check, size: 16),
@@ -1096,6 +1324,227 @@ class _SellingScreenState extends State<SellingScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─── Paired Devices Dialog ─────────────────────────────────────────────────
+
+class _PairedDevicesDialog extends StatefulWidget {
+  final PrinterProvider printerProvider;
+
+  const _PairedDevicesDialog({required this.printerProvider});
+
+  @override
+  State<_PairedDevicesDialog> createState() => _PairedDevicesDialogState();
+}
+
+class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
+  List<Device> _devices = [];
+  bool _isLoading = true;
+  bool _isConnecting = false;
+  String _connectingAddress = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDevices();
+  }
+
+  Future<void> _loadDevices() async {
+    final devices = await widget.printerProvider.getPairedDevices();
+    if (mounted) {
+      setState(() {
+        _devices = devices;
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _connectToDevice(Device device) async {
+    setState(() {
+      _isConnecting = true;
+      _connectingAddress = device.address;
+    });
+
+    final success = await widget.printerProvider.connectToDevice(device);
+
+    if (mounted) {
+      if (success) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Tersambung ke ${device.name ?? 'printer'}'),
+            backgroundColor: const Color(0xFF16A34A),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } else {
+        setState(() {
+          _isConnecting = false;
+          _connectingAddress = '';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal menyambung ke ${device.name ?? 'printer'}'),
+            backgroundColor: const Color(0xFFDC2626),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: _kBgCard,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      title: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: _kAccent.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(Icons.bluetooth, color: _kAccent, size: 20),
+          ),
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Pilih Printer',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: _kTxtHigh,
+                  ),
+                ),
+                Text(
+                  'Perangkat Bluetooth tersimpan',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: _kTxtMid,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: _isLoading
+            ? const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Center(child: CircularProgressIndicator()),
+              )
+            : _devices.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.bluetooth_searching,
+                            size: 36, color: _kTxtLow),
+                        SizedBox(height: 10),
+                        Text(
+                          'Tidak ada perangkat tersimpan.\n\nPasangkan printer melalui\npengaturan Bluetooth perangkat.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: _kTxtMid,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: _devices.length,
+                    separatorBuilder: (_, __) =>
+                        const Divider(height: 1, color: _kBorder),
+                    itemBuilder: (context, index) {
+                      final device = _devices[index];
+                      final bool isThisConnecting =
+                          _isConnecting && _connectingAddress == device.address;
+
+                      return InkWell(
+                        onTap: _isConnecting
+                            ? null
+                            : () => _connectToDevice(device),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 12,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.print,
+                                size: 20,
+                                color: isThisConnecting
+                                    ? _kAccent
+                                    : _kTxtMid,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      device.name ?? 'Unknown Device',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: _kTxtHigh,
+                                      ),
+                                    ),
+                                    Text(
+                                      device.address,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: _kTxtLow,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (isThisConnecting)
+                                const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              else
+                                const Icon(
+                                  Icons.chevron_right,
+                                  color: _kTxtLow,
+                                  size: 20,
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isConnecting ? null : () => Navigator.pop(context),
+          child: const Text(
+            'BATAL',
+            style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
     );
   }
 }

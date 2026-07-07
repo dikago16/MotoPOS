@@ -208,27 +208,6 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                   decoration: _inputDeco('Code / Name'),
                 ),
               ),
-              const SizedBox(width: 8),
-              InkWell(
-                onTap: () {
-                  // Filter action
-                },
-                borderRadius: BorderRadius.circular(6),
-                child: Container(
-                  height: 38,
-                  width: 44,
-                  decoration: BoxDecoration(
-                    color: _kAccentSoft,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: _kAccent.withValues(alpha: 0.2)),
-                  ),
-                  child: const Icon(
-                    Icons.filter_list,
-                    color: _kAccent,
-                    size: 18,
-                  ),
-                ),
-              ),
             ],
           ),
         ],
