@@ -151,20 +151,28 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
-        title: const Text(
-          'Item Detail',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'Item Detail',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              'Add or edit product',
+              style: TextStyle(
+                color: Color(0xFF90AAC8),
+                fontSize: 10,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SafeArea(
         child: Column(
@@ -191,25 +199,27 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             child: Checkbox(
                               value: _autoItemCode,
                               activeColor: _kAccent,
-                              onChanged: (val) {
-                                setState(() {
-                                  _autoItemCode = val ?? true;
-                                  if (_autoItemCode) {
-                                    _itemCodeCtrl.text = _generatedCode;
-                                  } else {
-                                    _itemCodeCtrl.text = '';
-                                  }
-                                });
-                              },
+                              onChanged: widget.product != null
+                                  ? null
+                                  : (val) {
+                                      setState(() {
+                                        _autoItemCode = val ?? true;
+                                        if (_autoItemCode) {
+                                          _itemCodeCtrl.text = _generatedCode;
+                                        } else {
+                                          _itemCodeCtrl.text = '';
+                                        }
+                                      });
+                                    },
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text(
+                          Text(
                             'Auto item code',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: _kTxtHigh,
+                              color: widget.product != null ? Colors.grey : _kTxtHigh,
                             ),
                           ),
                         ],
@@ -223,7 +233,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           Expanded(
                             child: TextFormField(
                               controller: _itemCodeCtrl,
-                              enabled: !_autoItemCode,
+                              enabled: widget.product == null ? !_autoItemCode : false,
                               style: const TextStyle(fontSize: 13),
                               decoration: _inputDeco('Item Code'),
                             ),
@@ -553,6 +563,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               height: 40,
               child: ElevatedButton.icon(
                 onPressed: () async {
+                  if (_itemNameCtrl.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Item Name tidak boleh kosong!'),
+                        backgroundColor: Colors.red.shade600,
+                      ),
+                    );
+                    return;
+                  }
+
                   final product = Product(
                     id: widget.product?.id,
                     itemCode: _itemCodeCtrl.text,

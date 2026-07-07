@@ -64,9 +64,6 @@ class _SellingScreenState extends State<SellingScreen> {
     super.dispose();
   }
 
-  String _formatRupiah(double v) =>
-      'Rp ${NumberFormat('#,###', 'id_ID').format(v)}';
-
   String _formatNumber(double v) => NumberFormat('#,###', 'id_ID').format(v);
 
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
@@ -272,13 +269,17 @@ class _SellingScreenState extends State<SellingScreen> {
                         });
                       },
                       displayStringForOption: (Product option) =>
-                          option.itemName,
+                          option.itemName.isEmpty
+                          ? 'Unknown Item'
+                          : option.itemName,
                       onSelected: (Product selection) {
                         final provider = context.read<SellingProvider>();
                         provider.addItem(
                           SaleItemModel(
                             id: selection.id.toString(),
-                            name: selection.itemName,
+                            name: selection.itemName.isEmpty
+                                ? 'Unknown Item'
+                                : selection.itemName,
                             category: selection.category,
                             price: selection.sellingPrice,
                             quantity: 1,
@@ -345,7 +346,9 @@ class _SellingScreenState extends State<SellingScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  option.itemName,
+                                                  option.itemName.isEmpty
+                                                      ? 'Unknown Item'
+                                                      : option.itemName,
                                                   style: const TextStyle(
                                                     fontSize: 13,
                                                     fontWeight: FontWeight.w600,
@@ -487,7 +490,7 @@ class _SellingScreenState extends State<SellingScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item.name,
+                                item.name.isEmpty ? 'Unknown Item' : item.name,
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -675,35 +678,6 @@ class _SellingScreenState extends State<SellingScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text(
-                    'TOTAL',
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: _kTxtLow,
-                      letterSpacing: 0.6,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _formatRupiah(provider.totalAmount),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: _kTxtHigh,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
             children: [
               InkWell(
                 onTap: () {},
@@ -752,49 +726,59 @@ class _SellingScreenState extends State<SellingScreen> {
                 child: SizedBox(
                   height: 38,
                   child: ElevatedButton.icon(
-                    onPressed: provider.items.isEmpty ? null : () async {
-                      final result = await showDialog<Map<String, dynamic>>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => PaymentDialog(totalAmount: provider.totalAmount),
-                      );
+                    onPressed: provider.items.isEmpty
+                        ? null
+                        : () async {
+                            final result =
+                                await showDialog<Map<String, dynamic>>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => PaymentDialog(
+                                    totalAmount: provider.totalAmount,
+                                  ),
+                                );
 
-                      if (result != null) {
-                        final double cashAmount = result['cashAmount'];
-                        final String vehicleNo = result['vehicleNo'];
+                            if (result != null) {
+                              final double cashAmount = result['cashAmount'];
+                              final String vehicleNo = result['vehicleNo'];
 
-                        // User confirmed payment
-                        final trx = TransactionModel(
-                          transactionDate: DateTime.now().toIso8601String(),
-                          totalAmount: provider.totalAmount,
-                          cashAmount: cashAmount,
-                          changeAmount: cashAmount - provider.totalAmount,
-                          vehicleNo: vehicleNo.isEmpty ? null : vehicleNo,
-                        );
-                        
-                        final items = provider.items.map((item) => TransactionItemModel(
-                          transactionId: 0,
-                          itemName: item.name,
-                          category: item.category,
-                          price: item.price,
-                          quantity: item.quantity,
-                          subtotal: item.total,
-                        )).toList();
+                              // User confirmed payment
+                              final trx = TransactionModel(
+                                transactionDate: DateTime.now()
+                                    .toIso8601String(),
+                                totalAmount: provider.totalAmount,
+                                cashAmount: cashAmount,
+                                changeAmount: cashAmount - provider.totalAmount,
+                                vehicleNo: vehicleNo.isEmpty ? null : vehicleNo,
+                              );
 
-                        await DBHelper.saveTransaction(trx, items);
-                        provider.clearTransaction();
-                        
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Transaksi Berhasil!'),
-                              backgroundColor: Colors.green,
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        }
-                      }
-                    },
+                              final items = provider.items
+                                  .map(
+                                    (item) => TransactionItemModel(
+                                      transactionId: 0,
+                                      itemName: item.name,
+                                      category: item.category,
+                                      price: item.price,
+                                      quantity: item.quantity,
+                                      subtotal: item.total,
+                                    ),
+                                  )
+                                  .toList();
+
+                              await DBHelper.saveTransaction(trx, items);
+                              provider.clearTransaction();
+
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Transaksi Berhasil!'),
+                                    backgroundColor: Colors.green,
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
+                            }
+                          },
                     icon: const Icon(Icons.check, size: 16),
                     label: const Text(
                       'PROCESS',
