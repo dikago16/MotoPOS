@@ -19,8 +19,13 @@ const _kRed = Color(0xFFDC2626);
 
 class PaymentDialog extends StatefulWidget {
   final double totalAmount;
+  final String? initialVehicleNo;
 
-  const PaymentDialog({super.key, required this.totalAmount});
+  const PaymentDialog({
+    super.key,
+    required this.totalAmount,
+    this.initialVehicleNo,
+  });
 
   @override
   State<PaymentDialog> createState() => _PaymentDialogState();
@@ -35,6 +40,9 @@ class _PaymentDialogState extends State<PaymentDialog> {
   void initState() {
     super.initState();
     _cashController.addListener(_onCashChanged);
+    if (widget.initialVehicleNo != null) {
+      _vehicleNoController.text = widget.initialVehicleNo!;
+    }
   }
 
   void _onCashChanged() {

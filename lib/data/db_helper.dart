@@ -11,7 +11,7 @@ import 'models/customer_model.dart';
 
 class DBHelper {
   static Database? _db;
-  static const int _version = 8;
+  static const int _version = 9;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
   static const String _transactionTable = 'transactions';
@@ -71,7 +71,9 @@ class DBHelper {
             totalAmount REAL,
             cashAmount REAL,
             changeAmount REAL,
-            vehicleNo TEXT
+            vehicleNo TEXT,
+            customerId INTEGER,
+            customerName TEXT
           )
           ''',
         );
@@ -123,6 +125,19 @@ class DBHelper {
             quantity INTEGER,
             buyingPrice REAL,
             subtotal REAL
+          )
+          ''',
+        );
+        await db.execute(
+          '''
+          CREATE TABLE $_customerTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customerCode TEXT,
+            name TEXT,
+            phone TEXT,
+            vehicleNo TEXT,
+            vehicleType TEXT,
+            address TEXT
           )
           ''',
         );
@@ -232,6 +247,10 @@ class DBHelper {
             )
             ''',
           );
+        }
+        if (oldVersion < 9) {
+          await db.execute('ALTER TABLE $_transactionTable ADD COLUMN customerId INTEGER');
+          await db.execute('ALTER TABLE $_transactionTable ADD COLUMN customerName TEXT');
         }
       },
     );

@@ -5,6 +5,8 @@ class TransactionModel {
   final double cashAmount;
   final double changeAmount;
   final String? vehicleNo;
+  final int? customerId;
+  final String? customerName;
 
   TransactionModel({
     this.id,
@@ -13,6 +15,8 @@ class TransactionModel {
     required this.cashAmount,
     required this.changeAmount,
     this.vehicleNo,
+    this.customerId,
+    this.customerName,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +27,8 @@ class TransactionModel {
       'cashAmount': cashAmount,
       'changeAmount': changeAmount,
       'vehicleNo': vehicleNo,
+      'customerId': customerId,
+      'customerName': customerName,
     };
   }
 
@@ -34,6 +40,8 @@ class TransactionModel {
       cashAmount: map['cashAmount']?.toDouble() ?? 0.0,
       changeAmount: map['changeAmount']?.toDouble() ?? 0.0,
       vehicleNo: map['vehicleNo'],
+      customerId: map['customerId']?.toInt(),
+      customerName: map['customerName'],
     );
   }
 }

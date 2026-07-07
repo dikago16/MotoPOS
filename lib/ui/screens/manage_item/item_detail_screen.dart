@@ -340,6 +340,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               ),
                             ),
                           ),
+                          // Prevent assertion error before categories finish loading
+                          if (_selectedCategory != 'uncategorized' &&
+                              !_categories.any((c) => c.categoryName == _selectedCategory))
+                            DropdownMenuItem(
+                              value: _selectedCategory,
+                              child: Text(_selectedCategory),
+                            ),
                         ],
                         onChanged: (val) {
                           if (val != null) {

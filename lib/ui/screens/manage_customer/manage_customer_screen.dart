@@ -150,6 +150,22 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.white, size: 20),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CustomerDetailScreen(),
+                ),
+              );
+              _fetchCustomers();
+            },
+            tooltip: 'Add Customer',
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -174,20 +190,6 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: _kAccent,
-        elevation: 3,
-        child: const Icon(Icons.add, color: Colors.white),
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CustomerDetailScreen(),
-            ),
-          );
-          _fetchCustomers();
-        },
-      ),
     );
   }
 
@@ -202,7 +204,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Directory', icon: Icons.search),
+          _sectionLabel('Search Customer', icon: Icons.search),
           TextFormField(
             style: const TextStyle(fontSize: 13),
             decoration: _inputDeco(
@@ -262,7 +264,11 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.person_off, size: 30, color: _kTxtLow.withOpacity(0.5)),
+                  Icon(
+                    Icons.person_off,
+                    size: 30,
+                    color: _kTxtLow.withOpacity(0.5),
+                  ),
                   const SizedBox(height: 7),
                   const Text(
                     'No customers found',
@@ -289,9 +295,8 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CustomerDetailScreen(
-                          customer: cust,
-                        ),
+                        builder: (context) =>
+                            CustomerDetailScreen(customer: cust),
                       ),
                     );
                     _fetchCustomers();
@@ -314,15 +319,6 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                   color: _kTxtHigh,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                cust.customerCode,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: _kAccent,
-                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               if (cust.phone.isNotEmpty) ...[

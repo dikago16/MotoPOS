@@ -15,6 +15,7 @@ import '../transaction_history/transaction_history_screen.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 import '../manage_customer/manage_customer_screen.dart';
+import '../../../data/models/customer_model.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -165,6 +166,8 @@ class _SellingScreenState extends State<SellingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    _buildCustomerSelector(),
+                    const SizedBox(height: 10),
                     _buildFormCard(),
                     const SizedBox(height: 10),
                     _buildItemsTable(),
@@ -327,6 +330,170 @@ class _SellingScreenState extends State<SellingScreen> {
         ),
         const SizedBox(width: 8),
       ],
+    );
+  }
+
+  Widget _buildCustomerSelector() {
+    final provider = context.watch<SellingProvider>();
+    final selectedCustomer = provider.selectedCustomer;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: _kBgCard,
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: _kBorder),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _kAccentSoft,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Icon(Icons.person, color: _kAccent, size: 16),
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Customer',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: _kTxtMid,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    selectedCustomer?.name ?? 'No customer selected',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: selectedCustomer != null ? _kTxtHigh : _kTxtLow,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          if (selectedCustomer != null)
+            IconButton(
+              icon: const Icon(Icons.close, color: _kTxtLow, size: 18),
+              onPressed: () {
+                context.read<SellingProvider>().setCustomer(null);
+              },
+              tooltip: 'Remove Customer',
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            )
+          else
+            TextButton(
+              onPressed: () => _showCustomerSelectionDialog(),
+              style: TextButton.styleFrom(
+                foregroundColor: _kAccent,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: const Text(
+                'Select',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _showCustomerSelectionDialog() async {
+    final customers = await DBHelper.getCustomers();
+    
+    if (!mounted) return;
+    
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: _kBgPage,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: _kBgCard,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  border: Border(bottom: BorderSide(color: _kBorder)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Select Customer',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: _kTxtHigh,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 20),
+                      onPressed: () => Navigator.pop(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
+              ),
+              if (customers.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(32),
+                  child: Text(
+                    'No customers found.\\nPlease add from Manage Customer.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: _kTxtMid),
+                  ),
+                )
+              else
+                Flexible(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: customers.length,
+                    separatorBuilder: (context, index) => const Divider(height: 1, color: _kBorder),
+                    itemBuilder: (context, index) {
+                      final customer = customers[index];
+                      return ListTile(
+                        title: Text(
+                          customer.name,
+                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: _kTxtHigh),
+                        ),
+                        subtitle: Text(
+                          '${customer.phone}\\n${customer.vehicleNo}',
+                          style: const TextStyle(fontSize: 11, color: _kTxtMid),
+                        ),
+                        isThreeLine: true,
+                        onTap: () {
+                          context.read<SellingProvider>().setCustomer(customer);
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -905,6 +1072,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                   barrierDismissible: false,
                                   builder: (context) => PaymentDialog(
                                     totalAmount: provider.totalAmount,
+                                    initialVehicleNo: provider.selectedCustomer?.vehicleNo,
                                   ),
                                 );
 
@@ -920,6 +1088,8 @@ class _SellingScreenState extends State<SellingScreen> {
                                 cashAmount: cashAmount,
                                 changeAmount: cashAmount - provider.totalAmount,
                                 vehicleNo: vehicleNo.isEmpty ? null : vehicleNo,
+                                customerId: provider.selectedCustomer?.id,
+                                customerName: provider.selectedCustomer?.name,
                               );
 
                               final items = provider.items

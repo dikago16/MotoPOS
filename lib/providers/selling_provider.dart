@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import '../data/models/sale_item_model.dart';
+import '../data/models/customer_model.dart';
 
 class SellingProvider with ChangeNotifier {
   final List<SaleItemModel> _items = [];
   double _cash = 0.0;
+  CustomerModel? _selectedCustomer;
 
   List<SaleItemModel> get items => _items;
   double get cash => _cash;
+  CustomerModel? get selectedCustomer => _selectedCustomer;
 
   double get totalAmount {
     return _items.fold(0.0, (sum, item) => sum + item.total);
@@ -48,6 +51,12 @@ class SellingProvider with ChangeNotifier {
   void clearTransaction() {
     _items.clear();
     _cash = 0.0;
+    _selectedCustomer = null;
+    notifyListeners();
+  }
+
+  void setCustomer(CustomerModel? customer) {
+    _selectedCustomer = customer;
     notifyListeners();
   }
 }
