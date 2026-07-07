@@ -73,8 +73,7 @@ class _SellingScreenState extends State<SellingScreen> {
   String _formatRupiah(double v) =>
       'Rp ${NumberFormat('#,###', 'id_ID').format(v)}';
 
-  String _formatNumber(double v) =>
-      NumberFormat('#,###', 'id_ID').format(v);
+  String _formatNumber(double v) => NumberFormat('#,###', 'id_ID').format(v);
 
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
@@ -338,7 +337,7 @@ class _SellingScreenState extends State<SellingScreen> {
     final selectedCustomer = provider.selectedCustomer;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: _kBgCard,
         borderRadius: BorderRadius.circular(7),
@@ -350,14 +349,14 @@ class _SellingScreenState extends State<SellingScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: _kAccentSoft,
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Icon(Icons.person, color: _kAccent, size: 16),
+                child: const Icon(Icons.person, color: _kAccent, size: 14),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -398,7 +397,10 @@ class _SellingScreenState extends State<SellingScreen> {
               onPressed: () => _showCustomerSelectionDialog(),
               style: TextButton.styleFrom(
                 foregroundColor: _kAccent,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -412,87 +414,16 @@ class _SellingScreenState extends State<SellingScreen> {
     );
   }
 
-  void _showCustomerSelectionDialog() async {
-    final customers = await DBHelper.getCustomers();
-    
-    if (!mounted) return;
-    
+  void _showCustomerSelectionDialog() {
     showModalBottomSheet(
       context: context,
       backgroundColor: _kBgPage,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: _kBgCard,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  border: Border(bottom: BorderSide(color: _kBorder)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Select Customer',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: _kTxtHigh,
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, size: 20),
-                      onPressed: () => Navigator.pop(context),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                  ],
-                ),
-              ),
-              if (customers.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(32),
-                  child: Text(
-                    'No customers found.\\nPlease add from Manage Customer.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: _kTxtMid),
-                  ),
-                )
-              else
-                Flexible(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: customers.length,
-                    separatorBuilder: (context, index) => const Divider(height: 1, color: _kBorder),
-                    itemBuilder: (context, index) {
-                      final customer = customers[index];
-                      return ListTile(
-                        title: Text(
-                          customer.name,
-                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: _kTxtHigh),
-                        ),
-                        subtitle: Text(
-                          '${customer.phone}\\n${customer.vehicleNo}',
-                          style: const TextStyle(fontSize: 11, color: _kTxtMid),
-                        ),
-                        isThreeLine: true,
-                        onTap: () {
-                          context.read<SellingProvider>().setCustomer(customer);
-                          Navigator.pop(context);
-                        },
-                      );
-                    },
-                  ),
-                ),
-            ],
-          ),
-        );
+        return const CustomerSelectionBottomSheet();
       },
     );
   }
@@ -521,9 +452,11 @@ class _SellingScreenState extends State<SellingScreen> {
                         }
                         final query = textEditingValue.text.toLowerCase();
                         return _products.where((Product product) {
-                          final matchQuery = product.itemName.toLowerCase().contains(query) ||
+                          final matchQuery =
+                              product.itemName.toLowerCase().contains(query) ||
                               product.itemCode.toLowerCase().contains(query);
-                          final hasStock = !product.isCountStock || product.stockQty > 0;
+                          final hasStock =
+                              !product.isCountStock || product.stockQty > 0;
                           return matchQuery && hasStock;
                         });
                       },
@@ -630,11 +563,17 @@ class _SellingScreenState extends State<SellingScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      option.isCountStock ? 'Stok: ${option.stockQty}' : 'Non Stok',
+                                                      option.isCountStock
+                                                          ? 'Stok: ${option.stockQty}'
+                                                          : 'Non Stok',
                                                       style: TextStyle(
                                                         fontSize: 10,
-                                                        color: option.isCountStock ? _kTxtMid : _kTxtLow,
-                                                        fontWeight: FontWeight.w500,
+                                                        color:
+                                                            option.isCountStock
+                                                            ? _kTxtMid
+                                                            : _kTxtLow,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                       ),
                                                     ),
                                                   ],
@@ -1072,7 +1011,8 @@ class _SellingScreenState extends State<SellingScreen> {
                                   barrierDismissible: false,
                                   builder: (context) => PaymentDialog(
                                     totalAmount: provider.totalAmount,
-                                    initialVehicleNo: provider.selectedCustomer?.vehicleNo,
+                                    initialVehicleNo:
+                                        provider.selectedCustomer?.vehicleNo,
                                   ),
                                 );
 
@@ -1142,6 +1082,179 @@ class _SellingScreenState extends State<SellingScreen> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomerSelectionBottomSheet extends StatefulWidget {
+  const CustomerSelectionBottomSheet({super.key});
+
+  @override
+  State<CustomerSelectionBottomSheet> createState() =>
+      _CustomerSelectionBottomSheetState();
+}
+
+class _CustomerSelectionBottomSheetState
+    extends State<CustomerSelectionBottomSheet> {
+  List<CustomerModel> _allCustomers = [];
+  List<CustomerModel> _filteredCustomers = [];
+  bool _isLoading = true;
+  final TextEditingController _searchCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCustomers();
+  }
+
+  Future<void> _fetchCustomers() async {
+    final customers = await DBHelper.getCustomers();
+    if (mounted) {
+      setState(() {
+        _allCustomers = customers;
+        _filteredCustomers = customers;
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _onSearchChanged(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        _filteredCustomers = _allCustomers;
+      });
+    } else {
+      final lowerQuery = query.toLowerCase();
+      setState(() {
+        _filteredCustomers = _allCustomers.where((c) {
+          return c.name.toLowerCase().contains(lowerQuery) ||
+              c.customerCode.toLowerCase().contains(lowerQuery) ||
+              c.phone.toLowerCase().contains(lowerQuery) ||
+              c.vehicleNo.toLowerCase().contains(lowerQuery);
+        }).toList();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      heightFactor: 0.85,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: _kBgCard,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                border: Border(bottom: BorderSide(color: _kBorder)),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Select Customer',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: _kTxtHigh,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 20),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _searchCtrl,
+                    onChanged: _onSearchChanged,
+                    style: const TextStyle(fontSize: 13),
+                    decoration: InputDecoration(
+                      hintText: 'Search by name, phone, or vehicle no...',
+                      hintStyle: const TextStyle(color: _kTxtMid, fontSize: 13),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        size: 18,
+                        color: _kTxtMid,
+                      ),
+                      filled: true,
+                      fillColor: _kBgPage,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 0,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: _kBorder),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: _kBorder),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: _kAccent),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _filteredCustomers.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No customers found.\nPlease add Customer first.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: _kTxtMid),
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      itemCount: _filteredCustomers.length,
+                      separatorBuilder: (context, index) =>
+                          const Divider(height: 1, color: _kBorder),
+                      itemBuilder: (context, index) {
+                        final customer = _filteredCustomers[index];
+                        return ListTile(
+                          title: Text(
+                            customer.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              color: _kTxtHigh,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${customer.phone}\n${customer.vehicleNo}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: _kTxtMid,
+                            ),
+                          ),
+                          isThreeLine: true,
+                          onTap: () {
+                            context.read<SellingProvider>().setCustomer(
+                              customer,
+                            );
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
