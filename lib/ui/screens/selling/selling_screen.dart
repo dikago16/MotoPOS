@@ -348,15 +348,6 @@ class _SellingScreenState extends State<SellingScreen> {
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: _kAccentSoft,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.person, color: _kAccent, size: 14),
-              ),
-              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -371,9 +362,13 @@ class _SellingScreenState extends State<SellingScreen> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    selectedCustomer?.name ?? 'No customer selected',
+                    selectedCustomer != null
+                        ? (selectedCustomer.vehicleNo.isNotEmpty
+                              ? '${selectedCustomer.name} (${selectedCustomer.vehicleNo})'
+                              : selectedCustomer.name)
+                        : 'No customer selected',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: selectedCustomer != null ? _kTxtHigh : _kTxtLow,
                     ),
@@ -383,30 +378,37 @@ class _SellingScreenState extends State<SellingScreen> {
             ],
           ),
           if (selectedCustomer != null)
-            IconButton(
-              icon: const Icon(Icons.close, color: _kTxtLow, size: 18),
-              onPressed: () {
-                context.read<SellingProvider>().setCustomer(null);
-              },
-              tooltip: 'Remove Customer',
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+            SizedBox(
+              height: 30,
+              width: 30,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: _kTxtLow, size: 18),
+                onPressed: () {
+                  context.read<SellingProvider>().setCustomer(null);
+                },
+                tooltip: 'Remove Customer',
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
             )
           else
-            TextButton(
-              onPressed: () => _showCustomerSelectionDialog(),
-              style: TextButton.styleFrom(
-                foregroundColor: _kAccent,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+            SizedBox(
+              height: 30,
+              child: TextButton(
+                onPressed: () => _showCustomerSelectionDialog(),
+                style: TextButton.styleFrom(
+                  foregroundColor: _kAccent,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 0,
+                  ),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: const Text(
-                'Select',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                child: const Text(
+                  'Select',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                ),
               ),
             ),
         ],
