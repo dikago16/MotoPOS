@@ -470,7 +470,7 @@ class DBHelper {
         itemMap['invoiceId'] = invoiceId;
         await txn.insert(_purchaseInvoiceItemsTable, itemMap);
 
-        // Update stock for stockable products
+        // Update stock and buying price for products
         final productRows = await txn.query(
           _tableName,
           where: 'id = ?',
@@ -478,10 +478,22 @@ class DBHelper {
         );
         if (productRows.isNotEmpty) {
           final product = Product.fromMap(productRows.first);
+          Map<String, dynamic> updateData = {};
+          
+          // Update buying price to the latest one if it's > 0
+          if (item.buyingPrice > 0) {
+            updateData['buyingPrice'] = item.buyingPrice;
+          }
+
+          // Update stock if it's a stockable item
           if (product.isCountStock) {
+            updateData['stockQty'] = product.stockQty + item.quantity;
+          }
+
+          if (updateData.isNotEmpty) {
             await txn.update(
               _tableName,
-              {'stockQty': product.stockQty + item.quantity},
+              updateData,
               where: 'id = ?',
               whereArgs: [item.productId],
             );

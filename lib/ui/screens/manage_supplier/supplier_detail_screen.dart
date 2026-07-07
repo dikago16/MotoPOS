@@ -82,22 +82,42 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
 
     setState(() => _isSaving = true);
 
-    final supplier = SupplierModel(
-      id: widget.supplier?.id,
-      supplierCode: _codeCtrl.text,
-      supplierName: _nameCtrl.text.trim(),
-      phone: _phoneCtrl.text.trim(),
-      address: _addressCtrl.text.trim(),
-    );
+    try {
+      final supplier = SupplierModel(
+        id: widget.supplier?.id,
+        supplierCode: _codeCtrl.text,
+        supplierName: _nameCtrl.text.trim(),
+        phone: _phoneCtrl.text.trim(),
+        address: _addressCtrl.text.trim(),
+      );
 
-    if (widget.supplier == null) {
-      await DBHelper.insertSupplier(supplier);
-    } else {
-      await DBHelper.updateSupplier(supplier);
-    }
+      if (widget.supplier == null) {
+        await DBHelper.insertSupplier(supplier);
+      } else {
+        await DBHelper.updateSupplier(supplier);
+      }
 
-    if (mounted) {
-      Navigator.pop(context, true);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Supplier saved successfully!'),
+            backgroundColor: Color(0xFF16A34A),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.pop(context, true);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSaving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save supplier: $e'),
+            backgroundColor: const Color(0xFFDC2626),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
