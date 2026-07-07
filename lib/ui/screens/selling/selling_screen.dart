@@ -8,6 +8,7 @@ import '../../../data/db_helper.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/sale_item_model.dart';
 import 'payment_dialog.dart';
+import '../daily_report/daily_report_screen.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 
@@ -64,7 +65,8 @@ class _SellingScreenState extends State<SellingScreen> {
     super.dispose();
   }
 
-  String _formatNumber(double v) => NumberFormat('#,###', 'id_ID').format(v);
+  String _formatRupiah(double v) =>
+      'Rp ${NumberFormat('#,###', 'id_ID').format(v)}';
 
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
@@ -92,38 +94,6 @@ class _SellingScreenState extends State<SellingScreen> {
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       suffixIcon: suffixIcon,
-    );
-  }
-
-  Widget _sectionLabel(String text, {IconData? icon}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        children: [
-          Container(
-            width: 3,
-            height: 14,
-            decoration: BoxDecoration(
-              color: _kAccent,
-              borderRadius: BorderRadius.circular(2),
-            ),
-            margin: const EdgeInsets.only(right: 8),
-          ),
-          if (icon != null) ...[
-            Icon(icon, size: 12, color: _kAccent),
-            const SizedBox(width: 5),
-          ],
-          Text(
-            text.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.0,
-              color: _kTxtMid,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -169,7 +139,7 @@ class _SellingScreenState extends State<SellingScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Selling',
+            'MotoPOS',
             style: TextStyle(
               color: Colors.white,
               fontSize: 15,
@@ -211,6 +181,13 @@ class _SellingScreenState extends State<SellingScreen> {
                 ),
               );
               _fetchProducts();
+            } else if (value == 'daily_report') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DailyReportScreen(),
+                ),
+              );
             }
           },
           itemBuilder: (BuildContext context) {
@@ -226,6 +203,13 @@ class _SellingScreenState extends State<SellingScreen> {
                 value: 'manage_category',
                 child: Text(
                   'Manage Category',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'daily_report',
+                child: Text(
+                  'Daily Report',
                   style: TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
@@ -248,7 +232,6 @@ class _SellingScreenState extends State<SellingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Input Item', icon: Icons.qr_code_scanner),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -285,7 +268,6 @@ class _SellingScreenState extends State<SellingScreen> {
                             quantity: 1,
                           ),
                         );
-                        // Clear the input after selection
                         Future.delayed(Duration.zero, () {
                           _autoCompleteController?.clear();
                         });
@@ -415,6 +397,65 @@ class _SellingScreenState extends State<SellingScreen> {
     );
   }
 
+  void _showRemoveItemDialog(SaleItemModel item) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: _kBgCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: Row(
+            children: const [
+              Icon(Icons.warning_amber_rounded, color: _kRed, size: 24),
+              SizedBox(width: 8),
+              Text(
+                'Remove Item',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: _kTxtHigh,
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'Are you sure you want to remove "${item.name}" from the cart?',
+            style: const TextStyle(fontSize: 13, color: _kTxtMid),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'CANCEL',
+                style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.read<SellingProvider>().removeItem(item);
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _kRed,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+              child: const Text(
+                'REMOVE',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildItemsTable() {
     final provider = context.watch<SellingProvider>();
     final items = provider.items;
@@ -428,13 +469,6 @@ class _SellingScreenState extends State<SellingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: _sectionLabel(
-              'Sales Items',
-              icon: Icons.shopping_basket_outlined,
-            ),
-          ),
           Container(
             color: _kTableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
@@ -540,7 +574,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              _formatNumber(item.price),
+                              _formatRupiah(item.price),
                               style: const TextStyle(
                                 fontSize: 11,
                                 color: _kTxtMid,
@@ -553,7 +587,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              _formatNumber(item.total),
+                              _formatRupiah(item.total),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -566,7 +600,7 @@ class _SellingScreenState extends State<SellingScreen> {
                           width: 26,
                           child: InkWell(
                             onTap: () {
-                              // Handle remove item (Need to update provider)
+                              _showRemoveItemDialog(item);
                             },
                             borderRadius: BorderRadius.circular(4),
                             child: const Padding(
@@ -614,7 +648,7 @@ class _SellingScreenState extends State<SellingScreen> {
                   ),
                   const Spacer(),
                   const Text(
-                    'SUBTOTAL',
+                    'TOTAL :',
                     style: TextStyle(
                       fontSize: 9,
                       color: _kTxtMid,
@@ -624,7 +658,7 @@ class _SellingScreenState extends State<SellingScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    _formatNumber(provider.totalAmount),
+                    _formatRupiah(provider.totalAmount),
                     style: const TextStyle(
                       fontSize: 14,
                       color: _kAccent,
@@ -771,7 +805,7 @@ class _SellingScreenState extends State<SellingScreen> {
                               if (mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Transaksi Berhasil!'),
+                                    content: Text('Transaction Saved'),
                                     backgroundColor: Colors.green,
                                     behavior: SnackBarBehavior.floating,
                                   ),

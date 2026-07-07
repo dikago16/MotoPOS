@@ -252,4 +252,69 @@ class DBHelper {
       return id;
     });
   }
+
+  // --- Daily Report ---
+
+  static Future<List<TransactionModel>> getTransactionsByDate(String date) async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _transactionTable,
+      where: 'transactionDate LIKE ?',
+      whereArgs: ['$date%'],
+      orderBy: 'id DESC',
+    );
+    return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
+  }
+
+  static Future<List<Map<String, dynamic>>> getDailyCategorySummary(String date) async {
+    final dbClient = await db;
+    return await dbClient.rawQuery('''
+      SELECT 
+        ti.category,
+        COUNT(DISTINCT t.id) AS transactionCount,
+        SUM(ti.quantity) AS totalQty,
+        SUM(ti.subtotal) AS totalAmount
+      FROM $_transactionItemsTable ti
+      INNER JOIN $_transactionTable t ON ti.transactionId = t.id
+      WHERE t.transactionDate LIKE ?
+      GROUP BY ti.category
+      ORDER BY totalAmount DESC
+    ''', ['$date%']);
+  }
+
+  static Future<Map<String, dynamic>> getDailySummary(String date) async {
+    final dbClient = await db;
+    final result = await dbClient.rawQuery('''
+      SELECT 
+        COUNT(*) AS totalTransactions,
+        COALESCE(SUM(totalAmount), 0) AS totalRevenue,
+        COALESCE(AVG(totalAmount), 0) AS avgTransaction
+      FROM $_transactionTable
+      WHERE transactionDate LIKE ?
+    ''', ['$date%']);
+    if (result.isNotEmpty) {
+      return result.first;
+    }
+    return {'totalTransactions': 0, 'totalRevenue': 0.0, 'avgTransaction': 0.0};
+  }
+
+  static Future<List<Map<String, dynamic>>> getTransactionDetailsByDate(String date) async {
+    final dbClient = await db;
+    return await dbClient.rawQuery('''
+      SELECT 
+        t.id,
+        t.transactionDate,
+        t.totalAmount,
+        t.vehicleNo,
+        ti.itemName,
+        ti.category,
+        ti.price,
+        ti.quantity,
+        ti.subtotal
+      FROM $_transactionTable t
+      INNER JOIN $_transactionItemsTable ti ON t.id = ti.transactionId
+      WHERE t.transactionDate LIKE ?
+      ORDER BY t.id DESC
+    ''', ['$date%']);
+  }
 }

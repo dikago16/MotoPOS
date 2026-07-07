@@ -27,6 +27,11 @@ class SellingProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeItem(SaleItemModel item) {
+    _items.removeWhere((element) => element.id == item.id);
+    notifyListeners();
+  }
+
   void updateCash(String cashStr) {
     _cash = double.tryParse(cashStr) ?? 0.0;
     notifyListeners();
