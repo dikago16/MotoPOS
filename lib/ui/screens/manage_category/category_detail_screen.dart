@@ -9,7 +9,6 @@ const _kBgPage = Color(0xFFF1F5F9);
 const _kBgCard = Color(0xFFFFFFFF);
 const _kBorder = Color(0xFFE2E8F0);
 const _kBorderMid = Color(0xFFCBD5E1);
-const _kTxtHigh = Color(0xFF0F172A);
 const _kTxtMid = Color(0xFF475569);
 const _kTxtLow = Color(0xFF94A3B8);
 // ──────────────────────────────────────────────────────────────────────────────
@@ -300,7 +299,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         if (_categoryNameCtrl.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text('Category name cannot be empty!'),
+                              content: const Text(
+                                'Category name cannot be empty!',
+                              ),
                               backgroundColor: Colors.red.shade600,
                             ),
                           );
@@ -320,7 +321,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           } else {
                             await DBHelper.insertCategory(category);
                           }
-                          
+
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

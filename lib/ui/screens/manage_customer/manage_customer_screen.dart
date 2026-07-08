@@ -6,7 +6,6 @@ import 'customer_detail_screen.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
 const _kBgPage = Color(0xFFF1F5F9);
 const _kBgCard = Color(0xFFFFFFFF);
 const _kBorder = Color(0xFFE2E8F0);
@@ -267,7 +266,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                   Icon(
                     Icons.person_off,
                     size: 30,
-                    color: _kTxtLow.withOpacity(0.5),
+                    color: _kTxtLow.withValues(alpha: 0.5),
                   ),
                   const SizedBox(height: 7),
                   const Text(

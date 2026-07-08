@@ -394,7 +394,7 @@ class _ManagePurchaseInvoiceScreenState
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.receipt_long, size: 30, color: _kTxtLow.withOpacity(0.5)),
+                  Icon(Icons.receipt_long, size: 30, color: _kTxtLow.withValues(alpha: 0.5)),
                   const SizedBox(height: 7),
                   const Text(
                     'No invoices found',

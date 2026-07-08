@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 const Color _kAccent = Color(0xFF00B0FF);
-const Color _kBgPage = Color(0xFFF8F9FA);
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -24,7 +23,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   void _onDetect(BarcodeCapture capture) {
     if (_isDisposed) return;
-    
+
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isNotEmpty) {
       final String? code = barcodes.first.rawValue;
@@ -40,7 +39,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Scan Barcode', style: TextStyle(color: Colors.white, fontSize: 16)),
+        title: const Text(
+          'Scan Barcode',
+          style: TextStyle(color: Colors.white, fontSize: 16),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -49,10 +51,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          MobileScanner(
-            controller: cameraController,
-            onDetect: _onDetect,
-          ),
+          MobileScanner(controller: cameraController, onDetect: _onDetect),
           // Scanner overlay box
           Container(
             decoration: ShapeDecoration(
@@ -95,8 +94,10 @@ class QrScannerOverlayShape extends ShapeBorder {
     this.borderLength = 40,
     this.cutOutSize = 250,
     this.cutOutBottomOffset = 0,
-  }) : assert(borderLength <= cutOutSize / 2 + borderWidth * 2,
-            "Border can't be larger than ${cutOutSize / 2 + borderWidth * 2}");
+  }) : assert(
+         borderLength <= cutOutSize / 2 + borderWidth * 2,
+         "Border can't be larger than ${cutOutSize / 2 + borderWidth * 2}",
+       );
 
   final Color borderColor;
   final double borderWidth;
@@ -118,26 +119,17 @@ class QrScannerOverlayShape extends ShapeBorder {
 
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    Path _getLeftTopPath(Rect rect) {
+    Path getLeftTopPath(Rect rect) {
       return Path()
         ..moveTo(rect.left, rect.bottom)
         ..lineTo(rect.left, rect.top)
         ..lineTo(rect.right, rect.top);
     }
 
-    return _getLeftTopPath(rect)
-      ..lineTo(
-        rect.right,
-        rect.bottom,
-      )
-      ..lineTo(
-        rect.left,
-        rect.bottom,
-      )
-      ..lineTo(
-        rect.left,
-        rect.top,
-      );
+    return getLeftTopPath(rect)
+      ..lineTo(rect.right, rect.bottom)
+      ..lineTo(rect.left, rect.bottom)
+      ..lineTo(rect.left, rect.top);
   }
 
   @override
@@ -146,10 +138,10 @@ class QrScannerOverlayShape extends ShapeBorder {
     final borderWidthSize = width / 2;
     final height = rect.height;
     final borderOffset = borderWidth / 2;
-    final _borderLength = borderLength > cutOutSize / 2 + borderWidth * 2
+    final adjustedBorderLength = borderLength > cutOutSize / 2 + borderWidth * 2
         ? borderWidthSize / 2
         : borderLength;
-    final _cutOutSize = cutOutSize < width
+    final adjustedCutOutSize = cutOutSize < width
         ? cutOutSize
         : width - borderOffset;
 
@@ -168,30 +160,21 @@ class QrScannerOverlayShape extends ShapeBorder {
       ..blendMode = BlendMode.dstOut;
 
     final cutOutRect = Rect.fromLTWH(
-      rect.left + width / 2 - _cutOutSize / 2 + borderOffset,
+      rect.left + width / 2 - adjustedCutOutSize / 2 + borderOffset,
       -cutOutBottomOffset +
           rect.top +
           height / 2 -
-          _cutOutSize / 2 +
+          adjustedCutOutSize / 2 +
           borderOffset,
-      _cutOutSize - borderOffset * 2,
-      _cutOutSize - borderOffset * 2,
+      adjustedCutOutSize - borderOffset * 2,
+      adjustedCutOutSize - borderOffset * 2,
     );
 
     canvas
-      ..saveLayer(
-        rect,
-        backgroundPaint,
-      )
-      ..drawRect(
-        rect,
-        backgroundPaint,
-      )
+      ..saveLayer(rect, backgroundPaint)
+      ..drawRect(rect, backgroundPaint)
       ..drawRRect(
-        RRect.fromRectAndRadius(
-          cutOutRect,
-          Radius.circular(borderRadius),
-        ),
+        RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)),
         boxPaint,
       )
       ..restore();
@@ -199,48 +182,48 @@ class QrScannerOverlayShape extends ShapeBorder {
     canvas
       ..drawPath(
         Path()
-          ..moveTo(cutOutRect.left, cutOutRect.top + _borderLength)
+          ..moveTo(cutOutRect.left, cutOutRect.top + adjustedBorderLength)
           ..lineTo(cutOutRect.left, cutOutRect.top + borderRadius)
           ..arcToPoint(
             Offset(cutOutRect.left + borderRadius, cutOutRect.top),
             radius: Radius.circular(borderRadius),
           )
-          ..lineTo(cutOutRect.left + _borderLength, cutOutRect.top),
+          ..lineTo(cutOutRect.left + adjustedBorderLength, cutOutRect.top),
         borderPaint,
       )
       ..drawPath(
         Path()
-          ..moveTo(cutOutRect.right, cutOutRect.top + _borderLength)
+          ..moveTo(cutOutRect.right, cutOutRect.top + adjustedBorderLength)
           ..lineTo(cutOutRect.right, cutOutRect.top + borderRadius)
           ..arcToPoint(
             Offset(cutOutRect.right - borderRadius, cutOutRect.top),
             radius: Radius.circular(borderRadius),
             clockwise: false,
           )
-          ..lineTo(cutOutRect.right - _borderLength, cutOutRect.top),
+          ..lineTo(cutOutRect.right - adjustedBorderLength, cutOutRect.top),
         borderPaint,
       )
       ..drawPath(
         Path()
-          ..moveTo(cutOutRect.left, cutOutRect.bottom - _borderLength)
+          ..moveTo(cutOutRect.left, cutOutRect.bottom - adjustedBorderLength)
           ..lineTo(cutOutRect.left, cutOutRect.bottom - borderRadius)
           ..arcToPoint(
             Offset(cutOutRect.left + borderRadius, cutOutRect.bottom),
             radius: Radius.circular(borderRadius),
             clockwise: false,
           )
-          ..lineTo(cutOutRect.left + _borderLength, cutOutRect.bottom),
+          ..lineTo(cutOutRect.left + adjustedBorderLength, cutOutRect.bottom),
         borderPaint,
       )
       ..drawPath(
         Path()
-          ..moveTo(cutOutRect.right, cutOutRect.bottom - _borderLength)
+          ..moveTo(cutOutRect.right, cutOutRect.bottom - adjustedBorderLength)
           ..lineTo(cutOutRect.right, cutOutRect.bottom - borderRadius)
           ..arcToPoint(
             Offset(cutOutRect.right - borderRadius, cutOutRect.bottom),
             radius: Radius.circular(borderRadius),
           )
-          ..lineTo(cutOutRect.right - _borderLength, cutOutRect.bottom),
+          ..lineTo(cutOutRect.right - adjustedBorderLength, cutOutRect.bottom),
         borderPaint,
       );
   }

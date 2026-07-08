@@ -381,7 +381,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.receipt, size: 30, color: _kTxtLow.withOpacity(0.5)),
+                  Icon(Icons.receipt, size: 30, color: _kTxtLow.withValues(alpha: 0.5)),
                   const SizedBox(height: 7),
                   const Text(
                     'No transactions found',

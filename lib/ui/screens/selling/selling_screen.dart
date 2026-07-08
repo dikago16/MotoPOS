@@ -1465,7 +1465,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                 : ListView.separated(
                     shrinkWrap: true,
                     itemCount: _devices.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, _) =>
                         const Divider(height: 1, color: _kBorder),
                     itemBuilder: (context, index) {
                       final device = _devices[index];

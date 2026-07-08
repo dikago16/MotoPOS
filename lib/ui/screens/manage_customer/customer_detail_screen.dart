@@ -5,7 +5,6 @@ import '../../../data/db_helper.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
 const _kBgPage = Color(0xFFF1F5F9);
 const _kBgCard = Color(0xFFFFFFFF);
 const _kBorder = Color(0xFFE2E8F0);
@@ -460,8 +459,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         if (_nameCtrl.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content:
-                                  const Text('Customer name cannot be empty!'),
+                              content: const Text(
+                                'Customer name cannot be empty!',
+                              ),
                               backgroundColor: Colors.red.shade600,
                               behavior: SnackBarBehavior.floating,
                             ),

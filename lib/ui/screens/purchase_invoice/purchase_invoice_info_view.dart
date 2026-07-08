@@ -88,7 +88,7 @@ class PurchaseInvoiceInfoView extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<int>(
-                    value: selectedSupplier?.id,
+                    initialValue: selectedSupplier?.id,
                     decoration: inputDeco('Select Supplier'),
                     style: const TextStyle(fontSize: 13, color: kTxtHigh),
                     dropdownColor: kBgCard,

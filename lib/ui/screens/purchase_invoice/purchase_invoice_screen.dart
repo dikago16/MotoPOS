@@ -24,7 +24,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
   List<Product> _products = [];
   List<SupplierModel> _suppliers = [];
-  List<PurchaseItemData> _invoiceItems = [];
+  final List<PurchaseItemData> _invoiceItems = [];
 
   String _invoiceCode = '';
   SupplierModel? _selectedSupplier;
