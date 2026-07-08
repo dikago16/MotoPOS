@@ -8,6 +8,7 @@ import '../manage_item/manage_item_screen.dart';
 import '../manage_category/manage_category_screen.dart';
 import '../manage_supplier/manage_supplier_screen.dart';
 import '../purchase_invoice/manage_purchase_invoice_screen.dart';
+import '../notes/notes_screen.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/sale_item_model.dart';
@@ -274,6 +275,13 @@ class _SellingScreenState extends State<SellingScreen> {
                   builder: (context) => const TransactionHistoryScreen(),
                 ),
               );
+            } else if (value == 'notes') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotesScreen(),
+                ),
+              );
             }
           },
           itemBuilder: (BuildContext context) {
@@ -324,6 +332,13 @@ class _SellingScreenState extends State<SellingScreen> {
                 value: 'transaction_history',
                 child: Text(
                   'Transaction History',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'notes',
+                child: Text(
+                  'Notes',
                   style: TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),

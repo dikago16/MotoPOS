@@ -8,10 +8,10 @@ import 'models/supplier_model.dart';
 import 'models/purchase_invoice_model.dart';
 import 'models/purchase_invoice_item_model.dart';
 import 'models/customer_model.dart';
-
+import 'models/note_model.dart';
 class DBHelper {
   static Database? _db;
-  static const int _version = 9;
+  static const int _version = 10;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
   static const String _transactionTable = 'transactions';
@@ -20,6 +20,7 @@ class DBHelper {
   static const String _purchaseInvoiceTable = 'purchase_invoices';
   static const String _purchaseInvoiceItemsTable = 'purchase_invoice_items';
   static const String _customerTable = 'customers';
+  static const String _notesTable = 'notes';
 
   static Future<Database> get db async {
     if (_db != null) return _db!;
@@ -141,6 +142,16 @@ class DBHelper {
           )
           ''',
         );
+        await db.execute(
+          '''
+          CREATE TABLE $_notesTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            content TEXT,
+            createdAt TEXT
+          )
+          ''',
+        );
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -251,6 +262,18 @@ class DBHelper {
         if (oldVersion < 9) {
           await db.execute('ALTER TABLE $_transactionTable ADD COLUMN customerId INTEGER');
           await db.execute('ALTER TABLE $_transactionTable ADD COLUMN customerName TEXT');
+        }
+        if (oldVersion < 10) {
+          await db.execute(
+            '''
+            CREATE TABLE $_notesTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              title TEXT,
+              content TEXT,
+              createdAt TEXT
+            )
+            ''',
+          );
         }
       },
     );
@@ -649,5 +672,43 @@ class DBHelper {
       int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
       return 'CUST${nextNumber.toString().padLeft(5, '0')}';
     }
+  }
+
+  // --- Notes ---
+
+  static Future<int> insertNote(NoteModel note) async {
+    final dbClient = await db;
+    return await dbClient.insert(
+      _notesTable,
+      note.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<int> updateNote(NoteModel note) async {
+    final dbClient = await db;
+    return await dbClient.update(
+      _notesTable,
+      note.toMap(),
+      where: 'id = ?',
+      whereArgs: [note.id],
+    );
+  }
+
+  static Future<int> deleteNote(int id) async {
+    final dbClient = await db;
+    return await dbClient.delete(
+      _notesTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  static Future<List<NoteModel>> getNotes() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(_notesTable, orderBy: 'createdAt DESC');
+    return List.generate(maps.length, (i) {
+      return NoteModel.fromMap(maps[i]);
+    });
   }
 }
