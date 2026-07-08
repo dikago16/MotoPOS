@@ -383,7 +383,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             ),
             const SizedBox(width: 10),
             const Text(
-              'Cetak Nota',
+              'Print Receipt',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -400,7 +400,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text(
-              'BATAL',
+              'CANCEL',
               style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
             ),
           ),
@@ -415,7 +415,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(success ? 'Nota berhasil dicetak' : 'Gagal mencetak nota'),
+                    content: Text(success ? 'Receipt printed successfully' : 'Failed to print receipt'),
                     backgroundColor: success ? Colors.green : Colors.red,
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -424,7 +424,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             },
             icon: const Icon(Icons.print, size: 16),
             label: const Text(
-              'CETAK',
+              'PRINT',
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             style: ElevatedButton.styleFrom(

@@ -1096,7 +1096,7 @@ class _SellingScreenState extends State<SellingScreen> {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text(
-              'TUTUP',
+              'CLOSE',
               style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
             ),
           ),
@@ -1278,7 +1278,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        content: Text('Transaksi disimpan, tapi gagal cetak nota'),
+                                        content: Text('Transaction saved, but failed to print receipt'),
                                         backgroundColor: Colors.orange,
                                         behavior: SnackBarBehavior.floating,
                                       ),
@@ -1374,7 +1374,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Tersambung ke ${device.name ?? 'printer'}'),
+            content: Text('Connected to ${device.name ?? 'printer'}'),
             backgroundColor: const Color(0xFF16A34A),
             behavior: SnackBarBehavior.floating,
           ),
@@ -1386,7 +1386,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Gagal menyambung ke ${device.name ?? 'printer'}'),
+            content: Text('Failed to connect to ${device.name ?? 'printer'}'),
             backgroundColor: const Color(0xFFDC2626),
             behavior: SnackBarBehavior.floating,
           ),
@@ -1416,7 +1416,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Pilih Printer',
+                  'Select Printer',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -1452,7 +1452,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                             size: 36, color: _kTxtLow),
                         SizedBox(height: 10),
                         Text(
-                          'Tidak ada perangkat tersimpan.\n\nPasangkan printer melalui\npengaturan Bluetooth perangkat.',
+                          'No saved devices.\n\nPair a printer through\nyour device\'s Bluetooth settings.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
@@ -1540,7 +1540,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
         TextButton(
           onPressed: _isConnecting ? null : () => Navigator.pop(context),
           child: const Text(
-            'BATAL',
+            'CANCEL',
             style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
           ),
         ),

@@ -108,12 +108,12 @@ class BluetoothPrinterService {
 
     // ── Payment ──
     bytes.addAll(_textToBytes(
-        _twoColumn('Bayar (Cash)', _formatRupiah(transaction.cashAmount))));
+        _twoColumn('Paid (Cash)', _formatRupiah(transaction.cashAmount))));
     bytes.addAll(_cmdNewLine);
 
     // ── Change ──
     bytes.addAll(_textToBytes(
-        _twoColumn('Kembali', _formatRupiah(transaction.changeAmount))));
+        _twoColumn('Change', _formatRupiah(transaction.changeAmount))));
     bytes.addAll(_cmdNewLine);
 
     // ── Separator ──
