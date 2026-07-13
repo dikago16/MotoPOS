@@ -40,6 +40,10 @@ dependencies:
   path: ^1.9.1
   mobile_scanner: ^7.2.0
   bluetooth_classic: ^0.0.4
+  shared_preferences: ^2.2.3
+  device_info_plus: ^10.1.0
+  crypto: ^3.0.3
+  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:

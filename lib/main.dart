@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/selling_provider.dart';
 import 'providers/printer_provider.dart';
-import 'ui/screens/selling/selling_screen.dart';
 import 'core/constants/app_colors.dart';
+import 'ui/screens/splash/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     MultiProvider(
       providers: [
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       ),
-      home: const SellingScreen(),
+      home: const SplashScreen(),
     );
   }
 }

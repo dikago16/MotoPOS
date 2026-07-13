@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Activation Generator - Moto POS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #2563EB;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            cursor: pointer;
+            background: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1D4ED8;
+        }
+
+        .result-container {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .result {
+            padding: 15px;
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 4px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #1E3A8A;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            background: #475569;
+        }
+
+        .copy-btn:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Moto POS Activation</h2>
+        <div class="form-group">
+            <label>Device ID:</label>
+            <input type="text" id="deviceId" placeholder="Enter User's Device ID">
+        </div>
+        <button onclick="generate()">Generate Code</button>
+
+        <div id="resultContainer" class="result-container">
+            <label>Activation Code:</label>
+            <div id="resultBox" class="result"></div>
+            <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+        </div>
+    </div>
+
+    <script>
+        // MUST BE THE SAME AS IN THE FLUTTER APP
+        const SECRET_SALT = "MY_APP_SECURE_SALT_2026";
+
+        async function generate() {
+            const deviceId = document.getElementById("deviceId").value.trim();
+            if (!deviceId) {
+                alert("Please enter a Device ID");
+                return;
+            }
+
+            const rawString = deviceId + SECRET_SALT;
+
+            // Generate SHA-256 hash using Web Crypto API
+            const msgBuffer = new TextEncoder().encode(rawString);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+
+            // Take first 12 chars
+            let code = hashHex.substring(0, 12);
+            // Format as XXXX-XXXX-XXXX
+            if (code.length === 12) {
+                code = code.substring(0, 4) + "-" + code.substring(4, 8) + "-" + code.substring(8, 12);
+            }
+
+            document.getElementById("resultContainer").style.display = "block";
+            document.getElementById("resultBox").innerText = code;
+        }
+
+        function copyCode() {
+            const code = document.getElementById("resultBox").innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy text: ", err);
+            });
+        }
+    </script>
+</body>
+
+</html>

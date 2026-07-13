@@ -20,6 +20,7 @@ import '../../../data/models/transaction_item_model.dart';
 import '../manage_customer/manage_customer_screen.dart';
 import '../../../data/models/customer_model.dart';
 import '../scanner/scanner_screen.dart';
+import '../settings/settings_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -216,7 +217,14 @@ class _SellingScreenState extends State<SellingScreen> {
       actions: [
         IconButton(
           icon: const Icon(Icons.settings, color: Colors.white, size: 20),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsScreen(),
+              ),
+            );
+          },
         ),
         PopupMenuButton<String>(
           icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
