@@ -25,6 +25,8 @@ class _AskAiScreenState extends State<AskAiScreen> {
   bool _isLoading = false;
   Timer? _typewriterTimer;
 
+  bool get _isAiResponding => _isLoading || (_typewriterTimer != null && _typewriterTimer!.isActive);
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +119,9 @@ class _AskAiScreenState extends State<AskAiScreen> {
           _scrollToBottom();
         }
       } else {
-        timer.cancel();
+        setState(() {
+          timer.cancel();
+        });
         _saveMessages();
         _scrollToBottom();
       }
@@ -163,31 +167,41 @@ class _AskAiScreenState extends State<AskAiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _kBgPage,
-      appBar: AppBar(
-        backgroundColor: _kNavy,
-        title: const Text(
-          "Ask AI",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+    return PopScope(
+      canPop: !_isAiResponding,
+      child: Scaffold(
+        backgroundColor: _kBgPage,
+        appBar: AppBar(
+          backgroundColor: _kNavy,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: _isAiResponding ? null : () => Navigator.pop(context),
+            color: _isAiResponding ? Colors.white38 : Colors.white,
           ),
+          title: const Text(
+            "Ask AI",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _isAiResponding
+                  ? null
+                  : () {
+                      if (_messages.isNotEmpty) {
+                        _showClearDialog();
+                      }
+                    },
+              color: _isAiResponding ? Colors.white38 : Colors.white,
+              tooltip: 'Hapus Percakapan',
+            ),
+          ],
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            onPressed: () {
-              if (_messages.isNotEmpty) {
-                _showClearDialog();
-              }
-            },
-            tooltip: 'Hapus Percakapan',
-          ),
-        ],
-      ),
       body: Column(
         children: [
           Expanded(
@@ -257,8 +271,9 @@ class _AskAiScreenState extends State<AskAiScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
+                    enabled: !_isAiResponding,
                     decoration: InputDecoration(
-                      hintText: "Tanya seputar motor...",
+                      hintText: _isAiResponding ? "AI sedang mengetik..." : "Tanya seputar motor...",
                       hintStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -272,18 +287,18 @@ class _AskAiScreenState extends State<AskAiScreen> {
                       ),
                       isDense: true,
                     ),
-                    onSubmitted: (_) => _sendMessage(),
+                    onSubmitted: _isAiResponding ? null : (_) => _sendMessage(),
                   ),
                 ),
                 const SizedBox(width: 8),
                 InkWell(
-                  onTap: _sendMessage,
+                  onTap: _isAiResponding ? null : _sendMessage,
                   borderRadius: BorderRadius.circular(24),
                   child: Container(
                     width: 42,
                     height: 42,
-                    decoration: const BoxDecoration(
-                      color: _kAccent,
+                    decoration: BoxDecoration(
+                      color: _isAiResponding ? Colors.grey : _kAccent,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -298,6 +313,6 @@ class _AskAiScreenState extends State<AskAiScreen> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
