@@ -21,7 +21,8 @@ class CircuitsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await http.get(Uri.parse('${AiService.baseUrl}/circuits'));
+      final String deviceId = await ActivationService.getDeviceId();
+      final response = await http.get(Uri.parse('${AiService.baseUrl}/circuits?device_id=$deviceId'));
       
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);

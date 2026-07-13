@@ -121,8 +121,10 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
                       child: ListTile(
                         title: Text(circuit.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                         trailing: const Icon(Icons.zoom_out_map, size: 18, color: _kAccent),
-                        onTap: () {
-                          final imageUrl = '${AiService.baseUrl}/circuits/image/${Uri.encodeComponent(_selectedBrand!.name)}/${Uri.encodeComponent(_selectedModel!.name)}/${Uri.encodeComponent(_selectedType!.name)}/${Uri.encodeComponent(circuit.filename)}';
+                        onTap: () async {
+                          final deviceId = await ActivationService.getDeviceId();
+                          final imageUrl = '${AiService.baseUrl}/circuits/image/${Uri.encodeComponent(_selectedBrand!.name)}/${Uri.encodeComponent(_selectedModel!.name)}/${Uri.encodeComponent(_selectedType!.name)}/${Uri.encodeComponent(circuit.filename)}?device_id=$deviceId';
+                          if (!context.mounted) return;
                           Navigator.push(
                             context,
                             MaterialPageRoute(

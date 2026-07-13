@@ -1,4 +1,4 @@
-package com.example.motopos
+package com.dxbytes.motopos
 
 import io.flutter.embedding.android.FlutterActivity
 

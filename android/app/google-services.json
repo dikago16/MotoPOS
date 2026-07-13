@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "903901990201",
+    "project_id": "motopos-app",
+    "storage_bucket": "motopos-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903901990201:android:9d5581c3a37b01f8f02ce8",
+        "android_client_info": {
+          "package_name": "com.dxbytes.motopos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxfneAnN2QjdG9gUg8zIxUNSmNg0Y64WA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
