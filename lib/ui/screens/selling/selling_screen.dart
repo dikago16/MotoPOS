@@ -22,6 +22,7 @@ import '../../../data/models/customer_model.dart';
 import '../scanner/scanner_screen.dart';
 import '../settings/settings_screen.dart';
 import '../ask_ai/ask_ai_screen.dart';
+import '../circuits/circuits_screen.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
@@ -297,6 +298,13 @@ class _SellingScreenState extends State<SellingScreen> {
                   builder: (context) => const AskAiScreen(),
                 ),
               );
+            } else if (value == 'circuits') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CircuitsScreen(),
+                ),
+              );
             }
           },
           itemBuilder: (BuildContext context) {
@@ -361,6 +369,13 @@ class _SellingScreenState extends State<SellingScreen> {
                 value: 'ask_ai',
                 child: Text(
                   'Ask AI',
+                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'circuits',
+                child: Text(
+                  'Circuits',
                   style: TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
