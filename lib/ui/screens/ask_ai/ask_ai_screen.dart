@@ -202,8 +202,9 @@ class _AskAiScreenState extends State<AskAiScreen> {
             ),
           ],
         ),
-      body: Column(
-        children: [
+      body: SafeArea(
+        child: Column(
+          children: [
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
@@ -313,6 +314,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
           ),
         ],
       ),
+    ),
     ));
   }
 }
