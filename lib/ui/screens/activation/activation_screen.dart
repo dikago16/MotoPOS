@@ -401,14 +401,12 @@ class _ActivationScreenState extends State<ActivationScreen>
             ),
             child: Row(
               children: [
-                const Icon(Icons.memory_rounded, size: 14, color: _kMuted),
-                const SizedBox(width: 12),
                 Expanded(
                   child: SelectableText(
                     _deviceId,
                     style: const TextStyle(
                       fontFamily: 'monospace',
-                      fontSize: 13,
+                      fontSize: 14,
                       color: _kAccentLt,
                       letterSpacing: 1.5,
                       fontWeight: FontWeight.w500,

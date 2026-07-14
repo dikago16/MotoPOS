@@ -4,10 +4,24 @@ import 'package:http/http.dart' as http;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart';
 
 class ActivationService {
   static const String baseUrl = "https://api.dx-bytes.com/api/v1";
   static const String _licenseKeyPref = "saved_license_key";
+
+  // Memformat ID menjadi 16 digit hex dengan pemisah minus per 4 karakter
+  static String _formatDeviceId(String rawId) {
+    final bytes = utf8.encode(rawId);
+    final digest = md5.convert(bytes);
+    final String hex16 = digest.toString().substring(0, 16).toUpperCase();
+    
+    List<String> chunks = [];
+    for (int i = 0; i < hex16.length; i += 4) {
+      chunks.add(hex16.substring(i, i + 4));
+    }
+    return chunks.join('-');
+  }
 
   // Mendapatkan Device ID Unik
   static Future<String> getDeviceId() async {
@@ -28,7 +42,7 @@ class ActivationService {
     } catch (e) {
       deviceId = "UNKNOWN_DEVICE";
     }
-    return deviceId;
+    return _formatDeviceId(deviceId);
   }
 
   // Melakukan Aktivasi Lisensi Baru

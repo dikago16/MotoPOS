@@ -20,6 +20,7 @@ class LicenseInfoScreen extends StatefulWidget {
 class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
   String _licenseKey = "Loading...";
   String _statusMessage = "Checking license info...";
+  String _deviceId = "Loading...";
   bool _isLoading = true;
   bool _isValid = false;
 
@@ -32,6 +33,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
   Future<void> _fetchLicenseInfo() async {
     final prefs = await SharedPreferences.getInstance();
     final key = prefs.getString('saved_license_key') ?? '';
+    final deviceId = await ActivationService.getDeviceId();
 
     if (key.isEmpty) {
       setState(() {
@@ -45,6 +47,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
 
     setState(() {
       _licenseKey = key;
+      _deviceId = deviceId;
     });
 
     final result = await ActivationService.checkLicenseInfo(key);
@@ -148,17 +151,41 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                         Text(
                           _statusMessage,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: _isValid
-                                ? Colors.green[700]
-                                : Colors.red[700],
+                            color: _kTxtHigh,
+                            height: 1.5,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Divider(color: _kBorder),
+                        ),
+                        const Text(
+                          'Device ID',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: _kTxtMid,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _deviceId,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'monospace',
+                            color: _kAccent,
+                            letterSpacing: 1.5,
                           ),
                         ),
                       ],
                     ),
                   ),
+                  const Spacer(),
                 ],
               ),
             ),

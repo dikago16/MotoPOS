@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               subtitle: const Text(
-                'Store name, address & phone for receipts',
+                'Store Information',
                 style: TextStyle(color: _kTxtMid, fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right, color: _kTxtMid),
