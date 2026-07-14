@@ -23,6 +23,8 @@ import '../scanner/scanner_screen.dart';
 import '../settings/settings_screen.dart';
 import '../ask_ai/ask_ai_screen.dart';
 import '../circuits/circuits_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/api_service.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
@@ -61,6 +63,24 @@ class _SellingScreenState extends State<SellingScreen> {
   void initState() {
     super.initState();
     _fetchProducts();
+    _runDailyLicenseCheck();
+  }
+
+  Future<void> _runDailyLicenseCheck() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String todayDate = DateTime.now().toIso8601String().substring(0, 10);
+      final String? lastCheck = prefs.getString('last_daily_check_date');
+
+      if (lastCheck != todayDate) {
+        // Run silently in background
+        await ActivationService.performDailyCheck();
+        // Update check date so it only runs once today
+        await prefs.setString('last_daily_check_date', todayDate);
+      }
+    } catch (_) {
+      // Ignore
+    }
   }
 
   Future<void> _fetchProducts() async {

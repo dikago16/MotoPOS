@@ -134,6 +134,38 @@ class ActivationService {
     }
   }
 
+  // Cek lisensi harian secara diam-diam (background)
+  static Future<void> performDailyCheck() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? licenseKey = prefs.getString(_licenseKeyPref);
+
+    if (licenseKey == null || licenseKey.isEmpty) return;
+
+    try {
+      final String deviceId = await getDeviceId();
+      final response = await http
+          .post(
+            Uri.parse("$baseUrl/daily-check"),
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: jsonEncode({"license_key": licenseKey, "device_id": deviceId}),
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 403) {
+        final data = jsonDecode(response.body);
+        if (data['is_invalid'] == true) {
+          // Lisensi tidak valid atau expired, hapus dari perangkat
+          await prefs.remove(_licenseKeyPref);
+        }
+      }
+    } catch (_) {
+      // Abaikan error jaringan/timeout agar pengguna tetap bisa menggunakan aplikasi
+    }
+  }
+
   // Mendapatkan informasi lisensi
   static Future<Map<String, dynamic>> checkLicenseInfo(
     String licenseKey,
