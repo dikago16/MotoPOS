@@ -9,9 +9,10 @@ import 'models/purchase_invoice_model.dart';
 import 'models/purchase_invoice_item_model.dart';
 import 'models/customer_model.dart';
 import 'models/note_model.dart';
+import 'models/store_info_model.dart';
 class DBHelper {
   static Database? _db;
-  static const int _version = 10;
+  static const int _version = 11;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
   static const String _transactionTable = 'transactions';
@@ -21,6 +22,7 @@ class DBHelper {
   static const String _purchaseInvoiceItemsTable = 'purchase_invoice_items';
   static const String _customerTable = 'customers';
   static const String _notesTable = 'notes';
+  static const String _storeInfoTable = 'store_info';
 
   static Future<Database> get db async {
     if (_db != null) return _db!;
@@ -152,6 +154,16 @@ class DBHelper {
           )
           ''',
         );
+        await db.execute(
+          '''
+          CREATE TABLE $_storeInfoTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            storeName TEXT,
+            address TEXT,
+            phone TEXT
+          )
+          ''',
+        );
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
@@ -271,6 +283,18 @@ class DBHelper {
               title TEXT,
               content TEXT,
               createdAt TEXT
+            )
+            ''',
+          );
+        }
+        if (oldVersion < 11) {
+          await db.execute(
+            '''
+            CREATE TABLE $_storeInfoTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              storeName TEXT,
+              address TEXT,
+              phone TEXT
             )
             ''',
           );
@@ -710,5 +734,31 @@ class DBHelper {
     return List.generate(maps.length, (i) {
       return NoteModel.fromMap(maps[i]);
     });
+  }
+
+  // --- Store Info ---
+
+  static Future<StoreInfoModel> getStoreInfo() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(_storeInfoTable, limit: 1);
+    if (maps.isNotEmpty) {
+      return StoreInfoModel.fromMap(maps.first);
+    }
+    return StoreInfoModel.defaults();
+  }
+
+  static Future<int> saveStoreInfo(StoreInfoModel info) async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> existing = await dbClient.query(_storeInfoTable, limit: 1);
+    if (existing.isNotEmpty) {
+      return await dbClient.update(
+        _storeInfoTable,
+        info.toMap()..remove('id'),
+        where: 'id = ?',
+        whereArgs: [existing.first['id']],
+      );
+    } else {
+      return await dbClient.insert(_storeInfoTable, info.toMap()..remove('id'));
+    }
   }
 }

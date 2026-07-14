@@ -5,6 +5,7 @@ import 'package:bluetooth_classic/models/device.dart';
 import '../services/bluetooth_printer_service.dart';
 import '../data/models/transaction_model.dart';
 import '../data/models/transaction_item_model.dart';
+import '../data/db_helper.dart';
 
 /// Provider that manages Bluetooth printer connection state
 /// and receipt printing functionality.
@@ -139,10 +140,14 @@ class PrinterProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      final storeInfo = await DBHelper.getStoreInfo();
       final Uint8List receiptBytes = BluetoothPrinterService.generateReceipt(
         transaction: transaction,
         items: items,
         transactionId: transactionId,
+        storeName: storeInfo.storeName,
+        storeAddress: storeInfo.address,
+        storePhone: storeInfo.phone,
       );
 
       // Use writeBytes to send raw ESC/POS commands as bytes

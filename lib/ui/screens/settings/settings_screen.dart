@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'license_info_screen.dart';
+import 'my_store_screen.dart';
 
 const _kNavy = Color(0xFF0D1B2A);
 const _kBgPage = Color(0xFFF1F5F9);
@@ -31,6 +32,38 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          Container(
+            decoration: BoxDecoration(
+              color: _kBgCard,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: _kBorder),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.store, color: _kNavy),
+              title: const Text(
+                'My Store',
+                style: TextStyle(
+                  color: _kTxtHigh,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: const Text(
+                'Store name, address & phone for receipts',
+                style: TextStyle(color: _kTxtMid, fontSize: 12),
+              ),
+              trailing: const Icon(Icons.chevron_right, color: _kTxtMid),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyStoreScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: _kBgCard,

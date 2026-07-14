@@ -28,6 +28,9 @@ class BluetoothPrinterService {
     required TransactionModel transaction,
     required List<TransactionItemModel> items,
     required int transactionId,
+    String storeName = 'My Store',
+    String storeAddress = 'Jl. Bunga Melati',
+    String storePhone = '08123456789',
   }) {
     final List<int> bytes = [];
 
@@ -37,14 +40,12 @@ class BluetoothPrinterService {
     // ── Store Header (centered) ──
     bytes.addAll(_cmdAlignCenter);
     bytes.addAll(_cmdBoldOn);
-    bytes.addAll(_textToBytes('Ferry Motor'));
+    bytes.addAll(_textToBytes(storeName));
     bytes.addAll(_cmdNewLine);
     bytes.addAll(_cmdBoldOff);
-    bytes.addAll(_textToBytes('Dsn. Ngudi Kidul 705'));
+    bytes.addAll(_textToBytes(storeAddress));
     bytes.addAll(_cmdNewLine);
-    bytes.addAll(_textToBytes('Gempolkerep, Mojokerto'));
-    bytes.addAll(_cmdNewLine);
-    bytes.addAll(_textToBytes('085646097100 / 081224817777'));
+    bytes.addAll(_textToBytes(storePhone));
     bytes.addAll(_cmdNewLine);
 
     // ── Separator ──

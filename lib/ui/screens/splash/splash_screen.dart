@@ -244,104 +244,106 @@ class _SplashScreenState extends State<SplashScreen>
             ),
 
           // ── Konten utama ─────────────────────────────────────────────────────
-          FadeTransition(
-            opacity: _fadeAnim,
-            child: SafeArea(
-              child: Column(
-                children: [
-                  const Spacer(flex: 3),
+          Positioned.fill(
+            child: FadeTransition(
+              opacity: _fadeAnim,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    const Spacer(flex: 3),
 
-                  // ── DX-BYTES dengan efek sorotan lampu ───────────────────────
-                  _buildSpotlightText(),
+                    // ── DX-BYTES dengan efek sorotan lampu ───────────────────────
+                    _buildSpotlightText(),
 
-                  const SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
-                  // ── Badge "ENTERPRISE SOFTWARE" ──────────────────────────────
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: _kAccent.withValues(alpha: 0.30),
-                        width: 1,
+                    // ── Badge "ENTERPRISE SOFTWARE" ──────────────────────────────
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 5,
                       ),
-                      borderRadius: BorderRadius.circular(3),
-                      color: _kAccent.withValues(alpha: 0.05),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: _kAccent.withValues(alpha: 0.30),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(3),
+                        color: _kAccent.withValues(alpha: 0.05),
+                      ),
+                      child: const Text(
+                        'ENTERPRISE EDITION',
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: _kTxtLow,
+                          letterSpacing: 4.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                    child: const Text(
-                      'ENTERPRISE EDITION',
+
+                    const SizedBox(height: 14),
+
+                    // ── Garis aksen ──────────────────────────────────────────────
+                    _buildAccentDivider(),
+
+                    const SizedBox(height: 38),
+
+                    // ── Nama aplikasi ────────────────────────────────────────────
+                    const Text(
+                      'MotoPOS',
                       style: TextStyle(
-                        fontSize: 9,
-                        color: _kTxtLow,
-                        letterSpacing: 4.0,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 3.5,
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 14),
+                    const SizedBox(height: 8),
 
-                  // ── Garis aksen ──────────────────────────────────────────────
-                  _buildAccentDivider(),
-
-                  const SizedBox(height: 38),
-
-                  // ── Nama aplikasi ────────────────────────────────────────────
-                  const Text(
-                    'MotoPOS',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      letterSpacing: 3.5,
+                    const Text(
+                      'Motorcycle Service  ·  Point of Sales',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: _kTxtLow,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 8),
+                    const Spacer(flex: 3),
 
-                  const Text(
-                    'Motorcycle Service  ·  Point of Sales',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: _kTxtLow,
-                      letterSpacing: 1.0,
-                      fontWeight: FontWeight.w400,
+                    // ── Indikator loading ────────────────────────────────────────
+                    const _LoadingDots(),
+
+                    const SizedBox(height: 14),
+
+                    const Text(
+                      'VALIDATING  LICENSE',
+                      style: TextStyle(
+                        color: _kMuted,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 2.5,
+                      ),
                     ),
-                  ),
 
-                  const Spacer(flex: 3),
+                    const Spacer(flex: 1),
 
-                  // ── Indikator loading ────────────────────────────────────────
-                  const _LoadingDots(),
-
-                  const SizedBox(height: 14),
-
-                  const Text(
-                    'VALIDATING  LICENSE',
-                    style: TextStyle(
-                      color: _kMuted,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 2.5,
+                    // ── Copyright footer ─────────────────────────────────────────
+                    Text(
+                      '© ${DateTime.now().year}  DX-BYTES  ·  All rights reserved',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Color(0xFF1E3A55),
+                        letterSpacing: 0.5,
+                      ),
                     ),
-                  ),
 
-                  const Spacer(flex: 1),
-
-                  // ── Copyright footer ─────────────────────────────────────────
-                  Text(
-                    '© ${DateTime.now().year}  DX-BYTES  ·  All rights reserved',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Color(0xFF1E3A55),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 28),
-                ],
+                    const SizedBox(height: 28),
+                  ],
+                ),
               ),
             ),
           ),
