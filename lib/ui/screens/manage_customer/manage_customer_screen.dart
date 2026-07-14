@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 import 'customer_detail_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -127,21 +128,21 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Manage Customer',
-              style: TextStyle(
+              AppLocalizations.get('manage_customers'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
-              'Customers Directory',
-              style: TextStyle(
+              AppLocalizations.get('add_edit_customer'),
+              style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
@@ -203,11 +204,11 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Customer', icon: Icons.search),
+          _sectionLabel(AppLocalizations.get('search_customer'), icon: Icons.search),
           TextFormField(
             style: const TextStyle(fontSize: 13),
             decoration: _inputDeco(
-              'Name, Plat No, or Code',
+              AppLocalizations.get('code_name'),
               suffixIcon: const Icon(Icons.search, size: 18, color: _kTxtLow),
             ),
             onChanged: (val) {
@@ -233,19 +234,19 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: _sectionLabel('Customers List', icon: Icons.people),
+            child: _sectionLabel(AppLocalizations.get('customers_list'), icon: Icons.people),
           ),
           Container(
             color: _kTableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text('CUSTOMER', style: _kColHeader)),
+                Expanded(flex: 5, child: Text(AppLocalizations.get('customer'), style: _kColHeader)),
                 Expanded(
                   flex: 3,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('VEHICLE', style: _kColHeader),
+                    child: Text(AppLocalizations.get('vehicle'), style: _kColHeader),
                   ),
                 ),
               ],
@@ -269,9 +270,9 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                     color: _kTxtLow.withValues(alpha: 0.5),
                   ),
                   const SizedBox(height: 7),
-                  const Text(
-                    'No customers found',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.get('no_customers_found'),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
                       fontWeight: FontWeight.w500,
@@ -313,7 +314,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                cust.name,
+                                '${cust.name.isEmpty ? AppLocalizations.get('unknown_customer') : cust.name} (${cust.vehicleNo})',
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,

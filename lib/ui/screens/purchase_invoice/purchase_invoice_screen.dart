@@ -4,6 +4,7 @@ import '../../../data/models/product_model.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/models/purchase_invoice_model.dart';
 import '../../../data/models/purchase_invoice_item_model.dart';
+import '../../../core/services/app_localizations.dart';
 
 import 'purchase_invoice_constants.dart';
 import 'purchase_invoice_info_view.dart';
@@ -133,7 +134,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
   void _goToAddItems() {
     if (_selectedSupplier == null) {
-      _showSnackBar('Please select a supplier first', isError: true);
+      _showSnackBar(AppLocalizations.get('please_select_supplier'), isError: true);
       return;
     }
     setState(() => _currentPage = 1);
@@ -145,11 +146,11 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
   Future<void> _saveInvoice() async {
     if (_selectedSupplier == null) {
-      _showSnackBar('Please select a supplier', isError: true);
+      _showSnackBar(AppLocalizations.get('please_select_supplier'), isError: true);
       return;
     }
     if (_invoiceItems.isEmpty) {
-      _showSnackBar('Please add at least one item', isError: true);
+      _showSnackBar(AppLocalizations.get('please_add_at_least_one_item'), isError: true);
       return;
     }
 
@@ -181,10 +182,10 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
       await DBHelper.savePurchaseInvoice(invoice, items);
 
       if (!mounted) return;
-      _showSnackBar('Invoice $_invoiceCode saved successfully!');
+      _showSnackBar('${AppLocalizations.get('invoice')} $_invoiceCode ${AppLocalizations.get('saved_successfully')}');
       Navigator.pop(context, true);
     } catch (e) {
-      _showSnackBar('Failed to save: $e', isError: true);
+      _showSnackBar('${AppLocalizations.get('failed_to_save')}: $e', isError: true);
     } finally {
       setState(() => _isSaving = false);
     }
@@ -208,21 +209,21 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: kBgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: const Text(
-          'Edit Quantity',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        title: Text(
+          AppLocalizations.get('edit_quantity'),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
         ),
         content: TextFormField(
           controller: ctrl,
           keyboardType: TextInputType.number,
           autofocus: true,
           style: const TextStyle(fontSize: 14),
-          decoration: inputDeco('Quantity'),
+          decoration: inputDeco(AppLocalizations.get('quantity')),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('CANCEL', style: TextStyle(color: kTxtLow)),
+            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: kTxtLow)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -238,7 +239,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text('OK'),
+            child: Text(AppLocalizations.get('ok')),
           ),
         ],
       ),
@@ -252,21 +253,21 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: kBgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: const Text(
-          'Edit Buying Price',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        title: Text(
+          AppLocalizations.get('edit_buying_price'),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
         ),
         content: TextFormField(
           controller: ctrl,
           keyboardType: TextInputType.number,
           autofocus: true,
           style: const TextStyle(fontSize: 14),
-          decoration: inputDeco('Price'),
+          decoration: inputDeco(AppLocalizations.get('price')),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('CANCEL', style: TextStyle(color: kTxtLow)),
+            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: kTxtLow)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -282,7 +283,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text('OK'),
+            child: Text(AppLocalizations.get('ok')),
           ),
         ],
       ),

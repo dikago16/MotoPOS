@@ -3,6 +3,7 @@ import '../../../data/models/product_model.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/db_helper.dart';
 import '../scanner/scanner_screen.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -30,7 +31,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   bool _autoItemCode = true;
   bool _isSaving = false;
   bool _countStock = false;
-  String _discountType = 'Percent';
+  String _discountType = AppLocalizations.get('percent');
   String _generatedCode = '';
   String _selectedCategory = 'uncategorized';
   List<CategoryModel> _categories = [];
@@ -196,7 +197,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? 'Edit Item' : 'New Item',
+              isEdit ? AppLocalizations.get('edit_item') : AppLocalizations.get('new_item'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -204,7 +205,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? 'Update Details' : 'Add New Item',
+              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_item'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -234,7 +235,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _sectionLabel(
-                            'Basic Information',
+                            AppLocalizations.get('basic_information'),
                             icon: Icons.info_outline,
                           ),
                           if (widget.product == null)
@@ -259,8 +260,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                const Text(
-                                  'Auto Code',
+                                Text(
+                                  AppLocalizations.get('auto_code'),
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: _kTxtMid,
@@ -282,7 +283,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                 fontSize: 13,
                                 color: _kTxtMid,
                               ),
-                              decoration: _inputDeco('Item Code').copyWith(
+                              decoration: _inputDeco(AppLocalizations.get('item_code')).copyWith(
                                 fillColor: _autoItemCode ? _kBgPage : _kBgCard,
                               ),
                             ),
@@ -332,27 +333,27 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       TextFormField(
                         controller: _itemNameCtrl,
                         style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco('Item Name'),
+                        decoration: _inputDeco(AppLocalizations.get('item_name')),
                       ),
                       const SizedBox(height: 8),
 
                       // Category
                       DropdownButtonFormField<String>(
                         initialValue: _selectedCategory,
-                        decoration: _inputDeco('Category'),
+                        decoration: _inputDeco(AppLocalizations.get('category')),
                         style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                         dropdownColor: _kBgCard,
                         items: [
-                          const DropdownMenuItem(
+                          DropdownMenuItem(
                             value: 'uncategorized',
-                            child: Text('Uncategorized'),
+                            child: Text(AppLocalizations.get('uncategorized')),
                           ),
                           ..._categories.map(
                             (c) => DropdownMenuItem(
                               value: c.categoryName,
                               child: Text(
                                 c.categoryName.isEmpty
-                                    ? 'Unknown Category'
+                                    ? AppLocalizations.get('unknown_category')
                                     : c.categoryName,
                               ),
                             ),
@@ -377,7 +378,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       TextFormField(
                         controller: _buyingPriceCtrl,
                         style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco('Buying Price'),
+                        decoration: _inputDeco(AppLocalizations.get('buying_price')),
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 8),
@@ -390,7 +391,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             child: TextFormField(
                               controller: _packetBuyPriceCtrl,
                               style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco('Packet Buy Price'),
+                              decoration: _inputDeco(AppLocalizations.get('packet_buy_price')),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -406,7 +407,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             child: TextFormField(
                               controller: _packetBuyQtyCtrl,
                               style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco('Packet Quantity'),
+                              decoration: _inputDeco(AppLocalizations.get('packet_quantity')),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -418,7 +419,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       TextFormField(
                         controller: _sellingPriceCtrl,
                         style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco('Selling Price'),
+                        decoration: _inputDeco(AppLocalizations.get('selling_price')),
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 8),
@@ -431,7 +432,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             child: TextFormField(
                               controller: _packetSellPriceCtrl,
                               style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco('Packet Sell Price'),
+                              decoration: _inputDeco(AppLocalizations.get('packet_sell_price')),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -447,7 +448,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             child: TextFormField(
                               controller: _packetSellQtyCtrl,
                               style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco('Paket Quantity'),
+                              decoration: _inputDeco(AppLocalizations.get('packet_quantity')),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -458,8 +459,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       // Discount
                       Row(
                         children: [
-                          const Text(
-                            'Discount',
+                          Text(
+                            AppLocalizations.get('discount'),
                             style: TextStyle(fontSize: 12, color: _kTxtMid),
                           ),
                           const SizedBox(width: 8),
@@ -489,7 +490,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                     });
                                   }
                                 },
-                                items: <String>['Percent', 'Amount']
+                                items: <String>[AppLocalizations.get('percent'), AppLocalizations.get('amount')]
                                     .map<DropdownMenuItem<String>>((
                                       String value,
                                     ) {
@@ -519,7 +520,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       TextFormField(
                         controller: _unitCtrl,
                         style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco('Unit', hintText: 'Example: Kg'),
+                        decoration: _inputDeco(AppLocalizations.get('unit'), hintText: AppLocalizations.get('unit_hint')),
                       ),
                       const SizedBox(height: 8),
 
@@ -540,8 +541,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            'Count stock when transaction',
+                          Text(
+                            AppLocalizations.get('count_stock'),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -557,7 +558,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         TextFormField(
                           controller: _stockQtyCtrl,
                           style: const TextStyle(fontSize: 13),
-                          decoration: _inputDeco('Stock Quantity'),
+                          decoration: _inputDeco(AppLocalizations.get('stock_quantity')),
                           keyboardType: TextInputType.number,
                         ),
                       ],
@@ -608,7 +609,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   setState(() {
                     _autoItemCode = true;
                     _countStock = false;
-                    _discountType = 'Percent';
+                    _discountType = AppLocalizations.get('percent');
                     _itemCodeCtrl.text = _generatedCode;
                     _selectedCategory = 'uncategorized';
                   });
@@ -622,8 +623,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     side: const BorderSide(color: _kBorderMid),
                   ),
                 ),
-                child: const Text(
-                  'ABORT',
+                child: Text(
+                  AppLocalizations.get('abort'),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -644,7 +645,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         if (_itemNameCtrl.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text('Item name cannot be empty!'),
+                              content: Text(AppLocalizations.get('item_name_empty')),
                               backgroundColor: Colors.red.shade600,
                             ),
                           );
@@ -682,8 +683,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Item saved successfully!'),
+                            SnackBar(
+                              content: Text(AppLocalizations.get('item_saved')),
                               backgroundColor: Color(0xFF16A34A),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -694,7 +695,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           setState(() => _isSaving = false);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Failed to save item: $e'),
+                              content: Text('${AppLocalizations.get('item_save_failed')}: $e'),
                               backgroundColor: const Color(0xFFDC2626),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -712,7 +713,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       )
                     : const Icon(Icons.check, size: 16),
                 label: Text(
-                  _isSaving ? 'SAVING...' : 'SAVE',
+                  _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save'),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

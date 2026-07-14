@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -100,9 +101,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Daily Report',
-              style: TextStyle(
+            Text(
+              AppLocalizations.get('daily_report'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
@@ -199,9 +200,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     child: const Icon(Icons.trending_up, color: Colors.white, size: 16),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'TOTAL REVENUE',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.get('total_revenue').toUpperCase(),
+                    style: const TextStyle(
                       color: Color(0xFF90AAC8),
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
@@ -241,7 +242,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                 icon: Icons.receipt_long,
                 iconColor: _kAccent,
                 iconBg: _kAccentSoft,
-                label: 'Transactions',
+                label: AppLocalizations.get('transactions'),
                 value: '$totalTrx',
               ),
             ),
@@ -251,7 +252,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                 icon: Icons.analytics_outlined,
                 iconColor: _kGreen,
                 iconBg: const Color(0xFFF0FDF4),
-                label: 'Avg / Transaction',
+                label: AppLocalizations.get('avg_per_transaction'),
                 value: _formatRupiah(avgTrx),
               ),
             ),
@@ -261,7 +262,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                 icon: Icons.category_outlined,
                 iconColor: _kAmber,
                 iconBg: const Color(0xFFFFFBEB),
-                label: 'Categories',
+                label: AppLocalizations.get('categories'),
                 value: '${_categorySummary.length}',
               ),
             ),
@@ -360,9 +361,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                   child: const Icon(Icons.pie_chart_outline, color: _kAccent, size: 14),
                 ),
                 const SizedBox(width: 8),
-                const Text(
-                  'SALES BY CATEGORY',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.get('sales_by_category').toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
@@ -374,16 +375,16 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           ),
 
           if (_categorySummary.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
               child: Center(
                 child: Column(
                   children: [
-                    Icon(Icons.inbox_outlined, size: 28, color: _kTxtLow),
-                    SizedBox(height: 6),
+                    const Icon(Icons.inbox_outlined, size: 28, color: _kTxtLow),
+                    const SizedBox(height: 6),
                     Text(
-                      'No transactions for this date',
-                      style: TextStyle(fontSize: 12, color: _kTxtLow),
+                      AppLocalizations.get('no_transactions_today'),
+                      style: const TextStyle(fontSize: 12, color: _kTxtLow),
                     ),
                   ],
                 ),
@@ -395,12 +396,12 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
               Container(
                 color: _kTableHead,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                child: const Row(
+                child: Row(
                   children: [
-                    Expanded(flex: 4, child: _ColHeader('CATEGORY')),
-                    Expanded(flex: 2, child: _ColHeaderCenter('QTY')),
-                    Expanded(flex: 2, child: _ColHeaderCenter('TRX')),
-                    Expanded(flex: 3, child: _ColHeaderRight('AMOUNT')),
+                    Expanded(flex: 4, child: _ColHeader(AppLocalizations.get('category').toUpperCase())),
+                    Expanded(flex: 2, child: _ColHeaderCenter(AppLocalizations.get('qty').toUpperCase())),
+                    Expanded(flex: 2, child: _ColHeaderCenter(AppLocalizations.get('trx').toUpperCase())),
+                    Expanded(flex: 3, child: _ColHeaderRight(AppLocalizations.get('amount').toUpperCase())),
                     Expanded(flex: 2, child: _ColHeaderRight('%')),
                   ],
                 ),
@@ -439,7 +440,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Text(
-                                    catName.isEmpty ? 'Uncategorized' : catName,
+                                    catName.isEmpty ? AppLocalizations.get('uncategorized') : catName,
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
@@ -534,11 +535,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       flex: 4,
                       child: Text(
-                        'TOTAL',
-                        style: TextStyle(
+                        AppLocalizations.get('total').toUpperCase(),
+                        style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                           color: _kTxtHigh,
@@ -660,9 +661,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                   child: const Icon(Icons.list_alt, color: _kGreen, size: 14),
                 ),
                 const SizedBox(width: 8),
-                const Text(
-                  'TRANSACTION HISTORY',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.get('transaction_history').toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
@@ -678,7 +679,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     border: Border.all(color: _kBorderMid),
                   ),
                   child: Text(
-                    '${grouped.length} Transaction${grouped.length != 1 ? 's' : ''}',
+                    '${grouped.length} ${AppLocalizations.get('transactions')}',
                     style: const TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w600,
@@ -691,16 +692,16 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           ),
 
           if (grouped.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
               child: Center(
                 child: Column(
                   children: [
-                    Icon(Icons.receipt_long_outlined, size: 28, color: _kTxtLow),
-                    SizedBox(height: 6),
+                    const Icon(Icons.receipt_long_outlined, size: 28, color: _kTxtLow),
+                    const SizedBox(height: 6),
                     Text(
-                      'No transactions recorded',
-                      style: TextStyle(fontSize: 12, color: _kTxtLow),
+                      AppLocalizations.get('no_transactions_recorded'),
+                      style: const TextStyle(fontSize: 12, color: _kTxtLow),
                     ),
                   ],
                 ),
@@ -819,7 +820,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           child: Column(
                             children: List.generate(items.length, (i) {
                               final item = items[i];
-                              final itemName = (item['itemName'] as String?) ?? 'Unknown';
+                              final itemName = (item['itemName'] as String?) ?? AppLocalizations.get('unknown_item');
                               final category = (item['category'] as String?) ?? '';
                               final qty = (item['quantity'] as int?) ?? 0;
                               final subtotal = (item['subtotal'] is int)

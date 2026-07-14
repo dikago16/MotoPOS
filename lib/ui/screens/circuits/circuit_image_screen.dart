@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/services/app_localizations.dart';
 
 class CircuitImageScreen extends StatelessWidget {
   final String title;
@@ -35,10 +36,10 @@ class CircuitImageScreen extends StatelessWidget {
               );
             },
             errorBuilder: (context, error, stackTrace) {
-              return const Center(
+              return Center(
                 child: Text(
-                  'Gagal memuat gambar',
-                  style: TextStyle(color: Colors.red, fontSize: 16),
+                  AppLocalizations.get('failed_to_load_image'),
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
                 ),
               );
             },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/services/api_service.dart';
 import '../activation/activation_screen.dart';
 import '../selling/selling_screen.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -249,9 +250,9 @@ class _SplashScreenState extends State<SplashScreen>
               opacity: _fadeAnim,
               child: SafeArea(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Spacer(flex: 3),
-
+                    const Spacer(),
                     // ── DX-BYTES dengan efek sorotan lampu ───────────────────────
                     _buildSpotlightText(),
 
@@ -312,15 +313,31 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
 
-                    const Spacer(flex: 3),
-
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          
+          // ── Loading & Footer ──────────────────────────────────────────────────
+          Positioned(
+            bottom: 30,
+            left: 0,
+            right: 0,
+            child: FadeTransition(
+              opacity: _fadeAnim,
+              child: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     // ── Indikator loading ────────────────────────────────────────
                     const _LoadingDots(),
 
                     const SizedBox(height: 14),
 
-                    const Text(
-                      'VALIDATING  LICENSE',
+                    Text(
+                      AppLocalizations.get('validating_license'),
                       style: TextStyle(
                         color: _kMuted,
                         fontSize: 10,
@@ -329,7 +346,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
 
-                    const Spacer(flex: 1),
+                    const SizedBox(height: 30),
 
                     // ── Copyright footer ─────────────────────────────────────────
                     Text(
@@ -340,8 +357,6 @@ class _SplashScreenState extends State<SplashScreen>
                         letterSpacing: 0.5,
                       ),
                     ),
-
-                    const SizedBox(height: 28),
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../../../core/services/app_localizations.dart';
 
 const Color _kAccent = Color(0xFF00B0FF);
 
@@ -39,9 +40,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text(
-          'Scan Barcode',
-          style: TextStyle(color: Colors.white, fontSize: 16),
+        title: Text(
+          AppLocalizations.get('scanner'),
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -72,9 +73,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 color: Colors.black54,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text(
-                'Align barcode within the frame',
-                style: TextStyle(color: Colors.white, fontSize: 14),
+              child: Text(
+                AppLocalizations.get('align_barcode'),
+                style: const TextStyle(color: Colors.white, fontSize: 14),
               ),
             ),
           ),

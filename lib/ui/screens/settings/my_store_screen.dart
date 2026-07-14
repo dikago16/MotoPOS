@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/store_info_model.dart';
+import '../../../core/services/app_localizations.dart';
 
 const _kNavy = Color(0xFF0D1B2A);
 const _kBgPage = Color(0xFFF1F5F9);
@@ -69,7 +70,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
       setState(() => _isSaving = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Store info saved'),
+          content: Text(AppLocalizations.get('store_saved')),
           backgroundColor: Colors.green.shade700,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
@@ -86,9 +87,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
       appBar: AppBar(
         backgroundColor: _kNavy,
         elevation: 0,
-        title: const Text(
-          'My Store',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.get('my_store'),
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -116,9 +117,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'STORE INFORMATION',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.get('store_information').toUpperCase(),
+                              style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 color: _kTxtLow,
@@ -128,50 +129,50 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                             const SizedBox(height: 10),
 
                             // Store Name
-                            _buildLabel('Store Name'),
+                            _buildLabel(AppLocalizations.get('store_name')),
                             const SizedBox(height: 6),
                             TextFormField(
                               controller: _nameCtrl,
                               decoration: _inputDecoration(
-                                hint: 'e.g. My Store',
+                                hint: AppLocalizations.get('e_g_my_store'),
                                 icon: Icons.store_outlined,
                               ),
                               validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? 'Required'
+                                  ? AppLocalizations.get('required')
                                   : null,
                             ),
 
                             const SizedBox(height: 10),
 
                             // Address
-                            _buildLabel('Address'),
+                            _buildLabel(AppLocalizations.get('address')),
                             const SizedBox(height: 6),
                             TextFormField(
                               controller: _addressCtrl,
                               maxLines: 2,
                               decoration: _inputDecoration(
-                                hint: 'e.g. Jl. Bunga Melati',
+                                hint: AppLocalizations.get('e_g_address'),
                                 icon: Icons.location_on_outlined,
                               ),
                               validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? 'Required'
+                                  ? AppLocalizations.get('required')
                                   : null,
                             ),
 
                             const SizedBox(height: 18),
 
                             // Phone
-                            _buildLabel('Phone Number'),
+                            _buildLabel(AppLocalizations.get('phone_number')),
                             const SizedBox(height: 6),
                             TextFormField(
                               controller: _phoneCtrl,
                               keyboardType: TextInputType.phone,
                               decoration: _inputDecoration(
-                                hint: 'e.g. 08123456789',
+                                hint: AppLocalizations.get('e_g_phone'),
                                 icon: Icons.phone_outlined,
                               ),
                               validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? 'Required'
+                                  ? AppLocalizations.get('required')
                                   : null,
                             ),
                           ],
@@ -191,9 +192,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'RECEIPT PREVIEW',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.get('receipt_preview').toUpperCase(),
+                              style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 color: _kTxtLow,
@@ -216,7 +217,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                               ),
                               child: ValueListenableBuilder(
                                 valueListenable: _nameCtrl,
-                                builder: (_, _, _) {
+                                builder: (context, value, child) {
                                   return Column(
                                     children: [
                                       Text(
@@ -308,9 +309,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                     strokeWidth: 2,
                                   ),
                                 )
-                              : const Text(
-                                  'SAVE',
-                                  style: TextStyle(
+                              : Text(
+                                  AppLocalizations.get('save'),
+                                  style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,

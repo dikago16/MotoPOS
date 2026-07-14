@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/circuits_provider.dart';
 import '../../../data/models/circuit_model.dart';
 import '../../../core/services/api_service.dart';
+import '../../../core/services/app_localizations.dart';
 import 'circuit_image_screen.dart';
 
 // Enterprise Design Tokens
@@ -36,7 +37,7 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
     return Scaffold(
       backgroundColor: _kBgPage,
       appBar: AppBar(
-        title: const Text('Circuits Diagram'),
+        title: Text(AppLocalizations.get('circuits_title')),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,
@@ -50,7 +51,7 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
             return Center(child: Text(provider.error, style: const TextStyle(color: Colors.red)));
           }
           if (provider.brands.isEmpty) {
-            return const Center(child: Text('No circuits available.'));
+            return Center(child: Text(AppLocalizations.get('no_circuits_found')));
           }
 
           return SingleChildScrollView(

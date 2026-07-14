@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/note_model.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -49,9 +50,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
     if (title.isEmpty && content.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Note cannot be empty'),
-          backgroundColor: Color(0xFFDC2626),
+        SnackBar(
+          content: Text(AppLocalizations.get('note_cannot_be_empty')),
+          backgroundColor: const Color(0xFFDC2626),
         ),
       );
       return;
@@ -97,16 +98,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Note Title',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _kTxtMid),
+                Text(
+                  AppLocalizations.get('note_title'),
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _kTxtMid),
                 ),
                 const SizedBox(height: 6),
                 TextField(
                   controller: _titleController,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _kTxtHigh),
                   decoration: InputDecoration(
-                    hintText: 'Enter title here',
+                    hintText: AppLocalizations.get('enter_title_here'),
                     hintStyle: const TextStyle(color: _kTxtLow, fontSize: 14, fontWeight: FontWeight.w400),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -127,16 +128,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Content',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _kTxtMid),
+                Text(
+                  AppLocalizations.get('content'),
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _kTxtMid),
                 ),
                 const SizedBox(height: 6),
                 TextField(
                   controller: _contentController,
                   style: const TextStyle(fontSize: 13, color: _kTxtHigh, height: 1.5),
                   decoration: InputDecoration(
-                    hintText: 'Write your note here...',
+                    hintText: AppLocalizations.get('write_your_note_here'),
                     hintStyle: const TextStyle(color: _kTxtLow, fontSize: 13),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -173,7 +174,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    child: const Text('SAVE NOTE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
+                    child: Text(AppLocalizations.get('save_note').toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
                   ),
                 ),
               ],

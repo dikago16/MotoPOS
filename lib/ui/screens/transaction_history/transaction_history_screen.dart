@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 import 'transaction_detail_screen.dart';
 
@@ -199,21 +200,21 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
       elevation: 0,
       toolbarHeight: 54,
       iconTheme: const IconThemeData(color: Colors.white, size: 20),
-      title: const Column(
+      title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Transaction History',
-            style: TextStyle(
+            AppLocalizations.get('transaction_history'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            'Sales Records',
-            style: TextStyle(
+            AppLocalizations.get('sales_records'),
+            style: const TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
               fontWeight: FontWeight.w400,
@@ -242,14 +243,14 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Transactions', icon: Icons.search),
+          _sectionLabel(AppLocalizations.get('search_transactions'), icon: Icons.search),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: TextFormField(
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco('Vehicle No (Plat)'),
+                  decoration: _inputDeco(AppLocalizations.get('vehicle_no')),
                   onChanged: (val) {
                     setState(() {
                       _searchQuery = val;
@@ -342,7 +343,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: _sectionLabel(
-              'Sales Records',
+              AppLocalizations.get('sales_records'),
               icon: Icons.receipt,
             ),
           ),
@@ -351,19 +352,19 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text('TRANSACTION', style: _kColHeader)),
+                Expanded(flex: 3, child: Text(AppLocalizations.get('transaction').toUpperCase(), style: _kColHeader)),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('DATE', style: _kColHeader),
+                    child: Text(AppLocalizations.get('date').toUpperCase(), style: _kColHeader),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('TOTAL', style: _kColHeader),
+                    child: Text(AppLocalizations.get('total').toUpperCase(), style: _kColHeader),
                   ),
                 ),
               ],
@@ -383,9 +384,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                 children: [
                   Icon(Icons.receipt, size: 30, color: _kTxtLow.withValues(alpha: 0.5)),
                   const SizedBox(height: 7),
-                  const Text(
-                    'No transactions found',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.get('no_transactions_recorded'),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
                       fontWeight: FontWeight.w500,

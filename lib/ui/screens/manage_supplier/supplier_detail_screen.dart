@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -99,9 +100,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Supplier saved successfully!'),
-            backgroundColor: Color(0xFF16A34A),
+          SnackBar(
+            content: Text(AppLocalizations.get('supplier_saved')),
+            backgroundColor: const Color(0xFF16A34A),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -112,7 +113,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save supplier: $e'),
+            content: Text('${AppLocalizations.get('supplier_save_failed')}: $e'),
             backgroundColor: const Color(0xFFDC2626),
             behavior: SnackBarBehavior.floating,
           ),
@@ -196,7 +197,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? 'Edit Supplier' : 'New Supplier',
+              isEdit ? AppLocalizations.get('edit_supplier') : AppLocalizations.get('new_supplier'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -204,7 +205,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? 'Update Details' : 'Add New Supplier',
+              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_supplier'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -252,7 +253,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: 4),
-                                      const Text('Auto Code', style: TextStyle(fontSize: 11, color: _kTxtMid)),
+                                      Text(AppLocalizations.get('auto_code'), style: const TextStyle(fontSize: 11, color: _kTxtMid)),
                                     ],
                                   ),
                               ],
@@ -261,7 +262,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                               controller: _codeCtrl,
                               readOnly: _isAutoCode,
                               style: const TextStyle(fontSize: 13, color: _kTxtMid),
-                              decoration: _inputDeco('Supplier Code').copyWith(
+                              decoration: _inputDeco(AppLocalizations.get('supplier_code')).copyWith(
                                 fillColor: _isAutoCode ? _kBgPage : _kBgCard,
                               ),
                               validator: (value) =>
@@ -271,7 +272,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             TextFormField(
                               controller: _nameCtrl,
                               style: const TextStyle(fontSize: 13, color: _kTxtHigh),
-                              decoration: _inputDeco('Supplier Name*'),
+                              decoration: _inputDeco(AppLocalizations.get('supplier_name')),
                               validator: (value) =>
                                   value == null || value.trim().isEmpty ? 'Required' : null,
                             ),
@@ -294,14 +295,14 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                               controller: _phoneCtrl,
                               keyboardType: TextInputType.phone,
                               style: const TextStyle(fontSize: 13, color: _kTxtHigh),
-                              decoration: _inputDeco('Phone Number'),
+                              decoration: _inputDeco(AppLocalizations.get('phone_number')),
                             ),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _addressCtrl,
                               maxLines: 3,
                               style: const TextStyle(fontSize: 13, color: _kTxtHigh),
-                              decoration: _inputDeco('Address'),
+                              decoration: _inputDeco(AppLocalizations.get('address')),
                             ),
                           ],
                         ),
@@ -338,9 +339,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
-                        child: const Text(
-                          'CANCEL',
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                        child: Text(
+                          AppLocalizations.get('abort'),
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -369,9 +370,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                 ),
                               )
-                            : const Text(
-                                'SAVE SUPPLIER',
-                                style: TextStyle(
+                            : Text(
+                                _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save_supplier'),
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,

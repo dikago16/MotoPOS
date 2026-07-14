@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../core/services/api_service.dart';
 import '../selling/selling_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -223,8 +224,8 @@ class _ActivationScreenState extends State<ActivationScreen>
             borderRadius: BorderRadius.circular(3),
             color: _kDanger.withValues(alpha: 0.07),
           ),
-          child: const Text(
-            'ACTIVATION REQUIRED',
+          child: Text(
+            AppLocalizations.get('activation_required'),
             style: TextStyle(
               fontSize: 9,
               color: Color(0xFFFCA5A5),
@@ -322,7 +323,7 @@ class _ActivationScreenState extends State<ActivationScreen>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            'DEVICE INFORMATION',
+            AppLocalizations.get('device_information'),
             style: TextStyle(
               fontSize: 8,
               color: _kMuted,
@@ -354,8 +355,8 @@ class _ActivationScreenState extends State<ActivationScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'YOUR DEVICE ID',
+              Text(
+                AppLocalizations.get('your_device_id'),
                 style: TextStyle(
                   fontSize: 9,
                   color: _kTxtLow,
@@ -373,8 +374,8 @@ class _ActivationScreenState extends State<ActivationScreen>
                     width: 1,
                   ),
                 ),
-                child: const Text(
-                  'REQUIRED FOR LICENSE',
+                child: Text(
+                  AppLocalizations.get('required_for_license'),
                   style: TextStyle(
                     fontSize: 8,
                     color: _kAccentLt,
@@ -448,9 +449,9 @@ class _ActivationScreenState extends State<ActivationScreen>
                 color: _kTxtLow.withValues(alpha: 0.7),
               ),
               const SizedBox(width: 6),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Share this Device ID with DX-BYTES support to obtain a license.',
+                  AppLocalizations.get('share_device_id_desc'),
                   style: TextStyle(
                     fontSize: 10,
                     color: _kTxtLow,
@@ -483,7 +484,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                'LICENSE KEY',
+                AppLocalizations.get('license_key'),
                 style: TextStyle(
                   fontSize: 8,
                   color: _kMuted,
@@ -563,8 +564,8 @@ class _ActivationScreenState extends State<ActivationScreen>
 
         const SizedBox(height: 8),
 
-        const Text(
-          'Format: XXXX-XXXX-XXXX-XXXX · Case insensitive',
+        Text(
+          AppLocalizations.get('license_format_desc'),
           style: TextStyle(fontSize: 10, color: _kMuted, letterSpacing: 0.3),
         ),
       ],
@@ -592,8 +593,8 @@ class _ActivationScreenState extends State<ActivationScreen>
                   strokeWidth: 2,
                 ),
               )
-            : const Text(
-                'ACTIVATE  LICENSE',
+            : Text(
+                AppLocalizations.get('activate_license'),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -623,8 +624,8 @@ class _ActivationScreenState extends State<ActivationScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'This is a licensed enterprise software. Contact WhatsApp 0851-1722-2788 for support or click link below',
+                Text(
+                  AppLocalizations.get('license_support_desc'),
                   style: TextStyle(
                     fontSize: 11,
                     color: _kTxtLow,
@@ -647,8 +648,8 @@ class _ActivationScreenState extends State<ActivationScreen>
                           color: Color(0xFF4ADE80),
                         ),
                         const SizedBox(width: 6),
-                        const Text(
-                          'WhatsApp Support',
+                        Text(
+                          AppLocalizations.get('whatsapp_support'),
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,

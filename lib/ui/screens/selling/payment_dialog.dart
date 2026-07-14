@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/services/app_localizations.dart';
+
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
@@ -181,12 +183,12 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Payment',
+                            AppLocalizations.get('payment'),
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -194,7 +196,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                             ),
                           ),
                           Text(
-                            'Complete your transaction',
+                            AppLocalizations.get('complete_transaction'),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w400,
@@ -228,8 +230,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      'AMOUNT DUE',
+                    Text(
+                      AppLocalizations.get('amount_due'),
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w700,
@@ -268,7 +270,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       textCapitalization: TextCapitalization.characters,
                       decoration:
                           _inputDeco(
-                            'Vehicle No (Optional)',
+                            AppLocalizations.get('vehicle_no_optional'),
                             hint: 'e.g. B 1234 ABC',
                           ).copyWith(
                             prefixIcon: const Padding(
@@ -295,14 +297,14 @@ class _PaymentDialogState extends State<PaymentDialog> {
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
-                      decoration: _inputDeco('Cash Received', prefix: 'Rp '),
+                      decoration: _inputDeco(AppLocalizations.get('cash_received'), prefix: 'Rp '),
                     ),
                     const SizedBox(height: 10),
 
                     // Quick Nominals
                     Row(
                       children: [
-                        _quickChip('EXACT', widget.totalAmount, isExact: true),
+                        _quickChip(AppLocalizations.get('exact'), widget.totalAmount, isExact: true),
                         const SizedBox(width: 6),
                         ..._getQuickNominals().map(
                           (nom) => Padding(
@@ -350,7 +352,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                isValid ? 'CHANGE' : 'INSUFFICIENT',
+                                isValid ? AppLocalizations.get('change') : AppLocalizations.get('insufficient'),
                                 style: TextStyle(
                                   fontSize: 9,
                                   fontWeight: FontWeight.w700,
@@ -397,8 +399,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              child: const Text(
-                                'CANCEL',
+                              child: Text(
+                                AppLocalizations.get('cancel'),
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w700,
@@ -424,8 +426,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                     }
                                   : null,
                               icon: const Icon(Icons.check, size: 16),
-                              label: const Text(
-                                'CONFIRM PAYMENT',
+                              label: Text(
+                                AppLocalizations.get('confirm_payment'),
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w700,
@@ -512,7 +514,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Print Receipt',
+                    AppLocalizations.get('print_receipt'),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -521,8 +523,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                   ),
                   Text(
                     canPrint
-                        ? 'Printer is connected'
-                        : 'Printer is not connected',
+                        ? AppLocalizations.get('printer_is_connected')
+                        : AppLocalizations.get('printer_not_connected'),
                     style: TextStyle(
                       fontSize: 9,
                       color: canPrint ? _kTxtMid : _kTxtLow,
@@ -538,8 +540,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                   color: _kRed.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Text(
-                  'OFFLINE',
+                child: Text(
+                  AppLocalizations.get('offline'),
                   style: TextStyle(
                     fontSize: 8,
                     fontWeight: FontWeight.w700,

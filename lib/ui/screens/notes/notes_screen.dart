@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/note_model.dart';
 import 'note_detail_screen.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -49,12 +50,12 @@ class _NotesScreenState extends State<NotesScreen> {
           borderRadius: BorderRadius.circular(12),
         ),
         title: Row(
-          children: const [
-            Icon(Icons.warning_amber_rounded, color: Color(0xFFDC2626), size: 24),
-            SizedBox(width: 8),
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Color(0xFFDC2626), size: 24),
+            const SizedBox(width: 8),
             Text(
-              'Delete Note',
-              style: TextStyle(
+              AppLocalizations.get('delete_note'),
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: _kTxtHigh,
@@ -62,14 +63,14 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
           ],
         ),
-        content: const Text(
-          'Are you sure you want to delete this note?',
-          style: TextStyle(fontSize: 13, color: _kTxtMid),
+        content: Text(
+          AppLocalizations.get('delete_confirmation'),
+          style: const TextStyle(fontSize: 13, color: _kTxtMid),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('CANCEL', style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600)),
+            child: Text(AppLocalizations.get('cancel').toUpperCase(), style: const TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -81,7 +82,7 @@ class _NotesScreenState extends State<NotesScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text('DELETE', style: TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(AppLocalizations.get('delete').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -104,13 +105,13 @@ class _NotesScreenState extends State<NotesScreen> {
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.note_alt_outlined, size: 48, color: _kTxtLow),
-                        SizedBox(height: 12),
+                      children: [
+                        const Icon(Icons.note_alt_outlined, size: 48, color: _kTxtLow),
+                        const SizedBox(height: 12),
                         Text(
-                          'No notes yet.\nTap + to add one.',
+                          AppLocalizations.get('no_notes_found'),
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: _kTxtMid, fontSize: 14, fontWeight: FontWeight.w500),
+                          style: const TextStyle(color: _kTxtMid, fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -149,7 +150,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        note.title.isNotEmpty ? note.title : 'Untitled Note',
+                                        note.title.isNotEmpty ? note.title : AppLocalizations.get('untitled_note'),
                                         style: const TextStyle(
                                           color: _kTxtHigh,
                                           fontWeight: FontWeight.w600,
@@ -199,18 +200,18 @@ class _NotesScreenState extends State<NotesScreen> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
-            'Notes',
-            style: TextStyle(
+            AppLocalizations.get('notes'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            'Manage your notes',
-            style: TextStyle(
+            AppLocalizations.get('manage_notes'),
+            style: const TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
               fontWeight: FontWeight.w400,

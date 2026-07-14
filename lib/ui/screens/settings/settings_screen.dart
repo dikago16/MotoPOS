@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/services/app_localizations.dart';
+import 'language_screen.dart';
 import 'license_info_screen.dart';
 import 'my_store_screen.dart';
 
@@ -19,9 +21,9 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: _kNavy,
         elevation: 0,
-        title: const Text(
-          'Settings',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.get('settings'),
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -32,70 +34,68 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: _kBgCard,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: _kBorder),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.store, color: _kNavy),
-              title: const Text(
-                'My Store',
-                style: TextStyle(
-                  color: _kTxtHigh,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              subtitle: const Text(
-                'Store Information',
-                style: TextStyle(color: _kTxtMid, fontSize: 12),
-              ),
-              trailing: const Icon(Icons.chevron_right, color: _kTxtMid),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyStoreScreen(),
-                  ),
-                );
-              },
-            ),
+          _buildMenuTile(
+            context,
+            icon: Icons.store,
+            title: AppLocalizations.get('my_store'),
+            subtitle: AppLocalizations.get('store_information'),
+            screen: const MyStoreScreen(),
           ),
           const SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: _kBgCard,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: _kBorder),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.key, color: _kNavy),
-              title: const Text(
-                'License',
-                style: TextStyle(
-                  color: _kTxtHigh,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              subtitle: const Text(
-                'License info',
-                style: TextStyle(color: _kTxtMid, fontSize: 12),
-              ),
-              trailing: const Icon(Icons.chevron_right, color: _kTxtMid),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LicenseInfoScreen(),
-                  ),
-                );
-              },
-            ),
+          _buildMenuTile(
+            context,
+            icon: Icons.key,
+            title: AppLocalizations.get('license'),
+            subtitle: AppLocalizations.get('license_info'),
+            screen: const LicenseInfoScreen(),
+          ),
+          const SizedBox(height: 10),
+          _buildMenuTile(
+            context,
+            icon: Icons.language,
+            title: AppLocalizations.get('language'),
+            subtitle: AppLocalizations.get('choose_language'),
+            screen: const LanguageScreen(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMenuTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Widget screen,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: _kBgCard,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: _kBorder),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: _kNavy),
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: _kTxtHigh,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(color: _kTxtMid, fontSize: 12),
+        ),
+        trailing: const Icon(Icons.chevron_right, color: _kTxtMid),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => screen),
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -204,7 +205,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? 'Edit Customer' : 'New Customer',
+              isEdit ? AppLocalizations.get('edit_customer') : AppLocalizations.get('new_customer'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -212,7 +213,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? 'Update Details' : 'Add New Customer',
+              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_customer'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -279,8 +280,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 4),
-                                    const Text(
-                                      'Auto Code',
+                                    Text(
+                                      AppLocalizations.get('auto_code'),
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: _kTxtMid,
@@ -299,7 +300,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                               fontSize: 13,
                               color: _kTxtMid,
                             ),
-                            decoration: _inputDeco('Customer Code').copyWith(
+                            decoration: _inputDeco(AppLocalizations.get('customer_code')).copyWith(
                               fillColor: _autoCode ? _kBgPage : _kBgCard,
                             ),
                           ),
@@ -309,7 +310,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           TextFormField(
                             controller: _nameCtrl,
                             style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco('Customer Name'),
+                            decoration: _inputDeco(AppLocalizations.get('customer_name')),
                             textCapitalization: TextCapitalization.words,
                           ),
                           const SizedBox(height: 8),
@@ -330,7 +331,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           TextFormField(
                             controller: _addressCtrl,
                             style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco('Address'),
+                            decoration: _inputDeco(AppLocalizations.get('address')),
                             maxLines: 2,
                             textCapitalization: TextCapitalization.words,
                           ),
@@ -352,7 +353,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _sectionLabel(
-                            'Vehicle Information',
+                            AppLocalizations.get('basic_information'),
                             icon: Icons.two_wheeler,
                           ),
 
@@ -437,8 +438,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     side: const BorderSide(color: _kBorderMid),
                   ),
                 ),
-                child: const Text(
-                  'ABORT',
+                child: Text(
+                  AppLocalizations.get('abort'),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -459,9 +460,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         if (_nameCtrl.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text(
-                                'Customer name cannot be empty!',
-                              ),
+                              content: Text(AppLocalizations.get('customer_name_empty')),
                               backgroundColor: Colors.red.shade600,
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -490,8 +489,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Customer saved successfully!'),
+                            SnackBar(
+                              content: Text(AppLocalizations.get('customer_saved')),
                               backgroundColor: Color(0xFF16A34A),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -502,7 +501,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           setState(() => _isSaving = false);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Failed to save customer: $e'),
+                              content: Text('${AppLocalizations.get('customer_save_failed')}: $e'),
                               backgroundColor: const Color(0xFFDC2626),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -520,7 +519,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       )
                     : const Icon(Icons.check, size: 16),
                 label: Text(
-                  _isSaving ? 'SAVING...' : 'SAVE',
+                  _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save_customer'),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

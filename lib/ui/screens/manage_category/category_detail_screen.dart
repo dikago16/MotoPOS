@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -26,6 +27,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   bool _autoCategoryCode = true;
   bool _isSaving = false;
   String _generatedCode = '';
+  String? _codeError;
 
   final _categoryCodeCtrl = TextEditingController();
   final _categoryNameCtrl = TextEditingController();
@@ -136,7 +138,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? 'Edit Category' : 'New Category',
+              isEdit ? AppLocalizations.get('edit_category') : AppLocalizations.get('new_category'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -144,7 +146,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? 'Update Details' : 'Add New Category',
+              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_category'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -174,7 +176,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _sectionLabel(
-                            'Basic Information',
+                            AppLocalizations.get('basic_information'),
                             icon: Icons.info_outline,
                           ),
                           if (widget.category == null)
@@ -200,8 +202,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                const Text(
-                                  'Auto Code',
+                                Text(
+                                  AppLocalizations.get('auto_code'),
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: _kTxtMid,
@@ -216,7 +218,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         controller: _categoryCodeCtrl,
                         readOnly: _autoCategoryCode,
                         style: const TextStyle(fontSize: 13, color: _kTxtMid),
-                        decoration: _inputDeco('Category Code').copyWith(
+                        decoration: _inputDeco(AppLocalizations.get('category_code')).copyWith(
+                          errorText: _codeError,
                           fillColor: _autoCategoryCode ? _kBgPage : _kBgCard,
                         ),
                       ),
@@ -226,7 +229,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       TextFormField(
                         controller: _categoryNameCtrl,
                         style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco('Category Name'),
+                        decoration: _inputDeco(AppLocalizations.get('category_name')),
                       ),
                     ],
                   ),
@@ -277,8 +280,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                     side: const BorderSide(color: _kBorderMid),
                   ),
                 ),
-                child: const Text(
-                  'ABORT',
+                child: Text(
+                  AppLocalizations.get('abort'),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -299,9 +302,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         if (_categoryNameCtrl.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text(
-                                'Category name cannot be empty!',
-                              ),
+                              content: Text(AppLocalizations.get('category_name_empty')),
                               backgroundColor: Colors.red.shade600,
                             ),
                           );
@@ -324,8 +325,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Category saved successfully!'),
+                            SnackBar(
+                              content: Text(AppLocalizations.get('category_saved')),
                               backgroundColor: Color(0xFF16A34A),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -336,7 +337,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           setState(() => _isSaving = false);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Failed to save category: $e'),
+                              content: Text('${AppLocalizations.get('category_save_failed')}: $e'),
                               backgroundColor: const Color(0xFFDC2626),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -354,7 +355,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       )
                     : const Icon(Icons.check, size: 16),
                 label: Text(
-                  _isSaving ? 'SAVING...' : 'SAVE',
+                  _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save'),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

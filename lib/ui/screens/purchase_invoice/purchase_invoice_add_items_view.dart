@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/supplier_model.dart';
+import '../../../core/services/app_localizations.dart';
 import 'purchase_invoice_constants.dart';
 
 class PurchaseInvoiceAddItemsView extends StatelessWidget {
@@ -138,7 +139,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          sectionLabel('Add Items', icon: Icons.add_shopping_cart),
+          sectionLabel(AppLocalizations.get('add_items'), icon: Icons.add_shopping_cart),
           LayoutBuilder(
             builder: (context, constraints) {
               return Autocomplete<Product>(
@@ -153,7 +154,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                   });
                 },
                 displayStringForOption: (Product option) =>
-                    option.itemName.isEmpty ? 'Unknown Item' : option.itemName,
+                    option.itemName.isEmpty ? AppLocalizations.get('unknown_item') : option.itemName,
                 onSelected: onAddProduct,
                 fieldViewBuilder:
                     (context, controller, focusNode, onEditingComplete) {
@@ -163,7 +164,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                     focusNode: focusNode,
                     style: const TextStyle(fontSize: 13),
                     decoration: inputDeco(
-                      'Search item by code or name',
+                      AppLocalizations.get('search_item_hint'),
                       suffixIcon: const Icon(
                         Icons.search,
                         size: 18,
@@ -213,7 +214,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                                         children: [
                                           Text(
                                             option.itemName.isEmpty
-                                                ? 'Unknown Item'
+                                                ? AppLocalizations.get('unknown_item')
                                                 : option.itemName,
                                             style: const TextStyle(
                                               fontSize: 13,
@@ -239,8 +240,8 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                                               ),
                                               Text(
                                                 option.isCountStock
-                                                    ? 'Stok: ${option.stockQty}'
-                                                    : 'Non Stok',
+                                                    ? '${AppLocalizations.get('stock')}: ${option.stockQty}'
+                                                    : AppLocalizations.get('non_stock'),
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color: option.isCountStock
@@ -257,7 +258,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                                     Text(
                                       option.buyingPrice > 0
                                           ? _formatRupiah(option.buyingPrice)
-                                          : 'Not set',
+                                          : AppLocalizations.get('not_set'),
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: kAccent,
@@ -294,17 +295,17 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-            child: sectionLabel('Purchase Items', icon: Icons.list_alt),
+            child: sectionLabel(AppLocalizations.get('purchase_items'), icon: Icons.list_alt),
           ),
           Container(
             color: kTableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                _colHeader('ITEM', flex: 3),
-                _colHeaderCenter('QTY', flex: 2),
-                _colHeaderRight('PRICE', flex: 3),
-                _colHeaderRight('SUBTOTAL', flex: 3),
+                _colHeader(AppLocalizations.get('item'), flex: 3),
+                _colHeaderCenter(AppLocalizations.get('qty'), flex: 2),
+                _colHeaderRight(AppLocalizations.get('price'), flex: 3),
+                _colHeaderRight(AppLocalizations.get('subtotal'), flex: 3),
                 const SizedBox(width: 26),
               ],
             ),
@@ -315,13 +316,13 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 28),
               width: double.infinity,
-              child: const Column(
+              child: Column(
                 children: [
-                  Icon(Icons.add_shopping_cart, size: 30, color: kTxtLow),
-                  SizedBox(height: 7),
+                  const Icon(Icons.add_shopping_cart, size: 30, color: kTxtLow),
+                  const SizedBox(height: 7),
                   Text(
-                    'No items added yet',
-                    style: TextStyle(
+                    AppLocalizations.get('no_items_added'),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: kTxtLow,
                       fontWeight: FontWeight.w500,
@@ -352,7 +353,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                             children: [
                               Text(
                                 item.product.itemName.isEmpty
-                                    ? 'Unknown Item'
+                                    ? AppLocalizations.get('unknown_item')
                                     : item.product.itemName,
                                 style: const TextStyle(
                                   fontSize: 12,
@@ -475,7 +476,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                       border: Border.all(color: kBorderMid),
                     ),
                     child: Text(
-                      '${invoiceItems.length} Item${invoiceItems.length != 1 ? 's' : ''}',
+                      '${invoiceItems.length} ${AppLocalizations.get('items')}',
                       style: const TextStyle(
                         fontSize: 10,
                         color: kTxtMid,
@@ -484,9 +485,9 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    'TOTAL :',
-                    style: TextStyle(
+                  Text(
+                    '${AppLocalizations.get('total').toUpperCase()} :',
+                    style: const TextStyle(
                       fontSize: 9,
                       color: kTxtMid,
                       fontWeight: FontWeight.w700,
@@ -541,9 +542,9 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                     side: const BorderSide(color: kBorderMid),
                   ),
                 ),
-                child: const Text(
-                  'ABORT',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.get('abort').toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.6,

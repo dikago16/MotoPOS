@@ -25,6 +25,7 @@ import '../ask_ai/ask_ai_screen.dart';
 import '../circuits/circuits_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
+import '../../../core/services/app_localizations.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
@@ -137,21 +138,21 @@ class _SellingScreenState extends State<SellingScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: _kBgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: const Text(
-          'Edit Quantity',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        title: Text(
+          AppLocalizations.get('edit_quantity'),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
         ),
         content: TextFormField(
           controller: ctrl,
           keyboardType: TextInputType.number,
           autofocus: true,
           style: const TextStyle(fontSize: 14),
-          decoration: _inputDeco('Quantity'),
+          decoration: _inputDeco(AppLocalizations.get('quantity')),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('CANCEL', style: TextStyle(color: _kTxtLow)),
+            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: _kTxtLow)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -329,74 +330,74 @@ class _SellingScreenState extends State<SellingScreen> {
           },
           itemBuilder: (BuildContext context) {
             return [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'manage_customer',
                 child: Text(
-                  'Manage Customer',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('manage_customer'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'manage_item',
                 child: Text(
-                  'Manage Item',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('manage_item'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'manage_category',
                 child: Text(
-                  'Manage Category',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('manage_category'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'manage_supplier',
                 child: Text(
-                  'Manage Supplier',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('manage_supplier'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'purchase_invoice',
                 child: Text(
-                  'Purchase Invoice',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('purchase_invoice'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'daily_report',
                 child: Text(
-                  'Daily Report',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('daily_report'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'transaction_history',
                 child: Text(
-                  'Transaction History',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('transaction_history'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'notes',
                 child: Text(
-                  'Notes',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('notes'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'ask_ai',
                 child: Text(
-                  'Ask AI',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('ask_ai'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'circuits',
                 child: Text(
-                  'Circuits',
-                  style: TextStyle(fontSize: 13, color: _kTxtHigh),
+                  AppLocalizations.get('circuits'),
+                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
                 ),
               ),
             ];
@@ -426,9 +427,9 @@ class _SellingScreenState extends State<SellingScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Customer',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.get('customer'),
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       color: _kTxtMid,
@@ -441,7 +442,7 @@ class _SellingScreenState extends State<SellingScreen> {
                         ? (selectedCustomer.vehicleNo.isNotEmpty
                               ? '${selectedCustomer.name} (${selectedCustomer.vehicleNo})'
                               : selectedCustomer.name)
-                        : 'No customer selected',
+                        : AppLocalizations.get('no_customer_selected'),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -461,7 +462,7 @@ class _SellingScreenState extends State<SellingScreen> {
                 onPressed: () {
                   context.read<SellingProvider>().setCustomer(null);
                 },
-                tooltip: 'Remove Customer',
+                tooltip: AppLocalizations.get('remove_customer'),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
               ),
@@ -480,8 +481,8 @@ class _SellingScreenState extends State<SellingScreen> {
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text(
-                  'Select',
+                child: Text(
+                  AppLocalizations.get('select'),
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                 ),
               ),
@@ -566,7 +567,7 @@ class _SellingScreenState extends State<SellingScreen> {
                               focusNode: focusNode,
                               style: const TextStyle(fontSize: 13),
                               decoration: _inputDeco(
-                                'Code / Name (Type to search)',
+                                AppLocalizations.get('code_name_search'),
                               ),
                               onEditingComplete: onEditingComplete,
                             );
@@ -728,11 +729,11 @@ class _SellingScreenState extends State<SellingScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           title: Row(
-            children: const [
-              Icon(Icons.warning_amber_rounded, color: _kRed, size: 24),
-              SizedBox(width: 8),
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: _kRed, size: 24),
+              const SizedBox(width: 8),
               Text(
-                'Remove Item',
+                AppLocalizations.get('remove_item'),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -742,14 +743,14 @@ class _SellingScreenState extends State<SellingScreen> {
             ],
           ),
           content: Text(
-            'Are you sure you want to remove "${item.name}" from the cart?',
+            AppLocalizations.get('remove_item_confirm'),
             style: const TextStyle(fontSize: 13, color: _kTxtMid),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'CANCEL',
+              child: Text(
+                AppLocalizations.get('cancel'),
                 style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
               ),
             ),
@@ -766,8 +767,8 @@ class _SellingScreenState extends State<SellingScreen> {
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-              child: const Text(
-                'REMOVE',
+              child: Text(
+                AppLocalizations.get('remove'),
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
@@ -795,10 +796,10 @@ class _SellingScreenState extends State<SellingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                _colHeader('ITEM', flex: 3),
-                _colHeaderCenter('QTY', flex: 2),
-                _colHeaderRight('PRICE', flex: 3),
-                _colHeaderRight('SUBTOTAL', flex: 3),
+                _colHeader(AppLocalizations.get('item'), flex: 3),
+                _colHeaderCenter(AppLocalizations.get('qty'), flex: 2),
+                _colHeaderRight(AppLocalizations.get('price'), flex: 3),
+                _colHeaderRight(AppLocalizations.get('subtotal'), flex: 3),
                 const SizedBox(width: 26),
               ],
             ),
@@ -810,11 +811,11 @@ class _SellingScreenState extends State<SellingScreen> {
               padding: const EdgeInsets.symmetric(vertical: 28),
               width: double.infinity,
               child: Column(
-                children: const [
-                  Icon(Icons.inbox_outlined, size: 30, color: _kTxtLow),
-                  SizedBox(height: 7),
+                children: [
+                  const Icon(Icons.inbox_outlined, size: 30, color: _kTxtLow),
+                  const SizedBox(height: 7),
                   Text(
-                    'No items added yet',
+                    AppLocalizations.get('no_items_added'),
                     style: TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
@@ -976,8 +977,8 @@ class _SellingScreenState extends State<SellingScreen> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    'TOTAL :',
+                  Text(
+                    AppLocalizations.get('total'),
                     style: TextStyle(
                       fontSize: 9,
                       color: _kTxtMid,
@@ -1046,11 +1047,11 @@ class _SellingScreenState extends State<SellingScreen> {
               borderRadius: BorderRadius.circular(12),
             ),
             title: Row(
-              children: const [
-                Icon(Icons.bluetooth_disabled, color: _kRed, size: 24),
-                SizedBox(width: 8),
+              children: [
+                const Icon(Icons.bluetooth_disabled, color: _kRed, size: 24),
+                const SizedBox(width: 8),
                 Text(
-                  'Bluetooth Mati',
+                  AppLocalizations.get('bluetooth_off'),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -1059,8 +1060,8 @@ class _SellingScreenState extends State<SellingScreen> {
                 ),
               ],
             ),
-            content: const Text(
-              'Bluetooth pada perangkat Anda belum aktif.\n\nSilakan aktifkan Bluetooth terlebih dahulu melalui pengaturan perangkat, kemudian coba lagi.',
+            content: Text(
+              AppLocalizations.get('bluetooth_off_message'),
               style: TextStyle(fontSize: 13, color: _kTxtMid),
             ),
             actions: [
@@ -1120,8 +1121,8 @@ class _SellingScreenState extends State<SellingScreen> {
               ),
             ),
             const SizedBox(width: 10),
-            const Text(
-              'Printer Tersambung',
+            Text(
+              AppLocalizations.get('printer_connected'),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -1167,8 +1168,8 @@ class _SellingScreenState extends State<SellingScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              'CLOSE',
+            child: Text(
+              AppLocalizations.get('close'),
               style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
             ),
           ),
@@ -1178,8 +1179,8 @@ class _SellingScreenState extends State<SellingScreen> {
               Navigator.pop(ctx);
             },
             icon: const Icon(Icons.bluetooth_disabled, size: 16),
-            label: const Text(
-              'DISCONNECT',
+            label: Text(
+              AppLocalizations.get('disconnect'),
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             style: ElevatedButton.styleFrom(
@@ -1341,16 +1342,16 @@ class _SellingScreenState extends State<SellingScreen> {
                                 if (mounted) {
                                   if (printSuccess) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Transaksi disimpan & nota dicetak'),
+                                      SnackBar(
+                                        content: Text(AppLocalizations.get('transaction_saved_printed')),
                                         backgroundColor: Colors.green,
                                         behavior: SnackBarBehavior.floating,
                                       ),
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Transaction saved, but failed to print receipt'),
+                                      SnackBar(
+                                        content: Text(AppLocalizations.get('transaction_saved_print_failed')),
                                         backgroundColor: Colors.orange,
                                         behavior: SnackBarBehavior.floating,
                                       ),
@@ -1360,8 +1361,8 @@ class _SellingScreenState extends State<SellingScreen> {
                               } else {
                                 if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Transaction Saved'),
+                                    SnackBar(
+                                      content: Text(AppLocalizations.get('transaction_saved')),
                                       backgroundColor: Colors.green,
                                       behavior: SnackBarBehavior.floating,
                                     ),
@@ -1373,8 +1374,8 @@ class _SellingScreenState extends State<SellingScreen> {
                             }
                           },
                     icon: const Icon(Icons.check, size: 16),
-                    label: const Text(
-                      'PROCESS',
+                    label: Text(
+                      AppLocalizations.get('process'),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -1483,12 +1484,12 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
             child: const Icon(Icons.bluetooth, color: _kAccent, size: 20),
           ),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Select Printer',
+                  AppLocalizations.get('select_printer'),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -1496,7 +1497,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                   ),
                 ),
                 Text(
-                  'Perangkat Bluetooth tersimpan',
+                  AppLocalizations.get('saved_bluetooth_devices'),
                   style: TextStyle(
                     fontSize: 10,
                     color: _kTxtMid,
@@ -1570,7 +1571,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                                       CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      device.name ?? 'Unknown Device',
+                                      device.name ?? AppLocalizations.get('unknown_device'),
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600,
@@ -1611,8 +1612,8 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
       actions: [
         TextButton(
           onPressed: _isConnecting ? null : () => Navigator.pop(context),
-          child: const Text(
-            'CANCEL',
+          child: Text(
+            AppLocalizations.get('cancel'),
             style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
           ),
         ),
@@ -1690,8 +1691,8 @@ class _CustomerSelectionBottomSheetState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Select Customer',
+                      Text(
+                        AppLocalizations.get('select_customer'),
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -1712,7 +1713,7 @@ class _CustomerSelectionBottomSheetState
                     onChanged: _onSearchChanged,
                     style: const TextStyle(fontSize: 13),
                     decoration: InputDecoration(
-                      hintText: 'Search by name, phone, or vehicle no...',
+                      hintText: AppLocalizations.get('search_customer_hint'),
                       hintStyle: const TextStyle(color: _kTxtMid, fontSize: 13),
                       prefixIcon: const Icon(
                         Icons.search,
@@ -1746,11 +1747,11 @@ class _CustomerSelectionBottomSheetState
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : _filteredCustomers.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        'No customers found.\nPlease add Customer first.',
+                        AppLocalizations.get('no_customers_found'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: _kTxtMid),
+                        style: const TextStyle(color: _kTxtMid),
                       ),
                     )
                   : ListView.separated(

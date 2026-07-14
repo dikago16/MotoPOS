@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
+import '../../../core/services/app_localizations.dart';
 
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
@@ -145,19 +146,19 @@ class _AskAiScreenState extends State<AskAiScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Hapus Percakapan?"),
-          content: const Text("Apakah Anda yakin ingin menghapus semua riwayat percakapan dengan AI?"),
+          title: Text(AppLocalizations.get('clear_chat_title')),
+          content: Text(AppLocalizations.get('clear_chat_message')),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Batal"),
+              child: Text(AppLocalizations.get('cancel')),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 _clearMessages();
               },
-              child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+              child: Text(AppLocalizations.get('delete'), style: const TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -178,9 +179,9 @@ class _AskAiScreenState extends State<AskAiScreen> {
             onPressed: _isAiResponding ? null : () => Navigator.pop(context),
             color: _isAiResponding ? Colors.white38 : Colors.white,
           ),
-          title: const Text(
-            "Ask AI",
-            style: TextStyle(
+          title: Text(
+            AppLocalizations.get('ask_ai_title'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -198,7 +199,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
                       }
                     },
               color: _isAiResponding ? Colors.white38 : Colors.white,
-              tooltip: 'Hapus Percakapan',
+              tooltip: AppLocalizations.get('delete_chat'),
             ),
           ],
         ),
@@ -274,7 +275,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
                     controller: _controller,
                     enabled: !_isAiResponding,
                     decoration: InputDecoration(
-                      hintText: _isAiResponding ? "AI sedang mengetik..." : "Tanya seputar motor...",
+                      hintText: _isAiResponding ? AppLocalizations.get('ai_typing') : AppLocalizations.get('type_message'),
                       hintStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),

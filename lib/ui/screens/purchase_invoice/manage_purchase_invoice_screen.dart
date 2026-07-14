@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/purchase_invoice_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 import 'purchase_invoice_screen.dart';
 import 'purchase_invoice_detail_screen.dart';
@@ -202,21 +203,21 @@ class _ManagePurchaseInvoiceScreenState
       elevation: 0,
       toolbarHeight: 54,
       iconTheme: const IconThemeData(color: Colors.white, size: 20),
-      title: const Column(
+      title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Purchase Invoices',
-            style: TextStyle(
+            AppLocalizations.get('purchase_invoices'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            'Manage Invoices',
-            style: TextStyle(
+            AppLocalizations.get('manage_invoices'),
+            style: const TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
               fontWeight: FontWeight.w400,
@@ -255,14 +256,14 @@ class _ManagePurchaseInvoiceScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Invoices', icon: Icons.search),
+          _sectionLabel(AppLocalizations.get('search_invoices'), icon: Icons.search),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: TextFormField(
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco('Code / Supplier'),
+                  decoration: _inputDeco(AppLocalizations.get('code_supplier')),
                   onChanged: (val) {
                     setState(() {
                       _searchQuery = val;
@@ -355,7 +356,7 @@ class _ManagePurchaseInvoiceScreenState
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: _sectionLabel(
-              'Invoice Records',
+              AppLocalizations.get('invoice_records'),
               icon: Icons.receipt_long,
             ),
           ),
@@ -364,19 +365,19 @@ class _ManagePurchaseInvoiceScreenState
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text('INVOICE', style: _kColHeader)),
+                Expanded(flex: 3, child: Text(AppLocalizations.get('invoice').toUpperCase(), style: _kColHeader)),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('DATE', style: _kColHeader),
+                    child: Text(AppLocalizations.get('date').toUpperCase(), style: _kColHeader),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('TOTAL', style: _kColHeader),
+                    child: Text(AppLocalizations.get('total').toUpperCase(), style: _kColHeader),
                   ),
                 ),
               ],
@@ -396,9 +397,9 @@ class _ManagePurchaseInvoiceScreenState
                 children: [
                   Icon(Icons.receipt_long, size: 30, color: _kTxtLow.withValues(alpha: 0.5)),
                   const SizedBox(height: 7),
-                  const Text(
-                    'No invoices found',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.get('no_invoices_recorded'),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
                       fontWeight: FontWeight.w500,
@@ -450,7 +451,7 @@ class _ManagePurchaseInvoiceScreenState
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                invoice.supplierName,
+                                invoice.supplierName.isEmpty ? AppLocalizations.get('unknown_supplier') : invoice.supplierName,
                                 style: const TextStyle(
                                   fontSize: 10,
                                   color: _kTxtMid,

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../data/models/purchase_invoice_model.dart';
 import '../../../data/models/purchase_invoice_item_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -73,9 +74,9 @@ class _PurchaseInvoiceDetailScreenState
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Invoice Details',
-              style: TextStyle(
+            Text(
+              AppLocalizations.get('invoice_detail'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
@@ -126,10 +127,10 @@ class _PurchaseInvoiceDetailScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('SUPPLIER', style: _kColHeader),
+                    Text(AppLocalizations.get('supplier'), style: _kColHeader),
                     const SizedBox(height: 4),
                     Text(
-                      widget.invoice.supplierName,
+                      widget.invoice.supplierName.isEmpty ? AppLocalizations.get('unknown_supplier') : widget.invoice.supplierName,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
@@ -142,7 +143,7 @@ class _PurchaseInvoiceDetailScreenState
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('DATE', style: _kColHeader),
+                  Text(AppLocalizations.get('date'), style: _kColHeader),
                   const SizedBox(height: 4),
                   Text(
                     DateFormat('dd MMMM yyyy').format(date),
@@ -158,7 +159,7 @@ class _PurchaseInvoiceDetailScreenState
           ),
           if (widget.invoice.notes.isNotEmpty) ...[
             const SizedBox(height: 16),
-            const Text('NOTES', style: _kColHeader),
+            Text(AppLocalizations.get('notes'), style: _kColHeader),
             const SizedBox(height: 4),
             Text(
               widget.invoice.notes,
@@ -181,10 +182,10 @@ class _PurchaseInvoiceDetailScreenState
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
-                _colHeader('ITEM', flex: 4),
-                _colHeaderCenter('QTY', flex: 1),
-                _colHeaderRight('PRICE', flex: 3),
-                _colHeaderRight('SUBTOTAL', flex: 3),
+                _colHeader(AppLocalizations.get('item'), flex: 4),
+                _colHeaderCenter(AppLocalizations.get('qty'), flex: 1),
+                _colHeaderRight(AppLocalizations.get('price'), flex: 3),
+                _colHeaderRight(AppLocalizations.get('subtotal'), flex: 3),
               ],
             ),
           ),

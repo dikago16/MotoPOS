@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
+import '../../../core/services/app_localizations.dart';
 
 const _kNavy = Color(0xFF0D1B2A);
 const _kAccent = Color(0xFF2563EB);
@@ -37,8 +38,8 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
 
     if (key.isEmpty) {
       setState(() {
-        _licenseKey = "No License";
-        _statusMessage = "Please activate the application first.";
+        _licenseKey = AppLocalizations.get('no_license');
+        _statusMessage = AppLocalizations.get('activate_first');
         _isLoading = false;
         _isValid = false;
       });
@@ -59,7 +60,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
           final status = data['status'] == 'active' ? 'Active' : (data['status'] == 'expired' ? 'Expired' : data['status']);
           final expiresAt = data['expires_at'] != null ? data['expires_at'].toString().split('T')[0] : '-';
           
-          _statusMessage = 'Status: $status\nValid Until: $expiresAt';
+          _statusMessage = '${AppLocalizations.get('status')}: $status\n${AppLocalizations.get('valid_until')}: $expiresAt';
           _isValid = data['status'] == 'active';
         } else {
           _statusMessage = result['message'] ?? 'Unknown Status';
@@ -77,8 +78,8 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
       appBar: AppBar(
         backgroundColor: _kNavy,
         elevation: 0,
-        title: const Text(
-          'License Info',
+        title: Text(
+          AppLocalizations.get('license_info'),
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -116,8 +117,8 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                           color: _isValid ? Colors.green : Colors.red,
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'License Key',
+                        Text(
+                          AppLocalizations.get('license_key'),
                           style: TextStyle(
                             fontSize: 12,
                             color: _kTxtMid,
@@ -126,7 +127,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          _licenseKey.isNotEmpty ? _licenseKey : '-',
+                          _licenseKey.isNotEmpty ? _licenseKey : AppLocalizations.get('no_license'),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 18,
@@ -139,8 +140,8 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                           padding: EdgeInsets.symmetric(vertical: 16),
                           child: Divider(color: _kBorder),
                         ),
-                        const Text(
-                          'Status / Expiry',
+                        Text(
+                          AppLocalizations.get('status_expiry'),
                           style: TextStyle(
                             fontSize: 12,
                             color: _kTxtMid,
@@ -162,8 +163,8 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                           padding: EdgeInsets.symmetric(vertical: 16),
                           child: Divider(color: _kBorder),
                         ),
-                        const Text(
-                          'Device ID',
+                        Text(
+                          AppLocalizations.get('device_id').toUpperCase(),
                           style: TextStyle(
                             fontSize: 12,
                             color: _kTxtMid,

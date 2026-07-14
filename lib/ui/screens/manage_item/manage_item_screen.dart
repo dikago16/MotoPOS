@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'item_detail_screen.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -88,17 +89,17 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
-            'Manage Items',
-            style: TextStyle(
+            AppLocalizations.get('manage_items'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            'Add / Edit Item',
+            AppLocalizations.get('add_edit_item'),
             style: TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
@@ -197,14 +198,14 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Item', icon: Icons.search),
+          _sectionLabel(AppLocalizations.get('search_item'), icon: Icons.search),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: TextFormField(
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco('Code / Name'),
+                  decoration: _inputDeco(AppLocalizations.get('code_name')),
                 ),
               ),
             ],
@@ -227,7 +228,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: _sectionLabel(
-              'Item Catalog',
+              AppLocalizations.get('item_catalog'),
               icon: Icons.inventory_2_outlined,
             ),
           ),
@@ -236,19 +237,19 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text('ITEM', style: _kColHeader)),
+                Expanded(flex: 3, child: Text(AppLocalizations.get('item'), style: _kColHeader)),
                 Expanded(
                   flex: 1,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('STOCK', style: _kColHeader),
+                    child: Text(AppLocalizations.get('stock_label').toUpperCase(), style: _kColHeader),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('PRICE', style: _kColHeader),
+                    child: Text(AppLocalizations.get('price').toUpperCase(), style: _kColHeader),
                   ),
                 ),
                 const SizedBox(width: 26), // Space for action button
@@ -268,11 +269,11 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
               padding: const EdgeInsets.symmetric(vertical: 40),
               width: double.infinity,
               child: Column(
-                children: const [
+                children: [
                   Icon(Icons.inventory_2_outlined, size: 30, color: _kTxtLow),
                   SizedBox(height: 7),
                   Text(
-                    'No items found',
+                    AppLocalizations.get('no_items_found'),
                     style: TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
@@ -305,7 +306,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                           children: [
                             Text(
                               item.itemName.isEmpty
-                                  ? 'Unknown Item'
+                                  ? AppLocalizations.get('unknown_item')
                                   : item.itemName,
                               style: const TextStyle(
                                 fontSize: 13,
@@ -328,7 +329,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                         flex: 1,
                         child: Center(
                           child: Text(
-                            item.isCountStock ? '${item.stockQty}' : 'Non Stok',
+                            item.isCountStock ? '${item.stockQty}' : AppLocalizations.get('non_stock'),
                             style: TextStyle(
                               fontSize: item.isCountStock ? 12 : 10,
                               fontWeight: item.isCountStock
@@ -357,7 +358,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                             Text(
                               item.buyingPrice > 0
                                   ? 'Buy: Rp ${item.buyingPrice.toStringAsFixed(0)}'
-                                  : 'Not set',
+                                  : AppLocalizations.get('not_set'),
                               style: const TextStyle(
                                 fontSize: 9,
                                 color: _kTxtMid,
@@ -393,17 +394,17 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                         },
                         itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'edit',
                                 child: Text(
-                                  'Edit',
-                                  style: TextStyle(fontSize: 13),
+                                  AppLocalizations.get('edit'),
+                                  style: const TextStyle(fontSize: 13),
                                 ),
                               ),
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'delete',
                                 child: Text(
-                                  'Delete',
+                                  AppLocalizations.get('delete'),
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.red,
@@ -430,11 +431,11 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
           backgroundColor: _kBgCard,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           title: Row(
-            children: const [
+            children: [
               Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
               SizedBox(width: 8),
               Text(
-                'Delete Item',
+                AppLocalizations.get('delete_item'),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -451,10 +452,10 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                 height: 1.5,
               ),
               children: [
-                const TextSpan(text: 'Are you sure you want to delete\n'),
+                TextSpan(text: '${AppLocalizations.get('delete_confirm')}\n'),
                 TextSpan(
                   text:
-                      '${item.itemName.isEmpty ? 'Unknown Item' : item.itemName} (${item.itemCode})',
+                      '${item.itemName.isEmpty ? AppLocalizations.get('unknown_item') : item.itemName} (${item.itemCode})',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: _kTxtHigh,
@@ -478,7 +479,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              child: const Text('CANCEL'),
+              child: Text(AppLocalizations.get('cancel')),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
@@ -491,8 +492,8 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: const Text(
-                'DELETE',
+              child: Text(
+                AppLocalizations.get('delete'),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,

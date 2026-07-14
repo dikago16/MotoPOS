@@ -10,6 +10,7 @@ import 'providers/printer_provider.dart';
 import 'providers/circuits_provider.dart';
 import 'core/constants/app_colors.dart';
 import 'ui/screens/splash/splash_screen.dart';
+import 'core/services/app_localizations.dart';
 
 // Ubah main menjadi async
 void main() async {
@@ -17,6 +18,9 @@ void main() async {
 
   // Tambahkan blok inisialisasi Firebase ini
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize localization
+  await AppLocalizations.init();
 
   runApp(
     MultiProvider(

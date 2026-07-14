@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'supplier_detail_screen.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -89,18 +90,18 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
-            'Manage Suppliers',
-            style: TextStyle(
+            AppLocalizations.get('manage_suppliers'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            'Add / Edit Supplier',
-            style: TextStyle(
+            AppLocalizations.get('add_edit_supplier'),
+            style: const TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
               fontWeight: FontWeight.w400,
@@ -200,14 +201,14 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Supplier', icon: Icons.search),
+          _sectionLabel(AppLocalizations.get('search_supplier'), icon: Icons.search),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: TextFormField(
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco('Code / Name / Phone'),
+                  decoration: _inputDeco(AppLocalizations.get('code_name')),
                 ),
               ),
               const SizedBox(width: 8),
@@ -250,15 +251,15 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: _sectionLabel('Supplier List', icon: Icons.business),
+            child: _sectionLabel(AppLocalizations.get('supplier_list'), icon: Icons.business),
           ),
           Container(
             color: _kTableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text('SUPPLIER', style: _kColHeader)),
-                Expanded(flex: 3, child: Text('CONTACT', style: _kColHeader)),
+                Expanded(flex: 5, child: Text(AppLocalizations.get('supplier'), style: _kColHeader)),
+                Expanded(flex: 3, child: Text(AppLocalizations.get('contact'), style: _kColHeader)),
                 const SizedBox(width: 26), // Space for action button
               ],
             ),
@@ -275,12 +276,12 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
               padding: const EdgeInsets.symmetric(vertical: 40),
               width: double.infinity,
               child: Column(
-                children: const [
-                  Icon(Icons.business, size: 30, color: _kTxtLow),
-                  SizedBox(height: 7),
+                children: [
+                  const Icon(Icons.business, size: 30, color: _kTxtLow),
+                  const SizedBox(height: 7),
                   Text(
-                    'No suppliers found',
-                    style: TextStyle(
+                    AppLocalizations.get('no_suppliers_found'),
+                    style: const TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
                       fontWeight: FontWeight.w500,
@@ -312,7 +313,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                           children: [
                             Text(
                               supplier.supplierName.isEmpty
-                                  ? 'Unknown'
+                                  ? AppLocalizations.get('unknown_supplier')
                                   : supplier.supplierName,
                               style: const TextStyle(
                                 fontSize: 13,
@@ -384,18 +385,18 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                         },
                         itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'edit',
                                 child: Text(
-                                  'Edit',
-                                  style: TextStyle(fontSize: 13),
+                                  AppLocalizations.get('edit'),
+                                  style: const TextStyle(fontSize: 13),
                                 ),
                               ),
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'delete',
                                 child: Text(
-                                  'Delete',
-                                  style: TextStyle(
+                                  AppLocalizations.get('delete'),
+                                  style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.red,
                                   ),
@@ -421,12 +422,12 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
           backgroundColor: _kBgCard,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           title: Row(
-            children: const [
-              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
-              SizedBox(width: 8),
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
+              const SizedBox(width: 8),
               Text(
-                'Delete Supplier',
-                style: TextStyle(
+                AppLocalizations.get('delete_supplier'),
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: _kTxtHigh,
@@ -442,10 +443,10 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                 height: 1.5,
               ),
               children: [
-                const TextSpan(text: 'Are you sure you want to delete\n'),
+                TextSpan(text: '${AppLocalizations.get('delete_confirm')}\n'),
                 TextSpan(
                   text:
-                      '${supplier.supplierName.isEmpty ? 'Unknown' : supplier.supplierName} (${supplier.supplierCode})',
+                      '${supplier.supplierName.isEmpty ? AppLocalizations.get('unknown_supplier') : supplier.supplierName} (${supplier.supplierCode})',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: _kTxtHigh,
@@ -469,7 +470,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              child: const Text('CANCEL'),
+              child: Text(AppLocalizations.get('cancel')),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
@@ -482,8 +483,8 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: const Text(
-                'DELETE',
+              child: Text(
+                AppLocalizations.get('delete'),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,

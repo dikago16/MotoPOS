@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'category_detail_screen.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/db_helper.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -89,17 +90,17 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
-            'Manage Categories',
-            style: TextStyle(
+            AppLocalizations.get('manage_categories'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            'Add / Edit Item Catalogue',
+            AppLocalizations.get('add_edit_catalogue'),
             style: TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,
@@ -200,14 +201,14 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel('Search Category', icon: Icons.search),
+          _sectionLabel(AppLocalizations.get('search_category'), icon: Icons.search),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: TextFormField(
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco('Code / Name'),
+                  decoration: _inputDeco(AppLocalizations.get('code_name')),
                 ),
               ),
               const SizedBox(width: 8),
@@ -251,7 +252,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: _sectionLabel(
-              'Category Catalog',
+              AppLocalizations.get('category_catalog'),
               icon: Icons.category_outlined,
             ),
           ),
@@ -260,7 +261,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 5, child: Text('CATEGORY', style: _kColHeader)),
+                Expanded(flex: 5, child: Text(AppLocalizations.get('category'), style: _kColHeader)),
                 const SizedBox(width: 26), // Space for action button
               ],
             ),
@@ -278,11 +279,11 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
               padding: const EdgeInsets.symmetric(vertical: 40),
               width: double.infinity,
               child: Column(
-                children: const [
+                children: [
                   Icon(Icons.category_outlined, size: 30, color: _kTxtLow),
                   SizedBox(height: 7),
                   Text(
-                    'No categories found',
+                    AppLocalizations.get('no_categories_found'),
                     style: TextStyle(
                       fontSize: 12,
                       color: _kTxtLow,
@@ -315,7 +316,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                           children: [
                             Text(
                               category.categoryName.isEmpty
-                                  ? 'Unknown Category'
+                                  ? AppLocalizations.get('unknown_category')
                                   : category.categoryName,
                               style: const TextStyle(
                                 fontSize: 13,
@@ -361,17 +362,17 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                         },
                         itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'edit',
                                 child: Text(
-                                  'Edit',
-                                  style: TextStyle(fontSize: 13),
+                                  AppLocalizations.get('edit'),
+                                  style: const TextStyle(fontSize: 13),
                                 ),
                               ),
-                              const PopupMenuItem<String>(
+                              PopupMenuItem<String>(
                                 value: 'delete',
                                 child: Text(
-                                  'Delete',
+                                  AppLocalizations.get('delete'),
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.red,
@@ -398,11 +399,11 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
           backgroundColor: _kBgCard,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           title: Row(
-            children: const [
+            children: [
               Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
               SizedBox(width: 8),
               Text(
-                'Delete Category',
+                AppLocalizations.get('delete_category'),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -419,10 +420,10 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                 height: 1.5,
               ),
               children: [
-                const TextSpan(text: 'Are you sure you want to delete\n'),
+                TextSpan(text: '${AppLocalizations.get('delete_confirm')}\n'),
                 TextSpan(
                   text:
-                      '${category.categoryName.isEmpty ? 'Unknown Category' : category.categoryName} (${category.categoryCode})',
+                      '${category.categoryName.isEmpty ? AppLocalizations.get('unknown_category') : category.categoryName} (${category.categoryCode})',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: _kTxtHigh,
@@ -446,7 +447,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              child: const Text('CANCEL'),
+              child: Text(AppLocalizations.get('cancel')),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
@@ -459,8 +460,8 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: const Text(
-                'DELETE',
+              child: Text(
+                AppLocalizations.get('delete'),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,

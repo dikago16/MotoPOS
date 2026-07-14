@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/supplier_model.dart';
+import '../../../core/services/app_localizations.dart';
 import 'purchase_invoice_constants.dart';
 
 class PurchaseInvoiceInfoView extends StatelessWidget {
@@ -44,14 +45,14 @@ class PurchaseInvoiceInfoView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  sectionLabel('Invoice Information', icon: Icons.receipt_long),
+                  sectionLabel(AppLocalizations.get('invoice_information'), icon: Icons.receipt_long),
                   Row(
                     children: [
                       Expanded(
                         child: TextFormField(
                           readOnly: true,
                           style: const TextStyle(fontSize: 13, color: kTxtMid),
-                          decoration: inputDeco('Invoice Code').copyWith(
+                          decoration: inputDeco(AppLocalizations.get('invoice_code')).copyWith(
                             fillColor: kBgPage,
                           ),
                           controller: TextEditingController(text: invoiceCode),
@@ -63,7 +64,7 @@ class PurchaseInvoiceInfoView extends StatelessWidget {
                           onTap: onPickDate,
                           borderRadius: BorderRadius.circular(6),
                           child: InputDecorator(
-                            decoration: inputDeco('Invoice Date'),
+                            decoration: inputDeco(AppLocalizations.get('invoice_date')),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -89,7 +90,7 @@ class PurchaseInvoiceInfoView extends StatelessWidget {
                   const SizedBox(height: 12),
                   DropdownButtonFormField<int>(
                     initialValue: selectedSupplier?.id,
-                    decoration: inputDeco('Select Supplier'),
+                    decoration: inputDeco(AppLocalizations.get('select_supplier')),
                     style: const TextStyle(fontSize: 13, color: kTxtHigh),
                     dropdownColor: kBgCard,
                     isExpanded: true,

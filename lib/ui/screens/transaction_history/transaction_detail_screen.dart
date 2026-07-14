@@ -5,6 +5,7 @@ import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 import '../../../data/db_helper.dart';
 import '../../../providers/printer_provider.dart';
+import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -76,16 +77,16 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Transaction Details',
-              style: TextStyle(
+            Text(
+              AppLocalizations.get('transaction_details'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Text(
-              'TXN #${widget.transaction.id}',
+              '${AppLocalizations.get('txn')} #${widget.transaction.id}',
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -150,7 +151,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('VEHICLE NO.', style: _kColHeader),
+                    Text(AppLocalizations.get('vehicle_no'), style: _kColHeader),
                     const SizedBox(height: 4),
                     Text(
                       (widget.transaction.vehicleNo == null ||
@@ -169,7 +170,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('DATE', style: _kColHeader),
+                  Text(AppLocalizations.get('date'), style: _kColHeader),
                   const SizedBox(height: 4),
                   Text(
                     DateFormat('dd MMMM yyyy HH:mm').format(date),
@@ -190,7 +191,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('CASH AMOUNT', style: _kColHeader),
+                  Text(AppLocalizations.get('cash_amount'), style: _kColHeader),
                   const SizedBox(height: 4),
                   Text(
                     _formatRupiah(widget.transaction.cashAmount),
@@ -201,7 +202,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('CHANGE AMOUNT', style: _kColHeader),
+                  Text(AppLocalizations.get('change_amount'), style: _kColHeader),
                   const SizedBox(height: 4),
                   Text(
                     _formatRupiah(widget.transaction.changeAmount),
@@ -227,10 +228,10 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
-                _colHeader('ITEM', flex: 4),
-                _colHeaderCenter('QTY', flex: 1),
-                _colHeaderRight('PRICE', flex: 3),
-                _colHeaderRight('SUBTOTAL', flex: 3),
+                _colHeader(AppLocalizations.get('item'), flex: 4),
+                _colHeaderCenter(AppLocalizations.get('qty'), flex: 1),
+                _colHeaderRight(AppLocalizations.get('price'), flex: 3),
+                _colHeaderRight(AppLocalizations.get('subtotal'), flex: 3),
               ],
             ),
           ),
@@ -326,7 +327,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text('TOTAL AMOUNT:  ', style: _kColHeader),
+                Text('${AppLocalizations.get('total_amount')}:  ', style: _kColHeader),
                 Text(
                   _formatRupiah(widget.transaction.totalAmount),
                   style: const TextStyle(
@@ -382,9 +383,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               ),
             ),
             const SizedBox(width: 10),
-            const Text(
-              'Print Receipt',
-              style: TextStyle(
+            Text(
+              AppLocalizations.get('print_receipt'),
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: _kTxtHigh,
@@ -392,16 +393,16 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             ),
           ],
         ),
-        content: const Text(
-          'Apakah Anda yakin ingin mencetak nota untuk transaksi ini?',
-          style: TextStyle(fontSize: 13, color: _kTxtMid),
+        content: Text(
+          AppLocalizations.get('print_confirm_msg'),
+          style: const TextStyle(fontSize: 13, color: _kTxtMid),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              'CANCEL',
-              style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+            child: Text(
+              AppLocalizations.get('cancel'),
+              style: const TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
             ),
           ),
           ElevatedButton.icon(
@@ -415,7 +416,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(success ? 'Receipt printed successfully' : 'Failed to print receipt'),
+                    content: Text(success ? AppLocalizations.get('print_success') : AppLocalizations.get('print_failed')),
                     backgroundColor: success ? Colors.green : Colors.red,
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -423,9 +424,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               }
             },
             icon: const Icon(Icons.print, size: 16),
-            label: const Text(
-              'PRINT',
-              style: TextStyle(fontWeight: FontWeight.w600),
+            label: Text(
+              AppLocalizations.get('print'),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF16A34A),
