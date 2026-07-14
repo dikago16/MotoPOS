@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/services/api_service.dart';
 import '../selling/selling_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 const _kNavy = Color(0xFF0D1B2A);
@@ -223,7 +224,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             color: _kDanger.withValues(alpha: 0.07),
           ),
           child: const Text(
-            'ACTIVATION  REQUIRED',
+            'ACTIVATION REQUIRED',
             style: TextStyle(
               fontSize: 9,
               color: Color(0xFFFCA5A5),
@@ -233,11 +234,11 @@ class _ActivationScreenState extends State<ActivationScreen>
           ),
         ),
 
-        const SizedBox(height: 22),
+        const SizedBox(height: 10),
 
         // Nama brand
         const Text(
-          'DX-BYTES',
+          'MotoPOS',
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.w900,
@@ -299,25 +300,12 @@ class _ActivationScreenState extends State<ActivationScreen>
 
         // Produk
         const Text(
-          'MotoPOS',
+          'www.dx-bytes.com',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
             color: Colors.white,
             letterSpacing: 2.5,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        const Text(
-          'A valid license is required to continue.\nProvide your License Key below to activate.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: _kTxtLow,
-            height: 1.75,
-            letterSpacing: 0.3,
           ),
         ),
       ],
@@ -633,15 +621,48 @@ class _ActivationScreenState extends State<ActivationScreen>
         children: [
           const Icon(Icons.shield_outlined, size: 14, color: _kAccentLt),
           const SizedBox(width: 10),
-          const Expanded(
-            child: Text(
-              'This is a licensed enterprise software. Unauthorized use is strictly prohibited. Contact DX-BYTES for support.',
-              style: TextStyle(
-                fontSize: 11,
-                color: _kTxtLow,
-                height: 1.65,
-                letterSpacing: 0.2,
-              ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'This is a licensed enterprise software. Contact WhatsApp 0851-1722-2788 for support or click link below',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: _kTxtLow,
+                    height: 1.65,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                InkWell(
+                  onTap: _launchWhatsApp,
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.chat_bubble_outline,
+                          size: 13,
+                          color: Color(0xFF4ADE80),
+                        ),
+                        const SizedBox(width: 6),
+                        const Text(
+                          'WhatsApp Support',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF4ADE80),
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -660,6 +681,19 @@ class _ActivationScreenState extends State<ActivationScreen>
         letterSpacing: 0.5,
       ),
     );
+  }
+
+  Future<void> _launchWhatsApp() async {
+    final Uri url = Uri.parse(
+      'https://wa.me/6285117222788?text=Saya%20tertarik%20dengan%20aplikasi%20MotoPOS',
+    );
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not launch WhatsApp')),
+        );
+      }
+    }
   }
 }
 
