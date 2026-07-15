@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:903901990201:android:9d5581c3a37b01f8f02ce8",
+        "mobilesdk_app_id": "1:903901990201:android:e35c613a6e13e48af02ce8",
         "android_client_info": {
           "package_name": "com.dxbytes.motopos"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "903901990201-j4660epcg3rjhj449h9acpo73d5dalh9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dxbytes.motopos",
+            "certificate_hash": "443dc80f1d946989fc1f1ed340216eeec47d614b"
+          }
+        },
+        {
+          "client_id": "903901990201-1abdharqt7uhv8naomov07s7gip7ee9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAxfneAnN2QjdG9gUg8zIxUNSmNg0Y64WA"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903901990201-1abdharqt7uhv8naomov07s7gip7ee9k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "903901990201-pusfcj437mec69pn6p7u0qci2jdt2qhn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopos"
+              }
+            }
+          ]
         }
       }
     }

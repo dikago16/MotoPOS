@@ -3,6 +3,7 @@ import '../../../core/services/app_localizations.dart';
 import 'language_screen.dart';
 import 'license_info_screen.dart';
 import 'my_store_screen.dart';
+import 'backup_restore_screen.dart';
 
 const _kNavy = Color(0xFF0D1B2A);
 const _kBgPage = Color(0xFFF1F5F9);
@@ -31,9 +32,10 @@ class SettingsScreen extends StatelessWidget {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
           _buildMenuTile(
             context,
             icon: Icons.store,
@@ -57,7 +59,16 @@ class SettingsScreen extends StatelessWidget {
             subtitle: AppLocalizations.get('choose_language'),
             screen: const LanguageScreen(),
           ),
+          const SizedBox(height: 10),
+          _buildMenuTile(
+            context,
+            icon: Icons.cloud_upload,
+            title: AppLocalizations.get('backup_restore'),
+            subtitle: AppLocalizations.get('backup_restore_desc'),
+            screen: const BackupRestoreScreen(),
+          ),
         ],
+      ),
       ),
     );
   }

@@ -761,4 +761,51 @@ class DBHelper {
       return await dbClient.insert(_storeInfoTable, info.toMap()..remove('id'));
     }
   }
+
+  // --- Backup & Restore ---
+
+  static Future<Map<String, dynamic>> exportAllData() async {
+    final dbClient = await db;
+    final Map<String, dynamic> data = {};
+
+    data[_tableName] = await dbClient.query(_tableName);
+    data[_categoryTable] = await dbClient.query(_categoryTable);
+    data[_transactionTable] = await dbClient.query(_transactionTable);
+    data[_transactionItemsTable] = await dbClient.query(_transactionItemsTable);
+    data[_supplierTable] = await dbClient.query(_supplierTable);
+    data[_purchaseInvoiceTable] = await dbClient.query(_purchaseInvoiceTable);
+    data[_purchaseInvoiceItemsTable] = await dbClient.query(_purchaseInvoiceItemsTable);
+    data[_customerTable] = await dbClient.query(_customerTable);
+    data[_notesTable] = await dbClient.query(_notesTable);
+    data[_storeInfoTable] = await dbClient.query(_storeInfoTable);
+
+    return data;
+  }
+
+  static Future<void> clearAllTables(Transaction txn) async {
+    await txn.delete(_tableName);
+    await txn.delete(_categoryTable);
+    await txn.delete(_transactionTable);
+    await txn.delete(_transactionItemsTable);
+    await txn.delete(_supplierTable);
+    await txn.delete(_purchaseInvoiceTable);
+    await txn.delete(_purchaseInvoiceItemsTable);
+    await txn.delete(_customerTable);
+    await txn.delete(_notesTable);
+    await txn.delete(_storeInfoTable);
+  }
+
+  static Future<void> importAllData(Map<String, dynamic> data) async {
+    final dbClient = await db;
+    await dbClient.transaction((txn) async {
+      await clearAllTables(txn);
+
+      for (String table in data.keys) {
+        List<dynamic> rows = data[table] ?? [];
+        for (var row in rows) {
+          await txn.insert(table, Map<String, dynamic>.from(row));
+        }
+      }
+    });
+  }
 }

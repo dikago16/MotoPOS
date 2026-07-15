@@ -373,6 +373,29 @@ class AppLocalizations {
     'e_g_my_store': 'e.g. My Store',
     'e_g_address': 'e.g. Jl. Bunga Melati',
     'e_g_phone': 'e.g. 08123456789',
+
+    // ── Backup & Restore ──
+    'backup_restore': 'Backup & Restore',
+    'backup_restore_desc': 'Backup data to Google Drive',
+    'not_connected': 'Not Connected',
+    'connected_as': 'Connected as',
+    'sign_in_google': 'Sign in with Google',
+    'sign_out': 'Sign Out',
+    'backup_now': 'Backup Now',
+    'backup_in_progress': 'Backing up data...',
+    'backup_success': 'Backup successful!',
+    'backup_failed': 'Failed to backup data.',
+    'backup_history': 'Backup History',
+    'no_backups': 'No backups found.',
+    'restore': 'Restore',
+    'delete_backup': 'Delete',
+    'restore_confirm_title': 'Restore Data?',
+    'restore_confirm_msg': 'All local data will be replaced with this backup. This action cannot be undone. Are you sure?',
+    'restore_in_progress': 'Restoring data...',
+    'restore_success': 'Data restored successfully!',
+    'restore_failed': 'Failed to restore data.',
+    'delete_backup_confirm': 'Are you sure you want to delete this backup file?',
+    'backup_deleted': 'Backup file deleted!',
   };
 
   // ─── Indonesian Translations ───────────────────────────────────────────────
@@ -727,5 +750,28 @@ class AppLocalizations {
     'e_g_my_store': 'Cth: Toko Saya',
     'e_g_address': 'Cth: Jl. Bunga Melati',
     'e_g_phone': 'Cth: 08123456789',
+
+    // ── Backup & Restore ──
+    'backup_restore': 'Cadangkan & Pulihkan',
+    'backup_restore_desc': 'Cadangkan data ke Google Drive',
+    'not_connected': 'Belum Terhubung',
+    'connected_as': 'Terhubung sebagai',
+    'sign_in_google': 'Masuk dengan Google',
+    'sign_out': 'Keluar',
+    'backup_now': 'Cadangkan Sekarang',
+    'backup_in_progress': 'Mencadangkan data...',
+    'backup_success': 'Cadangan berhasil disimpan!',
+    'backup_failed': 'Gagal mencadangkan data.',
+    'backup_history': 'Riwayat Cadangan',
+    'no_backups': 'Tidak ada cadangan ditemukan.',
+    'restore': 'Pulihkan',
+    'delete_backup': 'Hapus',
+    'restore_confirm_title': 'Pulihkan Data?',
+    'restore_confirm_msg': 'Semua data lokal akan diganti dengan cadangan ini. Tindakan ini tidak dapat dibatalkan. Anda yakin?',
+    'restore_in_progress': 'Memulihkan data...',
+    'restore_success': 'Data berhasil dipulihkan!',
+    'restore_failed': 'Gagal memulihkan data.',
+    'delete_backup_confirm': 'Apakah Anda yakin ingin menghapus file cadangan ini?',
+    'backup_deleted': 'File cadangan dihapus!',
   };
 }
