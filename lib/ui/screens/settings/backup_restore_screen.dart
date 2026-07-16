@@ -7,13 +7,6 @@ import '../../../core/services/app_localizations.dart';
 import '../../../services/google_drive_service.dart';
 import '../../../data/database_service.dart';
 
-
-
-
-
-
-
-
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
 
@@ -75,13 +68,14 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
     );
 
     final success = await _driveService.backupData();
-    
+
     if (mounted) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.get(
-              success ? 'backup_success' : 'backup_failed')),
+          content: Text(
+            AppLocalizations.get(success ? 'backup_success' : 'backup_failed'),
+          ),
           backgroundColor: success ? Colors.green : Colors.red,
         ),
       );
@@ -117,6 +111,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
     if (confirm != true) return;
 
     setState(() => _isActionLoading = true);
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.get('restore_in_progress'))),
     );
@@ -127,8 +122,11 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.get(
-              success ? 'restore_success' : 'restore_failed')),
+          content: Text(
+            AppLocalizations.get(
+              success ? 'restore_success' : 'restore_failed',
+            ),
+          ),
           backgroundColor: success ? Colors.green : Colors.red,
         ),
       );
@@ -217,9 +215,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                   if (_isActionLoading)
                     Container(
                       color: Colors.black.withValues(alpha: 0.3),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      child: const Center(child: CircularProgressIndicator()),
                     ),
                 ],
               ),
@@ -241,7 +237,11 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
         children: [
           Row(
             children: [
-              Icon(Icons.account_circle, color: user != null ? Colors.green : Colors.grey, size: 40),
+              Icon(
+                Icons.account_circle,
+                color: user != null ? Colors.green : Colors.grey,
+                size: 40,
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -251,7 +251,10 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                       user != null
                           ? AppLocalizations.get('connected_as')
                           : AppLocalizations.get('not_connected'),
-                      style: const TextStyle(color: AppColors.txtMid, fontSize: 12),
+                      style: const TextStyle(
+                        color: AppColors.txtMid,
+                        fontSize: 12,
+                      ),
                     ),
                     if (user != null)
                       Text(
@@ -273,8 +276,12 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
             child: ElevatedButton(
               onPressed: user != null ? _handleSignOut : _handleSignIn,
               style: ElevatedButton.styleFrom(
-                backgroundColor: user != null ? Colors.grey[200] : AppColors.navy,
-                foregroundColor: user != null ? AppColors.txtHigh : Colors.white,
+                backgroundColor: user != null
+                    ? Colors.grey[200]
+                    : AppColors.navy,
+                foregroundColor: user != null
+                    ? AppColors.txtHigh
+                    : Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -308,7 +315,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.navy.withOpacity(0.1),
+                  color: AppColors.navy.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.cloud_upload, color: AppColors.navy),
@@ -328,7 +335,10 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                     ),
                     Text(
                       AppLocalizations.get('backup_restore_desc'),
-                      style: const TextStyle(color: AppColors.txtMid, fontSize: 12),
+                      style: const TextStyle(
+                        color: AppColors.txtMid,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -376,9 +386,11 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
       itemBuilder: (context, index) {
         final file = _backups[index];
         final createdTime = file.createdTime != null
-            ? DateFormat('dd MMM yyyy, HH:mm').format(file.createdTime!.toLocal())
+            ? DateFormat(
+                'dd MMM yyyy, HH:mm',
+              ).format(file.createdTime!.toLocal())
             : AppLocalizations.get('unknown');
-            
+
         return Container(
           decoration: BoxDecoration(
             color: AppColors.bgCard,

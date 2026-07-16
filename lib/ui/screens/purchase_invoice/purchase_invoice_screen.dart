@@ -40,9 +40,14 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
   }
 
   Future<void> _loadData() async {
+    if (!mounted) return;
     final products = await context.read<DatabaseService>().getProducts();
+    if (!mounted) return;
     final suppliers = await context.read<DatabaseService>().getSuppliers();
-    final code = await context.read<DatabaseService>().getNextPurchaseInvoiceCode();
+    if (!mounted) return;
+    final code = await context
+        .read<DatabaseService>()
+        .getNextPurchaseInvoiceCode();
     setState(() {
       _products = products;
       _suppliers = suppliers;
@@ -135,7 +140,10 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
   void _goToAddItems() {
     if (_selectedSupplier == null) {
-      _showSnackBar(AppLocalizations.get('please_select_supplier'), isError: true);
+      _showSnackBar(
+        AppLocalizations.get('please_select_supplier'),
+        isError: true,
+      );
       return;
     }
     setState(() => _currentPage = 1);
@@ -147,11 +155,17 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
 
   Future<void> _saveInvoice() async {
     if (_selectedSupplier == null) {
-      _showSnackBar(AppLocalizations.get('please_select_supplier'), isError: true);
+      _showSnackBar(
+        AppLocalizations.get('please_select_supplier'),
+        isError: true,
+      );
       return;
     }
     if (_invoiceItems.isEmpty) {
-      _showSnackBar(AppLocalizations.get('please_add_at_least_one_item'), isError: true);
+      _showSnackBar(
+        AppLocalizations.get('please_add_at_least_one_item'),
+        isError: true,
+      );
       return;
     }
 
@@ -183,10 +197,15 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
       await context.read<DatabaseService>().savePurchaseInvoice(invoice, items);
 
       if (!mounted) return;
-      _showSnackBar('${AppLocalizations.get('invoice')} $_invoiceCode ${AppLocalizations.get('saved_successfully')}');
+      _showSnackBar(
+        '${AppLocalizations.get('invoice')} $_invoiceCode ${AppLocalizations.get('saved_successfully')}',
+      );
       Navigator.pop(context, true);
     } catch (e) {
-      _showSnackBar('${AppLocalizations.get('failed_to_save')}: $e', isError: true);
+      _showSnackBar(
+        '${AppLocalizations.get('failed_to_save')}: $e',
+        isError: true,
+      );
     } finally {
       setState(() => _isSaving = false);
     }
@@ -224,7 +243,10 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: kTxtLow)),
+            child: Text(
+              AppLocalizations.get('cancel'),
+              style: const TextStyle(color: kTxtLow),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -268,7 +290,10 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: kTxtLow)),
+            child: Text(
+              AppLocalizations.get('cancel'),
+              style: const TextStyle(color: kTxtLow),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -307,7 +332,9 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
                 onPickDate: _pickDate,
                 onSupplierChanged: (val) {
                   setState(() {
-                    _selectedSupplier = _suppliers.firstWhere((s) => s.id == val);
+                    _selectedSupplier = _suppliers.firstWhere(
+                      (s) => s.id == val,
+                    );
                   });
                 },
                 onClearForm: _clearForm,
@@ -365,9 +392,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
             ),
           ),
           Text(
-            _currentPage == 0
-                ? 'Invoice Information'
-                : 'Search & Add Products',
+            _currentPage == 0 ? 'Invoice Information' : 'Search & Add Products',
             style: const TextStyle(
               color: Color(0xFF90AAC8),
               fontSize: 10,

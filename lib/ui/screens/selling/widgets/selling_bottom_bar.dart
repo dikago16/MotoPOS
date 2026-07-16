@@ -297,6 +297,8 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                   ),
                                 );
 
+                            if (!context.mounted) return;
+
                             if (result != null) {
                               final double cashAmount = result['cashAmount'];
                               final String vehicleNo = result['vehicleNo'];
@@ -330,9 +332,9 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                     ),
                                   )
                                   .toList();
-
-                              final transactionId =
-                                  await context.read<DatabaseService>().saveTransaction(trx, items);
+                              final transactionId = await context
+                                  .read<DatabaseService>()
+                                  .saveTransaction(trx, items);
 
                               if (printReceipt && printerProvider.isConnected) {
                                 final printSuccess = await printerProvider
@@ -341,7 +343,7 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                       items: items,
                                       transactionId: transactionId,
                                     );
-                                if (mounted) {
+                                if (context.mounted) {
                                   if (printSuccess) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -369,7 +371,7 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                   }
                                 }
                               } else {
-                                if (mounted) {
+                                if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(

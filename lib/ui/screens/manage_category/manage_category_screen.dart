@@ -8,16 +8,6 @@ import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -203,7 +193,10 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel(AppLocalizations.get('search_category'), icon: Icons.search),
+          _sectionLabel(
+            AppLocalizations.get('search_category'),
+            icon: Icons.search,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -225,7 +218,9 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
+                    border: Border.all(
+                      color: AppColors.accent.withValues(alpha: 0.2),
+                    ),
                   ),
                   child: const Icon(
                     Icons.filter_list,
@@ -263,7 +258,13 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 5, child: Text(AppLocalizations.get('category'), style: _kColHeader)),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    AppLocalizations.get('category'),
+                    style: _kColHeader,
+                  ),
+                ),
                 const SizedBox(width: 26), // Space for action button
               ],
             ),
@@ -282,7 +283,11 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.category_outlined, size: 30, color: AppColors.txtLow),
+                  Icon(
+                    Icons.category_outlined,
+                    size: 30,
+                    color: AppColors.txtLow,
+                  ),
                   SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_categories_found'),
@@ -477,6 +482,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
     );
 
     if (confirmed == true && category.id != null) {
+      if (!mounted) return;
       await context.read<DatabaseService>().deleteCategory(category.id!);
       _fetchCategories();
     }

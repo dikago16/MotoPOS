@@ -5,13 +5,7 @@ import 'language_screen.dart';
 import 'license_info_screen.dart';
 import 'my_store_screen.dart';
 import 'backup_restore_screen.dart';
-
-
-
-
-
-
-
+import 'about_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -37,39 +31,47 @@ class SettingsScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-          _buildMenuTile(
-            context,
-            icon: Icons.store,
-            title: AppLocalizations.get('my_store'),
-            subtitle: AppLocalizations.get('store_information'),
-            screen: const MyStoreScreen(),
-          ),
-          const SizedBox(height: 10),
-          _buildMenuTile(
-            context,
-            icon: Icons.key,
-            title: AppLocalizations.get('license'),
-            subtitle: AppLocalizations.get('license_info'),
-            screen: const LicenseInfoScreen(),
-          ),
-          const SizedBox(height: 10),
-          _buildMenuTile(
-            context,
-            icon: Icons.language,
-            title: AppLocalizations.get('language'),
-            subtitle: AppLocalizations.get('choose_language'),
-            screen: const LanguageScreen(),
-          ),
-          const SizedBox(height: 10),
-          _buildMenuTile(
-            context,
-            icon: Icons.cloud_upload,
-            title: AppLocalizations.get('backup_restore'),
-            subtitle: AppLocalizations.get('backup_restore_desc'),
-            screen: const BackupRestoreScreen(),
-          ),
-        ],
-      ),
+            _buildMenuTile(
+              context,
+              icon: Icons.store,
+              title: AppLocalizations.get('my_store'),
+              subtitle: AppLocalizations.get('store_information'),
+              screen: const MyStoreScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.key,
+              title: AppLocalizations.get('license'),
+              subtitle: AppLocalizations.get('license_info'),
+              screen: const LicenseInfoScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.language,
+              title: AppLocalizations.get('language'),
+              subtitle: AppLocalizations.get('choose_language'),
+              screen: const LanguageScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.cloud_upload,
+              title: AppLocalizations.get('backup_restore'),
+              subtitle: AppLocalizations.get('backup_restore_desc'),
+              screen: const BackupRestoreScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.info_outline,
+              title: AppLocalizations.get('About'),
+              subtitle: 'MotoPOS application information',
+              screen: const AboutScreen(),
+            ),
+          ],
+        ),
       ),
     );
   }

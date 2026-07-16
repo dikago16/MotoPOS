@@ -8,15 +8,6 @@ import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -200,7 +191,10 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel(AppLocalizations.get('search_item'), icon: Icons.search),
+          _sectionLabel(
+            AppLocalizations.get('search_item'),
+            icon: Icons.search,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -239,19 +233,28 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text(AppLocalizations.get('item'), style: _kColHeader)),
+                Expanded(
+                  flex: 3,
+                  child: Text(AppLocalizations.get('item'), style: _kColHeader),
+                ),
                 Expanded(
                   flex: 1,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.get('stock_label').toUpperCase(), style: _kColHeader),
+                    child: Text(
+                      AppLocalizations.get('stock_label').toUpperCase(),
+                      style: _kColHeader,
+                    ),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(AppLocalizations.get('price').toUpperCase(), style: _kColHeader),
+                    child: Text(
+                      AppLocalizations.get('price').toUpperCase(),
+                      style: _kColHeader,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 26), // Space for action button
@@ -272,7 +275,11 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.inventory_2_outlined, size: 30, color: AppColors.txtLow),
+                  Icon(
+                    Icons.inventory_2_outlined,
+                    size: 30,
+                    color: AppColors.txtLow,
+                  ),
                   SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_items_found'),
@@ -331,13 +338,17 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                         flex: 1,
                         child: Center(
                           child: Text(
-                            item.isCountStock ? '${item.stockQty}' : AppLocalizations.get('non_stock'),
+                            item.isCountStock
+                                ? '${item.stockQty}'
+                                : AppLocalizations.get('non_stock'),
                             style: TextStyle(
                               fontSize: item.isCountStock ? 12 : 10,
                               fontWeight: item.isCountStock
                                   ? FontWeight.w500
                                   : FontWeight.w600,
-                              color: item.isCountStock ? AppColors.txtMid : AppColors.txtLow,
+                              color: item.isCountStock
+                                  ? AppColors.txtMid
+                                  : AppColors.txtLow,
                             ),
                           ),
                         ),
@@ -509,6 +520,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
     );
 
     if (confirmed == true && item.id != null) {
+      if (!mounted) return;
       await context.read<DatabaseService>().deleteProduct(item.id!);
       _fetchProducts();
     }

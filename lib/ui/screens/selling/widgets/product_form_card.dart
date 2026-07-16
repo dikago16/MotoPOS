@@ -23,7 +23,6 @@ class _ProductFormCardState extends State<ProductFormCard> {
 
   @override
   void dispose() {
-    _autoCompleteController?.dispose();
     super.dispose();
   }
 

@@ -7,15 +7,6 @@ import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
 // ──────────────────────────────────────────────────────────────────────────────
 
 class CustomerDetailScreen extends StatefulWidget {
@@ -56,7 +47,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   }
 
   Future<void> _fetchNextCode() async {
-    String nextCode = await context.read<DatabaseService>().getNextCustomerCode();
+    String nextCode = await context
+        .read<DatabaseService>()
+        .getNextCustomerCode();
     setState(() {
       _generatedCode = nextCode;
       if (_autoCode) {
@@ -99,7 +92,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('CANCEL', style: TextStyle(color: AppColors.txtLow)),
+            child: const Text(
+              'CANCEL',
+              style: TextStyle(color: AppColors.txtLow),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -118,7 +114,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
 
     if (confirm == true) {
-      await context.read<DatabaseService>().deleteCustomer(widget.customer!.id!);
+      if (!mounted) return;
+      await context.read<DatabaseService>().deleteCustomer(
+        widget.customer!.id!,
+      );
       if (mounted) {
         Navigator.pop(context, true);
       }
@@ -207,7 +206,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? AppLocalizations.get('edit_customer') : AppLocalizations.get('new_customer'),
+              isEdit
+                  ? AppLocalizations.get('edit_customer')
+                  : AppLocalizations.get('new_customer'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -215,7 +216,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_customer'),
+              isEdit
+                  ? AppLocalizations.get('update_details')
+                  : AppLocalizations.get('add_new_customer'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -227,7 +230,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         actions: [
           if (isEdit)
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: AppColors.red, size: 20),
+              icon: const Icon(
+                Icons.delete_outline,
+                color: AppColors.red,
+                size: 20,
+              ),
               onPressed: _deleteCustomer,
               tooltip: 'Delete',
             ),
@@ -302,9 +309,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                               fontSize: 13,
                               color: AppColors.txtMid,
                             ),
-                            decoration: _inputDeco(AppLocalizations.get('customer_code')).copyWith(
-                              fillColor: _autoCode ? AppColors.bgPage : AppColors.bgCard,
-                            ),
+                            decoration:
+                                _inputDeco(
+                                  AppLocalizations.get('customer_code'),
+                                ).copyWith(
+                                  fillColor: _autoCode
+                                      ? AppColors.bgPage
+                                      : AppColors.bgCard,
+                                ),
                           ),
                           const SizedBox(height: 8),
 
@@ -312,7 +324,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           TextFormField(
                             controller: _nameCtrl,
                             style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(AppLocalizations.get('customer_name')),
+                            decoration: _inputDeco(
+                              AppLocalizations.get('customer_name'),
+                            ),
                             textCapitalization: TextCapitalization.words,
                           ),
                           const SizedBox(height: 8),
@@ -333,7 +347,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           TextFormField(
                             controller: _addressCtrl,
                             style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(AppLocalizations.get('address')),
+                            decoration: _inputDeco(
+                              AppLocalizations.get('address'),
+                            ),
                             maxLines: 2,
                             textCapitalization: TextCapitalization.words,
                           ),
@@ -462,7 +478,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         if (_nameCtrl.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.get('customer_name_empty')),
+                              content: Text(
+                                AppLocalizations.get('customer_name_empty'),
+                              ),
                               backgroundColor: Colors.red.shade600,
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -484,15 +502,21 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           );
 
                           if (widget.customer != null) {
-                            await context.read<DatabaseService>().updateCustomer(customer);
+                            await context
+                                .read<DatabaseService>()
+                                .updateCustomer(customer);
                           } else {
-                            await context.read<DatabaseService>().insertCustomer(customer);
+                            await context
+                                .read<DatabaseService>()
+                                .insertCustomer(customer);
                           }
 
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.get('customer_saved')),
+                              content: Text(
+                                AppLocalizations.get('customer_saved'),
+                              ),
                               backgroundColor: Color(0xFF16A34A),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -503,7 +527,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           setState(() => _isSaving = false);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('${AppLocalizations.get('customer_save_failed')}: $e'),
+                              content: Text(
+                                '${AppLocalizations.get('customer_save_failed')}: $e',
+                              ),
                               backgroundColor: const Color(0xFFDC2626),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -521,7 +547,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       )
                     : const Icon(Icons.check, size: 16),
                 label: Text(
-                  _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save_customer'),
+                  _isSaving
+                      ? AppLocalizations.get('saving')
+                      : AppLocalizations.get('save_customer'),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

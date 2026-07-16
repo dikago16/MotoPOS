@@ -8,13 +8,6 @@ import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
 // ──────────────────────────────────────────────────────────────────────────────
 
 class NotesScreen extends StatefulWidget {
@@ -48,12 +41,14 @@ class _NotesScreenState extends State<NotesScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.bgCard,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: Color(0xFFDC2626), size: 24),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: Color(0xFFDC2626),
+              size: 24,
+            ),
             const SizedBox(width: 8),
             Text(
               AppLocalizations.get('delete_note'),
@@ -72,7 +67,13 @@ class _NotesScreenState extends State<NotesScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalizations.get('cancel').toUpperCase(), style: const TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600)),
+            child: Text(
+              AppLocalizations.get('cancel').toUpperCase(),
+              style: const TextStyle(
+                color: AppColors.txtLow,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -84,12 +85,16 @@ class _NotesScreenState extends State<NotesScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: Text(AppLocalizations.get('delete').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w600)),
+            child: Text(
+              AppLocalizations.get('delete').toUpperCase(),
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
         ],
       ),
     );
     if (confirm == true) {
+      if (!mounted) return;
       await context.read<DatabaseService>().deleteNote(id);
       _fetchNotes();
     }
@@ -102,93 +107,119 @@ class _NotesScreenState extends State<NotesScreen> {
       appBar: _buildAppBar(),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.accent),
+              )
             : _notes.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.note_alt_outlined, size: 48, color: AppColors.txtLow),
-                        const SizedBox(height: 12),
-                        Text(
-                          AppLocalizations.get('no_notes_found'),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: AppColors.txtMid, fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                      ],
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.note_alt_outlined,
+                      size: 48,
+                      color: AppColors.txtLow,
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                    itemCount: _notes.length,
-                    itemBuilder: (context, index) {
-                      final note = _notes[index];
-                      return Card(
-                        color: AppColors.bgCard,
-                        margin: const EdgeInsets.only(bottom: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: const BorderSide(color: AppColors.border),
-                        ),
-                        elevation: 0,
-                        child: InkWell(
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NoteDetailScreen(note: note),
-                              ),
-                            );
-                            _fetchNotes();
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        note.title.isNotEmpty ? note.title : AppLocalizations.get('untitled_note'),
-                                        style: const TextStyle(
-                                          color: AppColors.txtHigh,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        note.content,
-                                        style: const TextStyle(color: AppColors.txtMid, fontSize: 12),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        note.createdAt,
-                                        style: const TextStyle(color: AppColors.txtLow, fontSize: 10, fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  icon: const Icon(Icons.delete_outline, color: Color(0xFFDC2626), size: 18),
-                                  onPressed: () => _deleteNote(note.id!),
-                                ),
-                              ],
-                            ),
+                    const SizedBox(height: 12),
+                    Text(
+                      AppLocalizations.get('no_notes_found'),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.txtMid,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+                itemCount: _notes.length,
+                itemBuilder: (context, index) {
+                  final note = _notes[index];
+                  return Card(
+                    color: AppColors.bgCard,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: AppColors.border),
+                    ),
+                    elevation: 0,
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NoteDetailScreen(note: note),
                           ),
+                        );
+                        _fetchNotes();
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    note.title.isNotEmpty
+                                        ? note.title
+                                        : AppLocalizations.get('untitled_note'),
+                                    style: const TextStyle(
+                                      color: AppColors.txtHigh,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    note.content,
+                                    style: const TextStyle(
+                                      color: AppColors.txtMid,
+                                      fontSize: 12,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    note.createdAt,
+                                    style: const TextStyle(
+                                      color: AppColors.txtLow,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                color: Color(0xFFDC2626),
+                                size: 18,
+                              ),
+                              onPressed: () => _deleteNote(note.id!),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
@@ -227,9 +258,7 @@ class _NotesScreenState extends State<NotesScreen> {
           onPressed: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const NoteDetailScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const NoteDetailScreen()),
             );
             _fetchNotes();
           },

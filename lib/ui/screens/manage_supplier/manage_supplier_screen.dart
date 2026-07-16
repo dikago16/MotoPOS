@@ -8,16 +8,6 @@ import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -203,7 +193,10 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel(AppLocalizations.get('search_supplier'), icon: Icons.search),
+          _sectionLabel(
+            AppLocalizations.get('search_supplier'),
+            icon: Icons.search,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -225,7 +218,9 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
+                    border: Border.all(
+                      color: AppColors.accent.withValues(alpha: 0.2),
+                    ),
                   ),
                   child: const Icon(
                     Icons.filter_list,
@@ -253,15 +248,30 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: _sectionLabel(AppLocalizations.get('supplier_list'), icon: Icons.business),
+            child: _sectionLabel(
+              AppLocalizations.get('supplier_list'),
+              icon: Icons.business,
+            ),
           ),
           Container(
             color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 5, child: Text(AppLocalizations.get('supplier'), style: _kColHeader)),
-                Expanded(flex: 3, child: Text(AppLocalizations.get('contact'), style: _kColHeader)),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    AppLocalizations.get('supplier'),
+                    style: _kColHeader,
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    AppLocalizations.get('contact'),
+                    style: _kColHeader,
+                  ),
+                ),
                 const SizedBox(width: 26), // Space for action button
               ],
             ),
@@ -425,7 +435,11 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           title: Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.red,
+                size: 24,
+              ),
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.get('delete_supplier'),
@@ -500,6 +514,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
     );
 
     if (confirmed == true && supplier.id != null) {
+      if (!mounted) return;
       await context.read<DatabaseService>().deleteSupplier(supplier.id!);
       _fetchSuppliers();
     }

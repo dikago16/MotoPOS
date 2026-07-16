@@ -47,9 +47,12 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
     setState(() => _isLoading = true);
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
 
-    final summary = await context.read<DatabaseService>().getDailySummary(dateStr);
-    final categories = await context.read<DatabaseService>().getDailyCategorySummary(dateStr);
-    final details = await context.read<DatabaseService>().getTransactionDetailsByDate(dateStr);
+    final dbService = context.read<DatabaseService>();
+    final summary = await dbService.getDailySummary(dateStr);
+    final categories = await dbService.getDailyCategorySummary(dateStr);
+    final details = await dbService.getTransactionDetailsByDate(dateStr);
+
+    if (!mounted) return;
 
     setState(() {
       _summary = summary;
