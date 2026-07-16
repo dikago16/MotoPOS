@@ -5,11 +5,14 @@ import 'package:bluetooth_classic/models/device.dart';
 import '../services/bluetooth_printer_service.dart';
 import '../data/models/transaction_model.dart';
 import '../data/models/transaction_item_model.dart';
-import '../data/db_helper.dart';
+import '../data/database_service.dart';
 
 /// Provider that manages Bluetooth printer connection state
 /// and receipt printing functionality.
 class PrinterProvider with ChangeNotifier {
+  final DatabaseService _dbService;
+  
+  PrinterProvider(this._dbService);
   final BluetoothClassic _bluetooth = BluetoothClassic();
   StreamSubscription<int>? _statusSubscription;
 
@@ -140,7 +143,7 @@ class PrinterProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final storeInfo = await DBHelper.getStoreInfo();
+      final storeInfo = await _dbService.getStoreInfo();
       final Uint8List receiptBytes = BluetoothPrinterService.generateReceipt(
         transaction: transaction,
         items: items,

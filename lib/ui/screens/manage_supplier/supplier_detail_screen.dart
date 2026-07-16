@@ -1,7 +1,8 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/supplier_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -62,7 +63,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   }
 
   Future<void> _generateCode() async {
-    final code = await DBHelper.getNextSupplierCode();
+    final code = await context.read<DatabaseService>().getNextSupplierCode();
     if (mounted) {
       setState(() {
         _codeCtrl.text = code;
@@ -94,9 +95,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
       );
 
       if (widget.supplier == null) {
-        await DBHelper.insertSupplier(supplier);
+        await context.read<DatabaseService>().insertSupplier(supplier);
       } else {
-        await DBHelper.updateSupplier(supplier);
+        await context.read<DatabaseService>().updateSupplier(supplier);
       }
 
       if (mounted) {

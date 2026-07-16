@@ -1,8 +1,9 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/category_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../scanner/scanner_screen.dart';
 import '../../../core/services/app_localizations.dart';
 
@@ -80,7 +81,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   }
 
   Future<void> _fetchCategories() async {
-    final categories = await DBHelper.getCategories();
+    final categories = await context.read<DatabaseService>().getCategories();
     setState(() {
       _categories = categories;
       bool exists = _categories.any((c) => c.categoryName == _selectedCategory);
@@ -91,7 +92,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   }
 
   Future<void> _fetchNextCode() async {
-    String nextCode = await DBHelper.getNextItemCode();
+    String nextCode = await context.read<DatabaseService>().getNextItemCode();
     setState(() {
       _generatedCode = nextCode;
       if (_autoItemCode) {
@@ -677,9 +678,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             stockQty: int.tryParse(_stockQtyCtrl.text) ?? 0,
                           );
                           if (widget.product != null) {
-                            await DBHelper.updateProduct(product);
+                            await context.read<DatabaseService>().updateProduct(product);
                           } else {
-                            await DBHelper.insertProduct(product);
+                            await context.read<DatabaseService>().insertProduct(product);
                           }
                           
                           if (!mounted) return;

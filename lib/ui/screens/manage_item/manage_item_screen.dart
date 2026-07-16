@@ -1,8 +1,9 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'item_detail_screen.dart';
 import '../../../data/models/product_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -43,7 +44,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
 
   Future<void> _fetchProducts() async {
     setState(() => _isLoading = true);
-    final products = await DBHelper.getProducts();
+    final products = await context.read<DatabaseService>().getProducts();
     setState(() {
       _products = products;
       _isLoading = false;
@@ -508,7 +509,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
     );
 
     if (confirmed == true && item.id != null) {
-      await DBHelper.deleteProduct(item.id!);
+      await context.read<DatabaseService>().deleteProduct(item.id!);
       _fetchProducts();
     }
   }

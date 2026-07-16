@@ -1,7 +1,8 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/category_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -46,7 +47,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   }
 
   Future<void> _fetchNextCode() async {
-    String nextCode = await DBHelper.getNextCategoryCode();
+    String nextCode = await context.read<DatabaseService>().getNextCategoryCode();
     setState(() {
       _generatedCode = nextCode;
       if (_autoCategoryCode) {
@@ -319,9 +320,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                             categoryName: _categoryNameCtrl.text,
                           );
                           if (widget.category != null) {
-                            await DBHelper.updateCategory(category);
+                            await context.read<DatabaseService>().updateCategory(category);
                           } else {
-                            await DBHelper.insertCategory(category);
+                            await context.read<DatabaseService>().insertCategory(category);
                           }
 
                           if (!mounted) return;

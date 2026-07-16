@@ -1,7 +1,8 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../data/models/note_model.dart';
 import '../../../core/services/app_localizations.dart';
 
@@ -64,7 +65,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     if (widget.note == null) {
       // Create new note
       final newNote = NoteModel(title: title, content: content, createdAt: now);
-      await DBHelper.insertNote(newNote);
+      await context.read<DatabaseService>().insertNote(newNote);
     } else {
       // Update existing note
       final updatedNote = NoteModel(
@@ -73,7 +74,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         content: content,
         createdAt: now, // update to modification time
       );
-      await DBHelper.updateNote(updatedNote);
+      await context.read<DatabaseService>().updateNote(updatedNote);
     }
 
     if (mounted) {

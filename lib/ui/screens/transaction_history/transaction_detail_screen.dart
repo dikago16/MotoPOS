@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../providers/printer_provider.dart';
 import '../../../core/services/app_localizations.dart';
 
@@ -49,7 +49,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   }
 
   Future<void> _fetchItems() async {
-    final items = await DBHelper.getTransactionItems(
+    final items = await context.read<DatabaseService>().getTransactionItems(
       widget.transaction.id ?? 0,
     );
     setState(() {

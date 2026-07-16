@@ -15,6 +15,8 @@ import 'core/constants/app_colors.dart';
 import 'ui/screens/splash/splash_screen.dart';
 import 'core/services/app_localizations.dart';
 
+import 'data/database_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,8 +36,12 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider<DatabaseService>(create: (_) => DatabaseService()),
         ChangeNotifierProvider(create: (_) => SellingProvider()),
-        ChangeNotifierProvider(create: (_) => PrinterProvider()),
+        ChangeNotifierProxyProvider<DatabaseService, PrinterProvider>(
+          create: (context) => PrinterProvider(context.read<DatabaseService>()),
+          update: (_, db, prev) => prev ?? PrinterProvider(db),
+        ),
         ChangeNotifierProvider(create: (_) => CircuitsProvider()),
       ],
       child: const MyApp(),

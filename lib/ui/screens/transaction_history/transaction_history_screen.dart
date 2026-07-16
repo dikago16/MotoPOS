@@ -1,8 +1,9 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/transaction_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 import 'transaction_detail_screen.dart';
@@ -49,7 +50,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
   Future<void> _fetchTransactions() async {
     setState(() => _isLoading = true);
-    final transactions = await DBHelper.getAllTransactions();
+    final transactions = await context.read<DatabaseService>().getAllTransactions();
     setState(() {
       _allTransactions = transactions;
       _isLoading = false;

@@ -1,8 +1,9 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'supplier_detail_screen.dart';
 import '../../../data/models/supplier_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -44,7 +45,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
 
   Future<void> _fetchSuppliers() async {
     setState(() => _isLoading = true);
-    final suppliers = await DBHelper.getSuppliers();
+    final suppliers = await context.read<DatabaseService>().getSuppliers();
     setState(() {
       _suppliers = suppliers;
       _isLoading = false;
@@ -499,7 +500,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
     );
 
     if (confirmed == true && supplier.id != null) {
-      await DBHelper.deleteSupplier(supplier.id!);
+      await context.read<DatabaseService>().deleteSupplier(supplier.id!);
       _fetchSuppliers();
     }
   }

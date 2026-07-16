@@ -1,7 +1,8 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/customer_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -55,7 +56,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   }
 
   Future<void> _fetchNextCode() async {
-    String nextCode = await DBHelper.getNextCustomerCode();
+    String nextCode = await context.read<DatabaseService>().getNextCustomerCode();
     setState(() {
       _generatedCode = nextCode;
       if (_autoCode) {
@@ -117,7 +118,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
 
     if (confirm == true) {
-      await DBHelper.deleteCustomer(widget.customer!.id!);
+      await context.read<DatabaseService>().deleteCustomer(widget.customer!.id!);
       if (mounted) {
         Navigator.pop(context, true);
       }
@@ -483,9 +484,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           );
 
                           if (widget.customer != null) {
-                            await DBHelper.updateCustomer(customer);
+                            await context.read<DatabaseService>().updateCustomer(customer);
                           } else {
-                            await DBHelper.insertCustomer(customer);
+                            await context.read<DatabaseService>().insertCustomer(customer);
                           }
 
                           if (!mounted) return;

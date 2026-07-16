@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../data/db_helper.dart';
+import 'package:provider/provider.dart';
+import '../../../data/database_service.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/models/purchase_invoice_model.dart';
@@ -39,9 +40,9 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
   }
 
   Future<void> _loadData() async {
-    final products = await DBHelper.getProducts();
-    final suppliers = await DBHelper.getSuppliers();
-    final code = await DBHelper.getNextPurchaseInvoiceCode();
+    final products = await context.read<DatabaseService>().getProducts();
+    final suppliers = await context.read<DatabaseService>().getSuppliers();
+    final code = await context.read<DatabaseService>().getNextPurchaseInvoiceCode();
     setState(() {
       _products = products;
       _suppliers = suppliers;
@@ -179,7 +180,7 @@ class _PurchaseInvoiceScreenState extends State<PurchaseInvoiceScreen> {
           )
           .toList();
 
-      await DBHelper.savePurchaseInvoice(invoice, items);
+      await context.read<DatabaseService>().savePurchaseInvoice(invoice, items);
 
       if (!mounted) return;
       _showSnackBar('${AppLocalizations.get('invoice')} $_invoiceCode ${AppLocalizations.get('saved_successfully')}');

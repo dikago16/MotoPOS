@@ -1,9 +1,10 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/purchase_invoice_model.dart';
 import '../../../data/models/purchase_invoice_item_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -48,7 +49,7 @@ class _PurchaseInvoiceDetailScreenState
   }
 
   Future<void> _fetchItems() async {
-    final items = await DBHelper.getPurchaseInvoiceItems(
+    final items = await context.read<DatabaseService>().getPurchaseInvoiceItems(
       widget.invoice.id ?? 0,
     );
     setState(() {

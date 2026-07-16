@@ -1,7 +1,8 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -46,9 +47,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
     setState(() => _isLoading = true);
     final dateStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
 
-    final summary = await DBHelper.getDailySummary(dateStr);
-    final categories = await DBHelper.getDailyCategorySummary(dateStr);
-    final details = await DBHelper.getTransactionDetailsByDate(dateStr);
+    final summary = await context.read<DatabaseService>().getDailySummary(dateStr);
+    final categories = await context.read<DatabaseService>().getDailyCategorySummary(dateStr);
+    final details = await context.read<DatabaseService>().getTransactionDetailsByDate(dateStr);
 
     setState(() {
       _summary = summary;

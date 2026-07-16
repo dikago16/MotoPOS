@@ -1,7 +1,8 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/customer_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 import 'customer_detail_screen.dart';
 
@@ -44,7 +45,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
 
   Future<void> _fetchCustomers() async {
     setState(() => _isLoading = true);
-    final customers = await DBHelper.getCustomers();
+    final customers = await context.read<DatabaseService>().getCustomers();
     setState(() {
       _allCustomers = customers;
       _isLoading = false;

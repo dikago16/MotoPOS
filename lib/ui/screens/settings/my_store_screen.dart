@@ -1,6 +1,7 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../data/models/store_info_model.dart';
 import '../../../core/services/app_localizations.dart';
 
@@ -43,7 +44,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
   }
 
   Future<void> _loadStoreInfo() async {
-    final info = await DBHelper.getStoreInfo();
+    final info = await context.read<DatabaseService>().getStoreInfo();
     if (mounted) {
       setState(() {
         _nameCtrl.text = info.storeName;
@@ -65,7 +66,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
       phone: _phoneCtrl.text.trim(),
     );
 
-    await DBHelper.saveStoreInfo(info);
+    await context.read<DatabaseService>().saveStoreInfo(info);
 
     if (mounted) {
       setState(() => _isSaving = false);

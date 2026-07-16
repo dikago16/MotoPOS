@@ -10,8 +10,8 @@ import 'models/purchase_invoice_item_model.dart';
 import 'models/customer_model.dart';
 import 'models/note_model.dart';
 import 'models/store_info_model.dart';
-class DBHelper {
-  static Database? _db;
+class DatabaseService {
+  Database? _db;
   static const int _version = 11;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
@@ -24,13 +24,13 @@ class DBHelper {
   static const String _notesTable = 'notes';
   static const String _storeInfoTable = 'store_info';
 
-  static Future<Database> get db async {
+  Future<Database> get db async {
     if (_db != null) return _db!;
     _db = await initDb();
     return _db!;
   }
 
-  static Future<Database> initDb() async {
+  Future<Database> initDb() async {
     String path = join(await getDatabasesPath(), 'motopos.db');
     return await openDatabase(
       path,
@@ -305,7 +305,7 @@ class DBHelper {
 
   // --- Products ---
 
-  static Future<int> insertProduct(Product product) async {
+  Future<int> insertProduct(Product product) async {
     final dbClient = await db;
     return await dbClient.insert(
       _tableName,
@@ -314,7 +314,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> updateProduct(Product product) async {
+  Future<int> updateProduct(Product product) async {
     final dbClient = await db;
     return await dbClient.update(
       _tableName,
@@ -324,7 +324,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> deleteProduct(int id) async {
+  Future<int> deleteProduct(int id) async {
     final dbClient = await db;
     return await dbClient.delete(
       _tableName,
@@ -333,7 +333,7 @@ class DBHelper {
     );
   }
 
-  static Future<List<Product>> getProducts() async {
+  Future<List<Product>> getProducts() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(_tableName);
     return List.generate(maps.length, (i) {
@@ -341,7 +341,7 @@ class DBHelper {
     });
   }
 
-  static Future<String> getNextItemCode() async {
+  Future<String> getNextItemCode() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> result = await dbClient.rawQuery(
         'SELECT itemCode FROM $_tableName WHERE itemCode LIKE "ITEM%" ORDER BY id DESC LIMIT 1');
@@ -357,7 +357,7 @@ class DBHelper {
 
   // --- Categories ---
 
-  static Future<int> insertCategory(CategoryModel category) async {
+  Future<int> insertCategory(CategoryModel category) async {
     final dbClient = await db;
     return await dbClient.insert(
       _categoryTable,
@@ -366,7 +366,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> updateCategory(CategoryModel category) async {
+  Future<int> updateCategory(CategoryModel category) async {
     final dbClient = await db;
     return await dbClient.update(
       _categoryTable,
@@ -376,7 +376,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> deleteCategory(int id) async {
+  Future<int> deleteCategory(int id) async {
     final dbClient = await db;
     return await dbClient.delete(
       _categoryTable,
@@ -385,7 +385,7 @@ class DBHelper {
     );
   }
 
-  static Future<List<CategoryModel>> getCategories() async {
+  Future<List<CategoryModel>> getCategories() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(_categoryTable);
     return List.generate(maps.length, (i) {
@@ -393,7 +393,7 @@ class DBHelper {
     });
   }
 
-  static Future<String> getNextCategoryCode() async {
+  Future<String> getNextCategoryCode() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> result = await dbClient.rawQuery(
         'SELECT categoryCode FROM $_categoryTable WHERE categoryCode LIKE "CAT%" ORDER BY id DESC LIMIT 1');
@@ -409,7 +409,7 @@ class DBHelper {
 
   // --- Transactions ---
 
-  static Future<int> saveTransaction(TransactionModel transaction, List<TransactionItemModel> items) async {
+  Future<int> saveTransaction(TransactionModel transaction, List<TransactionItemModel> items) async {
     final dbClient = await db;
     return await dbClient.transaction((txn) async {
       int id = await txn.insert(_transactionTable, transaction.toMap());
@@ -422,7 +422,7 @@ class DBHelper {
     });
   }
 
-  static Future<List<TransactionModel>> getAllTransactions() async {
+  Future<List<TransactionModel>> getAllTransactions() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(
       _transactionTable,
@@ -431,7 +431,7 @@ class DBHelper {
     return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
   }
 
-  static Future<List<TransactionItemModel>> getTransactionItems(int transactionId) async {
+  Future<List<TransactionItemModel>> getTransactionItems(int transactionId) async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(
       _transactionItemsTable,
@@ -443,7 +443,7 @@ class DBHelper {
 
   // --- Daily Report ---
 
-  static Future<List<TransactionModel>> getTransactionsByDate(String date) async {
+  Future<List<TransactionModel>> getTransactionsByDate(String date) async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(
       _transactionTable,
@@ -454,7 +454,7 @@ class DBHelper {
     return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
   }
 
-  static Future<List<Map<String, dynamic>>> getDailyCategorySummary(String date) async {
+  Future<List<Map<String, dynamic>>> getDailyCategorySummary(String date) async {
     final dbClient = await db;
     return await dbClient.rawQuery('''
       SELECT 
@@ -470,7 +470,7 @@ class DBHelper {
     ''', ['$date%']);
   }
 
-  static Future<Map<String, dynamic>> getDailySummary(String date) async {
+  Future<Map<String, dynamic>> getDailySummary(String date) async {
     final dbClient = await db;
     final result = await dbClient.rawQuery('''
       SELECT 
@@ -486,7 +486,7 @@ class DBHelper {
     return {'totalTransactions': 0, 'totalRevenue': 0.0, 'avgTransaction': 0.0};
   }
 
-  static Future<List<Map<String, dynamic>>> getTransactionDetailsByDate(String date) async {
+  Future<List<Map<String, dynamic>>> getTransactionDetailsByDate(String date) async {
     final dbClient = await db;
     return await dbClient.rawQuery('''
       SELECT 
@@ -508,7 +508,7 @@ class DBHelper {
 
   // --- Suppliers ---
 
-  static Future<int> insertSupplier(SupplierModel supplier) async {
+  Future<int> insertSupplier(SupplierModel supplier) async {
     final dbClient = await db;
     return await dbClient.insert(
       _supplierTable,
@@ -517,7 +517,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> updateSupplier(SupplierModel supplier) async {
+  Future<int> updateSupplier(SupplierModel supplier) async {
     final dbClient = await db;
     return await dbClient.update(
       _supplierTable,
@@ -527,7 +527,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> deleteSupplier(int id) async {
+  Future<int> deleteSupplier(int id) async {
     final dbClient = await db;
     return await dbClient.delete(
       _supplierTable,
@@ -536,7 +536,7 @@ class DBHelper {
     );
   }
 
-  static Future<List<SupplierModel>> getSuppliers() async {
+  Future<List<SupplierModel>> getSuppliers() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(_supplierTable);
     return List.generate(maps.length, (i) {
@@ -544,7 +544,7 @@ class DBHelper {
     });
   }
 
-  static Future<String> getNextSupplierCode() async {
+  Future<String> getNextSupplierCode() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> result = await dbClient.rawQuery(
         'SELECT supplierCode FROM $_supplierTable WHERE supplierCode LIKE "SUPP%" ORDER BY id DESC LIMIT 1');
@@ -560,7 +560,7 @@ class DBHelper {
 
   // --- Purchase Invoices ---
 
-  static Future<int> savePurchaseInvoice(
+  Future<int> savePurchaseInvoice(
     PurchaseInvoiceModel invoice,
     List<PurchaseInvoiceItemModel> items,
   ) async {
@@ -606,7 +606,7 @@ class DBHelper {
     });
   }
 
-  static Future<List<PurchaseInvoiceModel>> getPurchaseInvoices() async {
+  Future<List<PurchaseInvoiceModel>> getPurchaseInvoices() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(
       _purchaseInvoiceTable,
@@ -617,7 +617,7 @@ class DBHelper {
     });
   }
 
-  static Future<List<PurchaseInvoiceItemModel>> getPurchaseInvoiceItems(
+  Future<List<PurchaseInvoiceItemModel>> getPurchaseInvoiceItems(
     int invoiceId,
   ) async {
     final dbClient = await db;
@@ -631,7 +631,7 @@ class DBHelper {
     });
   }
 
-  static Future<String> getNextPurchaseInvoiceCode() async {
+  Future<String> getNextPurchaseInvoiceCode() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> result = await dbClient.rawQuery(
       'SELECT invoiceCode FROM $_purchaseInvoiceTable WHERE invoiceCode LIKE "PINV%" ORDER BY id DESC LIMIT 1',
@@ -648,7 +648,7 @@ class DBHelper {
 
   // --- Customers ---
 
-  static Future<int> insertCustomer(CustomerModel customer) async {
+  Future<int> insertCustomer(CustomerModel customer) async {
     final dbClient = await db;
     return await dbClient.insert(
       _customerTable,
@@ -657,7 +657,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> updateCustomer(CustomerModel customer) async {
+  Future<int> updateCustomer(CustomerModel customer) async {
     final dbClient = await db;
     return await dbClient.update(
       _customerTable,
@@ -667,7 +667,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> deleteCustomer(int id) async {
+  Future<int> deleteCustomer(int id) async {
     final dbClient = await db;
     return await dbClient.delete(
       _customerTable,
@@ -676,7 +676,7 @@ class DBHelper {
     );
   }
 
-  static Future<List<CustomerModel>> getCustomers() async {
+  Future<List<CustomerModel>> getCustomers() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(_customerTable);
     return List.generate(maps.length, (i) {
@@ -684,7 +684,7 @@ class DBHelper {
     });
   }
 
-  static Future<String> getNextCustomerCode() async {
+  Future<String> getNextCustomerCode() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> result = await dbClient.rawQuery(
         'SELECT customerCode FROM $_customerTable WHERE customerCode LIKE "CUST%" ORDER BY id DESC LIMIT 1');
@@ -700,7 +700,7 @@ class DBHelper {
 
   // --- Notes ---
 
-  static Future<int> insertNote(NoteModel note) async {
+  Future<int> insertNote(NoteModel note) async {
     final dbClient = await db;
     return await dbClient.insert(
       _notesTable,
@@ -709,7 +709,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> updateNote(NoteModel note) async {
+  Future<int> updateNote(NoteModel note) async {
     final dbClient = await db;
     return await dbClient.update(
       _notesTable,
@@ -719,7 +719,7 @@ class DBHelper {
     );
   }
 
-  static Future<int> deleteNote(int id) async {
+  Future<int> deleteNote(int id) async {
     final dbClient = await db;
     return await dbClient.delete(
       _notesTable,
@@ -728,7 +728,7 @@ class DBHelper {
     );
   }
 
-  static Future<List<NoteModel>> getNotes() async {
+  Future<List<NoteModel>> getNotes() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(_notesTable, orderBy: 'createdAt DESC');
     return List.generate(maps.length, (i) {
@@ -738,7 +738,7 @@ class DBHelper {
 
   // --- Store Info ---
 
-  static Future<StoreInfoModel> getStoreInfo() async {
+  Future<StoreInfoModel> getStoreInfo() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(_storeInfoTable, limit: 1);
     if (maps.isNotEmpty) {
@@ -747,7 +747,7 @@ class DBHelper {
     return StoreInfoModel.defaults();
   }
 
-  static Future<int> saveStoreInfo(StoreInfoModel info) async {
+  Future<int> saveStoreInfo(StoreInfoModel info) async {
     final dbClient = await db;
     final List<Map<String, dynamic>> existing = await dbClient.query(_storeInfoTable, limit: 1);
     if (existing.isNotEmpty) {
@@ -764,7 +764,7 @@ class DBHelper {
 
   // --- Backup & Restore ---
 
-  static Future<Map<String, dynamic>> exportAllData() async {
+  Future<Map<String, dynamic>> exportAllData() async {
     final dbClient = await db;
     final Map<String, dynamic> data = {};
 
@@ -782,7 +782,7 @@ class DBHelper {
     return data;
   }
 
-  static Future<void> clearAllTables(Transaction txn) async {
+  Future<void> clearAllTables(Transaction txn) async {
     await txn.delete(_tableName);
     await txn.delete(_categoryTable);
     await txn.delete(_transactionTable);
@@ -795,7 +795,7 @@ class DBHelper {
     await txn.delete(_storeInfoTable);
   }
 
-  static Future<void> importAllData(Map<String, dynamic> data) async {
+  Future<void> importAllData(Map<String, dynamic> data) async {
     final dbClient = await db;
     await dbClient.transaction((txn) async {
       await clearAllTables(txn);

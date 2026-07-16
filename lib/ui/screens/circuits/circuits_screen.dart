@@ -9,10 +9,6 @@ import 'circuit_image_screen.dart';
 
 // Enterprise Design Tokens
 
-
-
-
-
 class CircuitsScreen extends StatefulWidget {
   const CircuitsScreen({super.key});
 
@@ -46,13 +42,22 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
       body: Consumer<CircuitsProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.accent));
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.accent),
+            );
           }
           if (provider.error.isNotEmpty) {
-            return Center(child: Text(provider.error, style: const TextStyle(color: Colors.red)));
+            return Center(
+              child: Text(
+                provider.error,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
           }
           if (provider.brands.isEmpty) {
-            return Center(child: Text(AppLocalizations.get('no_circuits_found')));
+            return Center(
+              child: Text(AppLocalizations.get('no_circuits_found')),
+            );
           }
 
           return SingleChildScrollView(
@@ -88,7 +93,7 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
                     },
                   ),
                 if (_selectedBrand != null) const SizedBox(height: 12),
-                
+
                 if (_selectedModel != null)
                   _buildDropdown<CircuitType>(
                     label: 'Tipe / Tahun',
@@ -108,7 +113,11 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
                     padding: EdgeInsets.only(top: 12, bottom: 8),
                     child: Text(
                       'Daftar Sirkuit:',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.txtMid),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: AppColors.txtMid,
+                      ),
                     ),
                   ),
                   ..._selectedType!.circuits.map((circuit) {
@@ -121,11 +130,23 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
                       ),
                       margin: const EdgeInsets.only(bottom: 8),
                       child: ListTile(
-                        title: Text(circuit.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                        trailing: const Icon(Icons.zoom_out_map, size: 18, color: AppColors.accent),
+                        title: Text(
+                          circuit.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                        trailing: const Icon(
+                          Icons.zoom_out_map,
+                          size: 18,
+                          color: AppColors.accent,
+                        ),
                         onTap: () async {
-                          final deviceId = await ActivationService.getDeviceId();
-                          final imageUrl = '${AiService.baseUrl}/circuits/image/${Uri.encodeComponent(_selectedBrand!.name)}/${Uri.encodeComponent(_selectedModel!.name)}/${Uri.encodeComponent(_selectedType!.name)}/${Uri.encodeComponent(circuit.filename)}?device_id=$deviceId';
+                          final deviceId =
+                              await ActivationService.getDeviceId();
+                          final imageUrl =
+                              '${AiService.baseUrl}/circuits/image/${Uri.encodeComponent(_selectedBrand!.name)}/${Uri.encodeComponent(_selectedModel!.name)}/${Uri.encodeComponent(_selectedType!.name)}/${Uri.encodeComponent(circuit.filename)}?device_id=$deviceId';
                           if (!context.mounted) return;
                           Navigator.push(
                             context,
@@ -139,7 +160,7 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
                         },
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ],
             ),
@@ -166,13 +187,13 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
           isExpanded: true,
-          hint: Text('Pilih $label', style: const TextStyle(color: AppColors.txtMid)),
+          hint: Text(
+            'Pilih $label',
+            style: const TextStyle(color: AppColors.txtMid),
+          ),
           value: value,
           items: items.map((T item) {
-            return DropdownMenuItem<T>(
-              value: item,
-              child: Text(getName(item)),
-            );
+            return DropdownMenuItem<T>(value: item, child: Text(getName(item)));
           }).toList(),
           onChanged: onChanged,
         ),

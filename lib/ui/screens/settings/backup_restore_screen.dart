@@ -1,9 +1,11 @@
-import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:intl/intl.dart';
+import '../../../core/constants/app_colors.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../../services/google_drive_service.dart';
+import '../../../data/database_service.dart';
 
 
 
@@ -20,7 +22,7 @@ class BackupRestoreScreen extends StatefulWidget {
 }
 
 class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
-  final GoogleDriveService _driveService = GoogleDriveService();
+  late final GoogleDriveService _driveService;
   bool _isLoading = true;
   bool _isActionLoading = false;
   List<drive.File> _backups = [];
@@ -28,6 +30,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
   @override
   void initState() {
     super.initState();
+    _driveService = GoogleDriveService(context.read<DatabaseService>());
     _initGoogleSignIn();
   }
 

@@ -1,6 +1,7 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../data/models/note_model.dart';
 import 'note_detail_screen.dart';
 import '../../../core/services/app_localizations.dart';
@@ -35,7 +36,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
   Future<void> _fetchNotes() async {
     setState(() => _isLoading = true);
-    final notes = await DBHelper.getNotes();
+    final notes = await context.read<DatabaseService>().getNotes();
     setState(() {
       _notes = notes;
       _isLoading = false;
@@ -89,7 +90,7 @@ class _NotesScreenState extends State<NotesScreen> {
       ),
     );
     if (confirm == true) {
-      await DBHelper.deleteNote(id);
+      await context.read<DatabaseService>().deleteNote(id);
       _fetchNotes();
     }
   }

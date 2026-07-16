@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:http/http.dart' as http;
-import '../data/db_helper.dart';
+import '../data/database_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
@@ -19,9 +19,13 @@ class GoogleAuthClient extends http.BaseClient {
 }
 
 class GoogleDriveService {
+  final DatabaseService _dbService;
+  
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [drive.DriveApi.driveFileScope],
   );
+
+  GoogleDriveService(this._dbService);
 
   GoogleSignInAccount? _currentUser;
   drive.DriveApi? _driveApi;
@@ -98,7 +102,7 @@ class GoogleDriveService {
       final folderId = await _getFolderId();
       if (folderId == null) return false;
 
-      final data = await DBHelper.exportAllData();
+      final data = await _dbService.exportAllData();
       final String jsonString = jsonEncode(data);
       
       final dateStr = DateFormat('yyyy-MM-dd_HH-mm').format(DateTime.now());
@@ -159,7 +163,7 @@ class GoogleDriveService {
       final String jsonString = utf8.decode(dataBytes);
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
-      await DBHelper.importAllData(data);
+      await _dbService.importAllData(data);
       return true;
     } catch (e) {
       debugPrint("Error restoring data: $e");

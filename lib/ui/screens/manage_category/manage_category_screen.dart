@@ -1,8 +1,9 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'category_detail_screen.dart';
 import '../../../data/models/category_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -44,7 +45,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
 
   Future<void> _fetchCategories() async {
     setState(() => _isLoading = true);
-    final categories = await DBHelper.getCategories();
+    final categories = await context.read<DatabaseService>().getCategories();
     setState(() {
       _categories = categories;
       _isLoading = false;
@@ -476,7 +477,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
     );
 
     if (confirmed == true && category.id != null) {
-      await DBHelper.deleteCategory(category.id!);
+      await context.read<DatabaseService>().deleteCategory(category.id!);
       _fetchCategories();
     }
   }

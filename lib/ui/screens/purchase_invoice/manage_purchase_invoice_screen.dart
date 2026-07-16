@@ -1,8 +1,9 @@
 import '../../../core/constants/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/purchase_invoice_model.dart';
-import '../../../data/db_helper.dart';
+import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
 import 'purchase_invoice_screen.dart';
@@ -51,7 +52,7 @@ class _ManagePurchaseInvoiceScreenState
 
   Future<void> _fetchInvoices() async {
     setState(() => _isLoading = true);
-    final invoices = await DBHelper.getPurchaseInvoices();
+    final invoices = await context.read<DatabaseService>().getPurchaseInvoices();
     setState(() {
       _allInvoices = invoices;
       _isLoading = false;
