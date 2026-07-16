@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
+import '../../data/database_service.dart';
 
 class ActivationService {
   static const String baseUrl = "https://api.dx-bytes.com/api/v1";
@@ -231,13 +232,16 @@ class AiService {
   static Future<Map<String, dynamic>> ask(String prompt) async {
     try {
       final String deviceId = await ActivationService.getDeviceId();
+      final storeInfo = await DatabaseService().getStoreInfo();
+      final String storeName = storeInfo.storeName == 'My Store' ? 'My Shop' : storeInfo.storeName;
+
       final response = await http.post(
         Uri.parse("$baseUrl/ask-ai"),
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
         },
-        body: jsonEncode({"prompt": prompt, "device_id": deviceId}),
+        body: jsonEncode({"prompt": prompt, "device_id": deviceId, "store_name": storeName}),
       );
 
       final data = jsonDecode(response.body);

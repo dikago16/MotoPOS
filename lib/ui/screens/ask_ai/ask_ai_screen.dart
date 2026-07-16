@@ -209,8 +209,22 @@ class _AskAiScreenState extends State<AskAiScreen> {
                 child: ListView.builder(
                   controller: _scrollController,
                   padding: const EdgeInsets.all(16),
-                  itemCount: _messages.length,
+                  itemCount: _messages.length + (_isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
+                    if (index == _messages.length) {
+                      return const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 12.0, left: 8.0),
+                          child: SizedBox(
+                            width: 24, 
+                            height: 24, 
+                            child: AppLoading()
+                          ),
+                        ),
+                      );
+                    }
+
                     final isUser = _messages[index]["isUser"];
                     final text = _messages[index]["text"];
 
@@ -254,11 +268,6 @@ class _AskAiScreenState extends State<AskAiScreen> {
                   },
                 ),
               ),
-              if (_isLoading)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: SizedBox(width: 24, height: 24, child: AppLoading()),
-                ),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,

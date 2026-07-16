@@ -14,7 +14,26 @@ class AppLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = Column(
+    if (isFullScreen) {
+      return Center(child: _buildMainContent());
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Automatically switch to a small indicator if constrained to a small box
+        if (constraints.maxWidth < 60 || constraints.maxHeight < 60) {
+          return const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.accent),
+            strokeWidth: 2,
+          );
+        }
+        return _buildMainContent();
+      },
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -50,10 +69,5 @@ class AppLoading extends StatelessWidget {
         ]
       ],
     );
-
-    if (isFullScreen) {
-      return Center(child: content);
-    }
-    return content;
   }
 }
