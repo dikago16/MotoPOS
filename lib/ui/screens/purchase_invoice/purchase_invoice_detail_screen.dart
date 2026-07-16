@@ -6,6 +6,7 @@ import '../../../data/models/purchase_invoice_model.dart';
 import '../../../data/models/purchase_invoice_item_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -102,7 +103,7 @@ class _PurchaseInvoiceDetailScreenState
             Expanded(
               child: _isLoading
                   ? const Center(
-                      child: CircularProgressIndicator(color: AppColors.accent),
+                      child: const AppLoading(),
                     )
                   : _buildItemsList(),
             ),

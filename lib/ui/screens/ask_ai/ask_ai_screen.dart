@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 
 
@@ -260,7 +261,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
               child: SizedBox(
                 width: 24,
                 height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2),
+                child: const AppLoading(),
               ),
             ),
           Container(

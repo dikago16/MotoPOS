@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 
 
@@ -90,7 +91,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? const AppLoading(isFullScreen: true)
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

@@ -6,6 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../../services/google_drive_service.dart';
 import '../../../data/database_service.dart';
+import '../../widgets/app_loading.dart';
 
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
@@ -188,7 +189,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const AppLoading(isFullScreen: true)
             : Stack(
                 children: [
                   ListView(
@@ -215,7 +216,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                   if (_isActionLoading)
                     Container(
                       color: Colors.black.withValues(alpha: 0.3),
-                      child: const Center(child: CircularProgressIndicator()),
+                      child: const AppLoading(isFullScreen: true),
                     ),
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 class CircuitImageScreen extends StatelessWidget {
   final String title;
@@ -32,7 +33,7 @@ class CircuitImageScreen extends StatelessWidget {
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
               return const Center(
-                child: CircularProgressIndicator(color: Colors.white),
+                child: const AppLoading(),
               );
             },
             errorBuilder: (context, error, stackTrace) {

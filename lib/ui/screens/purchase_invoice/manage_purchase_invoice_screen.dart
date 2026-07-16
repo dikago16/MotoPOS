@@ -8,6 +8,7 @@ import '../../../core/services/app_localizations.dart';
 
 import 'purchase_invoice_screen.dart';
 import 'purchase_invoice_detail_screen.dart';
+import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -389,7 +390,7 @@ class _ManagePurchaseInvoiceScreenState
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: Center(child: CircularProgressIndicator(color: AppColors.accent)),
+              child: const AppLoading(isFullScreen: true),
             )
           else if (filteredInvoices.isEmpty)
             Container(

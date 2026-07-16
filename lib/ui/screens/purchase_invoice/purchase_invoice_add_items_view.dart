@@ -4,6 +4,7 @@ import '../../../data/models/product_model.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../core/services/app_localizations.dart';
 import 'purchase_invoice_constants.dart';
+import '../../widgets/app_loading.dart';
 
 class PurchaseInvoiceAddItemsView extends StatelessWidget {
   final String invoiceCode;
@@ -563,10 +564,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                     ? const SizedBox(
                         width: 14,
                         height: 14,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
+                        child: const AppLoading(),
                       )
                     : const Icon(Icons.check, size: 16),
                 label: Text(

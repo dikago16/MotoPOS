@@ -5,6 +5,7 @@ import '../../../../core/services/app_localizations.dart';
 import '../../../../data/models/customer_model.dart';
 import '../../../../data/database_service.dart';
 import '../../../../providers/selling_provider.dart';
+import '../../../widgets/app_loading.dart';
 
 class CustomerSelector extends StatelessWidget {
   const CustomerSelector({super.key});
@@ -232,7 +233,7 @@ class _CustomerSelectionBottomSheetState
             ),
             Expanded(
               child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const AppLoading(isFullScreen: true)
                   : _filteredCustomers.isEmpty
                   ? Center(
                       child: Text(

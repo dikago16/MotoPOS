@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -367,10 +368,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                ),
+                                child: const AppLoading(),
                               )
                             : Text(
                                 _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save_supplier'),

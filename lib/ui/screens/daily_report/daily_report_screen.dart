@@ -2,6 +2,7 @@ import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../widgets/app_loading.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
@@ -135,7 +136,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+            ? const AppLoading(isFullScreen: true)
             : RefreshIndicator(
                 onRefresh: _loadData,
                 color: AppColors.accent,

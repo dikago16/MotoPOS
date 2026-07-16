@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -350,10 +351,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                     ? const SizedBox(
                         height: 16,
                         width: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
+                        child: const AppLoading(),
                       )
                     : const Icon(Icons.check, size: 16),
                 label: Text(

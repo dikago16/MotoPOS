@@ -1,6 +1,8 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/app_loading.dart';
+import '../../widgets/app_empty_state.dart';
 import 'item_detail_screen.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/database_service.dart';
@@ -266,31 +268,13 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: Center(child: CircularProgressIndicator()),
+              child: AppLoading(),
             )
           else if (_products.isEmpty)
             // Empty State
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.inventory_2_outlined,
-                    size: 30,
-                    color: AppColors.txtLow,
-                  ),
-                  SizedBox(height: 7),
-                  Text(
-                    AppLocalizations.get('no_items_found'),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.txtLow,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            AppEmptyState(
+              icon: Icons.inventory_2_outlined,
+              title: AppLocalizations.get('no_items_found'),
             )
           else
             ListView.separated(

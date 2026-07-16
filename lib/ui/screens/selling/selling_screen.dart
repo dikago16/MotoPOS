@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/database_service.dart';
 import '../../../data/models/product_model.dart';
+import '../../widgets/app_loading.dart';
 
 // New Widget Imports
 import 'widgets/selling_app_bar.dart';
@@ -45,7 +46,7 @@ class _SellingScreenState extends State<SellingScreen> {
       return Scaffold(
         backgroundColor: AppColors.bgPage,
         appBar: SellingAppBar(onProductsChanged: () {}),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const AppLoading(isFullScreen: true),
       );
     }
 

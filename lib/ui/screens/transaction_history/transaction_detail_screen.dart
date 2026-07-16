@@ -7,6 +7,7 @@ import '../../../data/models/transaction_item_model.dart';
 import '../../../data/database_service.dart';
 import '../../../providers/printer_provider.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -125,7 +126,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             Expanded(
               child: _isLoading
                   ? const Center(
-                      child: CircularProgressIndicator(color: AppColors.accent),
+                      child: const AppLoading(),
                     )
                   : _buildItemsList(),
             ),

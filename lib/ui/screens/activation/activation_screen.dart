@@ -5,6 +5,7 @@ import '../../../core/services/api_service.dart';
 import '../selling/selling_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -589,10 +590,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             ? const SizedBox(
                 width: 18,
                 height: 18,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
+                child: const AppLoading(),
               )
             : Text(
                 AppLocalizations.get('activate_license'),

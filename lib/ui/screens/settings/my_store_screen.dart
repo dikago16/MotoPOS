@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../data/database_service.dart';
 import '../../../data/models/store_info_model.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../widgets/app_loading.dart';
 
 
 
@@ -100,7 +101,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const AppLoading(isFullScreen: true)
           : SafeArea(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -306,10 +307,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                               ? const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
+                                  child: const AppLoading(),
                                 )
                               : Text(
                                   AppLocalizations.get('save'),

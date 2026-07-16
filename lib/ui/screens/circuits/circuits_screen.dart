@@ -6,6 +6,7 @@ import '../../../data/models/circuit_model.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
 import 'circuit_image_screen.dart';
+import '../../widgets/app_loading.dart';
 
 // Enterprise Design Tokens
 
@@ -43,7 +44,7 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.accent),
+              child: const AppLoading(),
             );
           }
           if (provider.error.isNotEmpty) {

@@ -3,6 +3,7 @@ import 'package:bluetooth_classic/models/device.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/app_localizations.dart';
 import '../../../../providers/printer_provider.dart';
+import '../../../widgets/app_loading.dart';
 
 class PairedDevicesDialog extends StatefulWidget {
   final PrinterProvider printerProvider;
@@ -114,7 +115,7 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
         child: _isLoading
             ? const Padding(
                 padding: EdgeInsets.symmetric(vertical: 24),
-                child: Center(child: CircularProgressIndicator()),
+                child: const AppLoading(isFullScreen: true),
               )
             : _devices.isEmpty
                 ? Padding(
@@ -193,9 +194,7 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
                                 const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
+                                  child: const AppLoading(),
                                 )
                               else
                                 const Icon(

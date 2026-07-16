@@ -1,6 +1,8 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/app_loading.dart';
+import '../../widgets/app_empty_state.dart';
 import '../../../data/database_service.dart';
 import '../../../data/models/note_model.dart';
 import 'note_detail_screen.dart';
@@ -107,31 +109,11 @@ class _NotesScreenState extends State<NotesScreen> {
       appBar: _buildAppBar(),
       body: SafeArea(
         child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: AppColors.accent),
-              )
+            ? const AppLoading(isFullScreen: true)
             : _notes.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.note_alt_outlined,
-                      size: 48,
-                      color: AppColors.txtLow,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      AppLocalizations.get('no_notes_found'),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.txtMid,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
+            ? AppEmptyState(
+                icon: Icons.note_alt_outlined,
+                title: AppLocalizations.get('no_notes_found'),
               )
             : ListView.builder(
                 padding: const EdgeInsets.symmetric(

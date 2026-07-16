@@ -1,6 +1,8 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/app_loading.dart';
+import '../../widgets/app_empty_state.dart';
 import 'supplier_detail_screen.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/database_service.dart';
@@ -281,26 +283,12 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: Center(child: CircularProgressIndicator()),
+              child: AppLoading(),
             )
           else if (_suppliers.isEmpty)
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  const Icon(Icons.business, size: 30, color: AppColors.txtLow),
-                  const SizedBox(height: 7),
-                  Text(
-                    AppLocalizations.get('no_suppliers_found'),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.txtLow,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            AppEmptyState(
+              icon: Icons.business,
+              title: AppLocalizations.get('no_suppliers_found'),
             )
           else
             ListView.separated(

@@ -2,6 +2,8 @@ import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../widgets/app_loading.dart';
+import '../../widgets/app_empty_state.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
@@ -376,26 +378,12 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: Center(child: CircularProgressIndicator(color: AppColors.accent)),
+              child: AppLoading(),
             )
           else if (filteredTransactions.isEmpty)
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Icon(Icons.receipt, size: 30, color: AppColors.txtLow.withValues(alpha: 0.5)),
-                  const SizedBox(height: 7),
-                  Text(
-                    AppLocalizations.get('no_transactions_recorded'),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.txtLow,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            AppEmptyState(
+              icon: Icons.receipt,
+              title: AppLocalizations.get('no_transactions_recorded'),
             )
           else
             ListView.separated(
