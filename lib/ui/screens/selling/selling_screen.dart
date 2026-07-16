@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -27,19 +28,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kBorderMid = Color(0xFFCBD5E1);
-const _kTableHead = Color(0xFFF8FAFC);
-const _kRowAlt = Color(0xFFFAFBFD);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kRed = Color(0xFFDC2626);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const _kColHeader = TextStyle(
   fontSize: 9,
@@ -105,26 +106,26 @@ class _SellingScreenState extends State<SellingScreen> {
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       suffixIcon: suffixIcon,
@@ -136,7 +137,7 @@ class _SellingScreenState extends State<SellingScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: _kBgCard,
+        backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: Text(
           AppLocalizations.get('edit_quantity'),
@@ -152,7 +153,7 @@ class _SellingScreenState extends State<SellingScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: _kTxtLow)),
+            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: AppColors.txtLow)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -161,7 +162,7 @@ class _SellingScreenState extends State<SellingScreen> {
               Navigator.pop(ctx);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: _kNavy,
+              backgroundColor: AppColors.navy,
               foregroundColor: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -178,7 +179,7 @@ class _SellingScreenState extends State<SellingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: _buildAppBar(),
       body: SafeArea(
         child: Column(
@@ -211,7 +212,7 @@ class _SellingScreenState extends State<SellingScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       elevation: 0,
       toolbarHeight: 54,
       title: Column(
@@ -250,7 +251,7 @@ class _SellingScreenState extends State<SellingScreen> {
         ),
         PopupMenuButton<String>(
           icon: const Icon(Icons.more_vert, color: Colors.white, size: 20),
-          color: _kBgCard,
+          color: AppColors.bgCard,
           onSelected: (value) async {
             if (value == 'manage_customer') {
               await Navigator.push(
@@ -334,70 +335,70 @@ class _SellingScreenState extends State<SellingScreen> {
                 value: 'manage_customer',
                 child: Text(
                   AppLocalizations.get('manage_customer'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'manage_item',
                 child: Text(
                   AppLocalizations.get('manage_item'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'manage_category',
                 child: Text(
                   AppLocalizations.get('manage_category'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'manage_supplier',
                 child: Text(
                   AppLocalizations.get('manage_supplier'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'purchase_invoice',
                 child: Text(
                   AppLocalizations.get('purchase_invoice'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'daily_report',
                 child: Text(
                   AppLocalizations.get('daily_report'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'transaction_history',
                 child: Text(
                   AppLocalizations.get('transaction_history'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'notes',
                 child: Text(
                   AppLocalizations.get('notes'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'ask_ai',
                 child: Text(
                   AppLocalizations.get('ask_ai'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
               PopupMenuItem(
                 value: 'circuits',
                 child: Text(
                   AppLocalizations.get('circuits'),
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                 ),
               ),
             ];
@@ -415,9 +416,9 @@ class _SellingScreenState extends State<SellingScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -432,7 +433,7 @@ class _SellingScreenState extends State<SellingScreen> {
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: _kTxtMid,
+                      color: AppColors.txtMid,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -446,7 +447,7 @@ class _SellingScreenState extends State<SellingScreen> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: selectedCustomer != null ? _kTxtHigh : _kTxtLow,
+                      color: selectedCustomer != null ? AppColors.txtHigh : AppColors.txtLow,
                     ),
                   ),
                 ],
@@ -458,7 +459,7 @@ class _SellingScreenState extends State<SellingScreen> {
               height: 30,
               width: 30,
               child: IconButton(
-                icon: const Icon(Icons.close, color: _kTxtLow, size: 18),
+                icon: const Icon(Icons.close, color: AppColors.txtLow, size: 18),
                 onPressed: () {
                   context.read<SellingProvider>().setCustomer(null);
                 },
@@ -473,7 +474,7 @@ class _SellingScreenState extends State<SellingScreen> {
               child: TextButton(
                 onPressed: () => _showCustomerSelectionDialog(),
                 style: TextButton.styleFrom(
-                  foregroundColor: _kAccent,
+                  foregroundColor: AppColors.accent,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 0,
@@ -495,7 +496,7 @@ class _SellingScreenState extends State<SellingScreen> {
   void _showCustomerSelectionDialog() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -510,9 +511,9 @@ class _SellingScreenState extends State<SellingScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -582,16 +583,16 @@ class _SellingScreenState extends State<SellingScreen> {
                               width: constraints.maxWidth,
                               constraints: const BoxConstraints(maxHeight: 250),
                               decoration: BoxDecoration(
-                                color: _kBgCard,
+                                color: AppColors.bgCard,
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: _kBorder),
+                                border: Border.all(color: AppColors.border),
                               ),
                               child: ListView.separated(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 itemCount: options.length,
                                 separatorBuilder: (context, index) =>
-                                    const Divider(height: 1, color: _kBorder),
+                                    const Divider(height: 1, color: AppColors.border),
                                 itemBuilder: (context, index) {
                                   final Product option = options.elementAt(
                                     index,
@@ -621,7 +622,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                                   style: const TextStyle(
                                                     fontSize: 13,
                                                     fontWeight: FontWeight.w600,
-                                                    color: _kTxtHigh,
+                                                    color: AppColors.txtHigh,
                                                   ),
                                                 ),
                                                 Row(
@@ -630,14 +631,14 @@ class _SellingScreenState extends State<SellingScreen> {
                                                       option.category,
                                                       style: const TextStyle(
                                                         fontSize: 10,
-                                                        color: _kTxtMid,
+                                                        color: AppColors.txtMid,
                                                       ),
                                                     ),
                                                     const Text(
                                                       ' • ',
                                                       style: TextStyle(
                                                         fontSize: 10,
-                                                        color: _kTxtLow,
+                                                        color: AppColors.txtLow,
                                                       ),
                                                     ),
                                                     Text(
@@ -648,8 +649,8 @@ class _SellingScreenState extends State<SellingScreen> {
                                                         fontSize: 10,
                                                         color:
                                                             option.isCountStock
-                                                            ? _kTxtMid
-                                                            : _kTxtLow,
+                                                            ? AppColors.txtMid
+                                                            : AppColors.txtLow,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
@@ -663,7 +664,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                             'Rp ${NumberFormat('#,###', 'id_ID').format(option.sellingPrice)}',
                                             style: const TextStyle(
                                               fontSize: 12,
-                                              color: _kAccent,
+                                              color: AppColors.accent,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
@@ -701,13 +702,13 @@ class _SellingScreenState extends State<SellingScreen> {
                   height: 38,
                   width: 44,
                   decoration: BoxDecoration(
-                    color: _kAccentSoft,
+                    color: AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: _kAccent.withValues(alpha: 0.2)),
+                    border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
                   ),
                   child: const Icon(
                     Icons.qr_code_scanner,
-                    color: _kAccent,
+                    color: AppColors.accent,
                     size: 18,
                   ),
                 ),
@@ -724,34 +725,34 @@ class _SellingScreenState extends State<SellingScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: _kBgCard,
+          backgroundColor: AppColors.bgCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           title: Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: _kRed, size: 24),
+              const Icon(Icons.warning_amber_rounded, color: AppColors.red, size: 24),
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.get('remove_item'),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: _kTxtHigh,
+                  color: AppColors.txtHigh,
                 ),
               ),
             ],
           ),
           content: Text(
             AppLocalizations.get('remove_item_confirm'),
-            style: const TextStyle(fontSize: 13, color: _kTxtMid),
+            style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
                 AppLocalizations.get('cancel'),
-                style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
               ),
             ),
             ElevatedButton(
@@ -760,7 +761,7 @@ class _SellingScreenState extends State<SellingScreen> {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: _kRed,
+                backgroundColor: AppColors.red,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -784,15 +785,15 @@ class _SellingScreenState extends State<SellingScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: _kTableHead,
+            color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
@@ -804,7 +805,7 @@ class _SellingScreenState extends State<SellingScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, color: _kBorder),
+          const Divider(height: 1, color: AppColors.border),
 
           if (items.isEmpty)
             Container(
@@ -812,13 +813,13 @@ class _SellingScreenState extends State<SellingScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  const Icon(Icons.inbox_outlined, size: 30, color: _kTxtLow),
+                  const Icon(Icons.inbox_outlined, size: 30, color: AppColors.txtLow),
                   const SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_items_added'),
                     style: TextStyle(
                       fontSize: 12,
-                      color: _kTxtLow,
+                      color: AppColors.txtLow,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -833,7 +834,7 @@ class _SellingScreenState extends State<SellingScreen> {
               return Column(
                 children: [
                   Container(
-                    color: isAlt ? _kRowAlt : _kBgCard,
+                    color: isAlt ? AppColors.rowAlt : AppColors.bgCard,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 7,
@@ -850,7 +851,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: _kTxtHigh,
+                                  color: AppColors.txtHigh,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -858,7 +859,7 @@ class _SellingScreenState extends State<SellingScreen> {
                                 item.category,
                                 style: const TextStyle(
                                   fontSize: 9,
-                                  color: _kTxtLow,
+                                  color: AppColors.txtLow,
                                 ),
                               ),
                             ],
@@ -878,17 +879,17 @@ class _SellingScreenState extends State<SellingScreen> {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: _kAccentSoft,
+                                  color: AppColors.accentSoft,
                                   borderRadius: BorderRadius.circular(3),
                                   border: Border.all(
-                                    color: _kAccent.withValues(alpha: 0.2),
+                                    color: AppColors.accent.withValues(alpha: 0.2),
                                   ),
                                 ),
                                 child: Text(
                                   '${item.quantity}',
                                   style: const TextStyle(
                                     fontSize: 11,
-                                    color: _kAccent,
+                                    color: AppColors.accent,
                                     fontWeight: FontWeight.w800,
                                   ),
                                   textAlign: TextAlign.center,
@@ -907,7 +908,7 @@ class _SellingScreenState extends State<SellingScreen> {
                               _formatNumber(item.price),
                               style: const TextStyle(
                                 fontSize: 11,
-                                color: _kTxtMid,
+                                color: AppColors.txtMid,
                               ),
                             ),
                           ),
@@ -921,7 +922,7 @@ class _SellingScreenState extends State<SellingScreen> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: _kTxtHigh,
+                                color: AppColors.txtHigh,
                               ),
                             ),
                           ),
@@ -938,7 +939,7 @@ class _SellingScreenState extends State<SellingScreen> {
                               child: Icon(
                                 Icons.remove_circle_outline,
                                 size: 16,
-                                color: _kRed,
+                                color: AppColors.red,
                               ),
                             ),
                           ),
@@ -946,14 +947,14 @@ class _SellingScreenState extends State<SellingScreen> {
                       ],
                     ),
                   ),
-                  const Divider(height: 1, color: _kBorder),
+                  const Divider(height: 1, color: AppColors.border),
                 ],
               );
             }),
 
           if (items.isNotEmpty)
             Container(
-              color: _kTableHead,
+              color: AppColors.tableHead,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 children: [
@@ -963,15 +964,15 @@ class _SellingScreenState extends State<SellingScreen> {
                       vertical: 3,
                     ),
                     decoration: BoxDecoration(
-                      color: _kBgCard,
+                      color: AppColors.bgCard,
                       borderRadius: BorderRadius.circular(3),
-                      border: Border.all(color: _kBorderMid),
+                      border: Border.all(color: AppColors.borderMid),
                     ),
                     child: Text(
                       '${items.length} Items${items.length != 1 ? 's' : ''}',
                       style: const TextStyle(
                         fontSize: 10,
-                        color: _kTxtMid,
+                        color: AppColors.txtMid,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -981,7 +982,7 @@ class _SellingScreenState extends State<SellingScreen> {
                     AppLocalizations.get('total'),
                     style: TextStyle(
                       fontSize: 9,
-                      color: _kTxtMid,
+                      color: AppColors.txtMid,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.8,
                     ),
@@ -991,7 +992,7 @@ class _SellingScreenState extends State<SellingScreen> {
                     _formatRupiah(provider.totalAmount),
                     style: const TextStyle(
                       fontSize: 14,
-                      color: _kAccent,
+                      color: AppColors.accent,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -1042,33 +1043,33 @@ class _SellingScreenState extends State<SellingScreen> {
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            backgroundColor: _kBgCard,
+            backgroundColor: AppColors.bgCard,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
             title: Row(
               children: [
-                const Icon(Icons.bluetooth_disabled, color: _kRed, size: 24),
+                const Icon(Icons.bluetooth_disabled, color: AppColors.red, size: 24),
                 const SizedBox(width: 8),
                 Text(
                   AppLocalizations.get('bluetooth_off'),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: _kTxtHigh,
+                    color: AppColors.txtHigh,
                   ),
                 ),
               ],
             ),
             content: Text(
               AppLocalizations.get('bluetooth_off_message'),
-              style: TextStyle(fontSize: 13, color: _kTxtMid),
+              style: TextStyle(fontSize: 13, color: AppColors.txtMid),
             ),
             actions: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(ctx),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kNavy,
+                  backgroundColor: AppColors.navy,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -1102,7 +1103,7 @@ class _SellingScreenState extends State<SellingScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: _kBgCard,
+        backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -1126,7 +1127,7 @@ class _SellingScreenState extends State<SellingScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: _kTxtHigh,
+                color: AppColors.txtHigh,
               ),
             ),
           ],
@@ -1156,7 +1157,7 @@ class _SellingScreenState extends State<SellingScreen> {
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: _kTxtHigh,
+                        color: AppColors.txtHigh,
                       ),
                     ),
                   ),
@@ -1170,7 +1171,7 @@ class _SellingScreenState extends State<SellingScreen> {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               AppLocalizations.get('close'),
-              style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+              style: TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
             ),
           ),
           ElevatedButton.icon(
@@ -1184,7 +1185,7 @@ class _SellingScreenState extends State<SellingScreen> {
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: _kRed,
+              backgroundColor: AppColors.red,
               foregroundColor: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -1210,15 +1211,15 @@ class _SellingScreenState extends State<SellingScreen> {
         : const Color(0xFFFEF2F2); // red soft
     final Color printerBorderColor = isPrinterConnected
         ? const Color(0xFF16A34A).withValues(alpha: 0.3)
-        : _kRed.withValues(alpha: 0.3);
+        : AppColors.red.withValues(alpha: 0.3);
     final Color printerIconColor = isPrinterConnected
         ? const Color(0xFF16A34A)
-        : _kRed;
+        : AppColors.red;
 
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
-        border: const Border(top: BorderSide(color: _kBorder, width: 1)),
+        color: AppColors.bgCard,
+        border: const Border(top: BorderSide(color: AppColors.border, width: 1)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x0D000000),
@@ -1257,12 +1258,12 @@ class _SellingScreenState extends State<SellingScreen> {
                       provider.clearTransaction();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _kBgPage,
-                      foregroundColor: _kTxtMid,
+                      backgroundColor: AppColors.bgPage,
+                      foregroundColor: AppColors.txtMid,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
-                        side: const BorderSide(color: _kBorderMid),
+                        side: const BorderSide(color: AppColors.borderMid),
                       ),
                     ),
                     child: const Text(
@@ -1383,7 +1384,7 @@ class _SellingScreenState extends State<SellingScreen> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _kNavy,
+                      backgroundColor: AppColors.navy,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -1471,17 +1472,17 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: _kBgCard,
+      backgroundColor: AppColors.bgCard,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: _kAccent.withValues(alpha: 0.1),
+              color: AppColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.bluetooth, color: _kAccent, size: 20),
+            child: const Icon(Icons.bluetooth, color: AppColors.accent, size: 20),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -1493,14 +1494,14 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: _kTxtHigh,
+                    color: AppColors.txtHigh,
                   ),
                 ),
                 Text(
                   AppLocalizations.get('saved_bluetooth_devices'),
                   style: TextStyle(
                     fontSize: 10,
-                    color: _kTxtMid,
+                    color: AppColors.txtMid,
                   ),
                 ),
               ],
@@ -1522,14 +1523,14 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                       mainAxisSize: MainAxisSize.min,
                       children: const [
                         Icon(Icons.bluetooth_searching,
-                            size: 36, color: _kTxtLow),
+                            size: 36, color: AppColors.txtLow),
                         SizedBox(height: 10),
                         Text(
                           'No saved devices.\n\nPair a printer through\nyour device\'s Bluetooth settings.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
-                            color: _kTxtMid,
+                            color: AppColors.txtMid,
                           ),
                         ),
                       ],
@@ -1539,7 +1540,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                     shrinkWrap: true,
                     itemCount: _devices.length,
                     separatorBuilder: (_, _) =>
-                        const Divider(height: 1, color: _kBorder),
+                        const Divider(height: 1, color: AppColors.border),
                     itemBuilder: (context, index) {
                       final device = _devices[index];
                       final bool isThisConnecting =
@@ -1561,8 +1562,8 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                                 Icons.print,
                                 size: 20,
                                 color: isThisConnecting
-                                    ? _kAccent
-                                    : _kTxtMid,
+                                    ? AppColors.accent
+                                    : AppColors.txtMid,
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -1575,14 +1576,14 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600,
-                                        color: _kTxtHigh,
+                                        color: AppColors.txtHigh,
                                       ),
                                     ),
                                     Text(
                                       device.address,
                                       style: const TextStyle(
                                         fontSize: 10,
-                                        color: _kTxtLow,
+                                        color: AppColors.txtLow,
                                       ),
                                     ),
                                   ],
@@ -1599,7 +1600,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
                               else
                                 const Icon(
                                   Icons.chevron_right,
-                                  color: _kTxtLow,
+                                  color: AppColors.txtLow,
                                   size: 20,
                                 ),
                             ],
@@ -1614,7 +1615,7 @@ class _PairedDevicesDialogState extends State<_PairedDevicesDialog> {
           onPressed: _isConnecting ? null : () => Navigator.pop(context),
           child: Text(
             AppLocalizations.get('cancel'),
-            style: TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+            style: TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -1682,9 +1683,9 @@ class _CustomerSelectionBottomSheetState
             Container(
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
-                color: _kBgCard,
+                color: AppColors.bgCard,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                border: Border(bottom: BorderSide(color: _kBorder)),
+                border: Border(bottom: BorderSide(color: AppColors.border)),
               ),
               child: Column(
                 children: [
@@ -1696,7 +1697,7 @@ class _CustomerSelectionBottomSheetState
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: _kTxtHigh,
+                          color: AppColors.txtHigh,
                         ),
                       ),
                       IconButton(
@@ -1714,29 +1715,29 @@ class _CustomerSelectionBottomSheetState
                     style: const TextStyle(fontSize: 13),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.get('search_customer_hint'),
-                      hintStyle: const TextStyle(color: _kTxtMid, fontSize: 13),
+                      hintStyle: const TextStyle(color: AppColors.txtMid, fontSize: 13),
                       prefixIcon: const Icon(
                         Icons.search,
                         size: 18,
-                        color: _kTxtMid,
+                        color: AppColors.txtMid,
                       ),
                       filled: true,
-                      fillColor: _kBgPage,
+                      fillColor: AppColors.bgPage,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 0,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: _kBorder),
+                        borderSide: const BorderSide(color: AppColors.border),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: _kBorder),
+                        borderSide: const BorderSide(color: AppColors.border),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: _kAccent),
+                        borderSide: const BorderSide(color: AppColors.accent),
                       ),
                     ),
                   ),
@@ -1751,14 +1752,14 @@ class _CustomerSelectionBottomSheetState
                       child: Text(
                         AppLocalizations.get('no_customers_found'),
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: _kTxtMid),
+                        style: const TextStyle(color: AppColors.txtMid),
                       ),
                     )
                   : ListView.separated(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       itemCount: _filteredCustomers.length,
                       separatorBuilder: (context, index) =>
-                          const Divider(height: 1, color: _kBorder),
+                          const Divider(height: 1, color: AppColors.border),
                       itemBuilder: (context, index) {
                         final customer = _filteredCustomers[index];
                         return ListTile(
@@ -1767,14 +1768,14 @@ class _CustomerSelectionBottomSheetState
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
-                              color: _kTxtHigh,
+                              color: AppColors.txtHigh,
                             ),
                           ),
                           subtitle: Text(
                             '${customer.phone}\n${customer.vehicleNo}',
                             style: const TextStyle(
                               fontSize: 11,
-                              color: _kTxtMid,
+                              color: AppColors.txtMid,
                             ),
                           ),
                           isThreeLine: true,

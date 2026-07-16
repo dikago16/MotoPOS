@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/note_model.dart';
@@ -5,14 +6,14 @@ import 'note_detail_screen.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class NotesScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: _kBgCard,
+        backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -58,19 +59,19 @@ class _NotesScreenState extends State<NotesScreen> {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: _kTxtHigh,
+                color: AppColors.txtHigh,
               ),
             ),
           ],
         ),
         content: Text(
           AppLocalizations.get('delete_confirmation'),
-          style: const TextStyle(fontSize: 13, color: _kTxtMid),
+          style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalizations.get('cancel').toUpperCase(), style: const TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600)),
+            child: Text(AppLocalizations.get('cancel').toUpperCase(), style: const TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -96,22 +97,22 @@ class _NotesScreenState extends State<NotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: _buildAppBar(),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: _kAccent))
+            ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
             : _notes.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.note_alt_outlined, size: 48, color: _kTxtLow),
+                        const Icon(Icons.note_alt_outlined, size: 48, color: AppColors.txtLow),
                         const SizedBox(height: 12),
                         Text(
                           AppLocalizations.get('no_notes_found'),
                           textAlign: TextAlign.center,
-                          style: const TextStyle(color: _kTxtMid, fontSize: 14, fontWeight: FontWeight.w500),
+                          style: const TextStyle(color: AppColors.txtMid, fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -122,11 +123,11 @@ class _NotesScreenState extends State<NotesScreen> {
                     itemBuilder: (context, index) {
                       final note = _notes[index];
                       return Card(
-                        color: _kBgCard,
+                        color: AppColors.bgCard,
                         margin: const EdgeInsets.only(bottom: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
-                          side: const BorderSide(color: _kBorder),
+                          side: const BorderSide(color: AppColors.border),
                         ),
                         elevation: 0,
                         child: InkWell(
@@ -152,7 +153,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                       Text(
                                         note.title.isNotEmpty ? note.title : AppLocalizations.get('untitled_note'),
                                         style: const TextStyle(
-                                          color: _kTxtHigh,
+                                          color: AppColors.txtHigh,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
                                         ),
@@ -162,14 +163,14 @@ class _NotesScreenState extends State<NotesScreen> {
                                       const SizedBox(height: 4),
                                       Text(
                                         note.content,
-                                        style: const TextStyle(color: _kTxtMid, fontSize: 12),
+                                        style: const TextStyle(color: AppColors.txtMid, fontSize: 12),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       const SizedBox(height: 8),
                                       Text(
                                         note.createdAt,
-                                        style: const TextStyle(color: _kTxtLow, fontSize: 10, fontWeight: FontWeight.w500),
+                                        style: const TextStyle(color: AppColors.txtLow, fontSize: 10, fontWeight: FontWeight.w500),
                                       ),
                                     ],
                                   ),
@@ -193,7 +194,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       elevation: 0,
       toolbarHeight: 54,
       iconTheme: const IconThemeData(color: Colors.white, size: 20),

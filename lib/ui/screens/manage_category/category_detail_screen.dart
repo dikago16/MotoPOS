@@ -1,17 +1,18 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/db_helper.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kBorderMid = Color(0xFFCBD5E1);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
+
+
+
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class CategoryDetailScreen extends StatefulWidget {
@@ -65,27 +66,27 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 12, color: _kTxtLow),
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      hintStyle: const TextStyle(fontSize: 12, color: AppColors.txtLow),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
     );
@@ -100,13 +101,13 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 14, color: _kAccent),
+            Icon(icon, size: 14, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -115,7 +116,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -127,9 +128,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   Widget build(BuildContext context) {
     final isEdit = widget.category != null;
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -165,9 +166,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: _kBgCard,
+                    color: AppColors.bgCard,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: _kBorder),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +188,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   width: 24,
                                   child: Checkbox(
                                     value: _autoCategoryCode,
-                                    activeColor: _kAccent,
+                                    activeColor: AppColors.accent,
                                     onChanged: (val) {
                                       setState(() {
                                         _autoCategoryCode = val ?? true;
@@ -206,7 +207,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   AppLocalizations.get('auto_code'),
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: _kTxtMid,
+                                    color: AppColors.txtMid,
                                   ),
                                 ),
                               ],
@@ -217,10 +218,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       TextFormField(
                         controller: _categoryCodeCtrl,
                         readOnly: _autoCategoryCode,
-                        style: const TextStyle(fontSize: 13, color: _kTxtMid),
+                        style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
                         decoration: _inputDeco(AppLocalizations.get('category_code')).copyWith(
                           errorText: _codeError,
-                          fillColor: _autoCategoryCode ? _kBgPage : _kBgCard,
+                          fillColor: _autoCategoryCode ? AppColors.bgPage : AppColors.bgCard,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -246,8 +247,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   Widget _buildBottomBar() {
     return Container(
       decoration: const BoxDecoration(
-        color: _kBgCard,
-        border: Border(top: BorderSide(color: _kBorder, width: 1)),
+        color: AppColors.bgCard,
+        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         boxShadow: [
           BoxShadow(
             color: Color(0x0D000000),
@@ -272,12 +273,12 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kBgPage,
-                  foregroundColor: _kTxtMid,
+                  backgroundColor: AppColors.bgPage,
+                  foregroundColor: AppColors.txtMid,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
-                    side: const BorderSide(color: _kBorderMid),
+                    side: const BorderSide(color: AppColors.borderMid),
                   ),
                 ),
                 child: Text(
@@ -363,7 +364,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kNavy,
+                  backgroundColor: AppColors.navy,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(

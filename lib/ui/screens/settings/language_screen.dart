@@ -1,16 +1,17 @@
+import '../../../core/constants/app_colors.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/app_localizations.dart';
 
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
+
+
+
+
+
+
+
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -54,17 +55,17 @@ class _LanguageScreenState extends State<LanguageScreen> {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        backgroundColor: _kBgCard,
+        backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: _kAccent.withValues(alpha: 0.1),
+                color: AppColors.accent.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.language, color: _kAccent, size: 20),
+              child: const Icon(Icons.language, color: AppColors.accent, size: 20),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -73,7 +74,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: _kTxtHigh,
+                  color: AppColors.txtHigh,
                 ),
               ),
             ),
@@ -83,7 +84,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
           _selectedLang == 'en'
               ? 'Please close and reopen the app for changes to take effect across all screens.'
               : 'Silakan tutup dan buka kembali aplikasi agar perubahan diterapkan di semua halaman.',
-          style: const TextStyle(fontSize: 13, color: _kTxtMid, height: 1.5),
+          style: const TextStyle(fontSize: 13, color: AppColors.txtMid, height: 1.5),
         ),
         actions: [
           ElevatedButton(
@@ -95,7 +96,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: _kNavy,
+              backgroundColor: AppColors.navy,
               foregroundColor: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -114,9 +115,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
     final bool hasChanges = _selectedLang != _savedLang;
 
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         title: Text(
           AppLocalizations.get('language'),
@@ -144,9 +145,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: _kBgCard,
+                color: AppColors.bgCard,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: _kBorder),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 children: [
@@ -154,7 +155,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     title: AppLocalizations.get('english'),
                     value: 'en',
                   ),
-                  const Divider(height: 1, color: _kBorder),
+                  const Divider(height: 1, color: AppColors.border),
                   _buildLanguageOption(
                     title: AppLocalizations.get('bahasa_indonesia'),
                     value: 'id',
@@ -175,14 +176,14 @@ class _LanguageScreenState extends State<LanguageScreen> {
       title: Text(
         title,
         style: TextStyle(
-          color: _kTxtHigh,
+          color: AppColors.txtHigh,
           fontSize: 14,
           fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check_circle, color: _kAccent)
-          : const Icon(Icons.radio_button_unchecked, color: _kBorder),
+          ? const Icon(Icons.check_circle, color: AppColors.accent)
+          : const Icon(Icons.radio_button_unchecked, color: AppColors.border),
     );
   }
 }

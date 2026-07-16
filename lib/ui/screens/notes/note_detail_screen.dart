@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/db_helper.dart';
@@ -5,14 +6,14 @@ import '../../../data/models/note_model.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class NoteDetailScreen extends StatefulWidget {
@@ -83,7 +84,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: _buildAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -91,38 +92,38 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: _kBgCard,
+              color: AppColors.bgCard,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: _kBorder),
+              border: Border.all(color: AppColors.border),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.get('note_title'),
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _kTxtMid),
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.txtMid),
                 ),
                 const SizedBox(height: 6),
                 TextField(
                   controller: _titleController,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _kTxtHigh),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.txtHigh),
                   decoration: InputDecoration(
                     hintText: AppLocalizations.get('enter_title_here'),
-                    hintStyle: const TextStyle(color: _kTxtLow, fontSize: 14, fontWeight: FontWeight.w400),
+                    hintStyle: const TextStyle(color: AppColors.txtLow, fontSize: 14, fontWeight: FontWeight.w400),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: _kBorder),
+                      borderSide: const BorderSide(color: AppColors.border),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: _kBorder),
+                      borderSide: const BorderSide(color: AppColors.border),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: _kAccent, width: 1.5),
+                      borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
                     ),
                     filled: true,
-                    fillColor: _kBgCard,
+                    fillColor: AppColors.bgCard,
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   ),
@@ -130,29 +131,29 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 const SizedBox(height: 16),
                 Text(
                   AppLocalizations.get('content'),
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _kTxtMid),
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.txtMid),
                 ),
                 const SizedBox(height: 6),
                 TextField(
                   controller: _contentController,
-                  style: const TextStyle(fontSize: 13, color: _kTxtHigh, height: 1.5),
+                  style: const TextStyle(fontSize: 13, color: AppColors.txtHigh, height: 1.5),
                   decoration: InputDecoration(
                     hintText: AppLocalizations.get('write_your_note_here'),
-                    hintStyle: const TextStyle(color: _kTxtLow, fontSize: 13),
+                    hintStyle: const TextStyle(color: AppColors.txtLow, fontSize: 13),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: _kBorder),
+                      borderSide: const BorderSide(color: AppColors.border),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: _kBorder),
+                      borderSide: const BorderSide(color: AppColors.border),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: _kAccent, width: 1.5),
+                      borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
                     ),
                     filled: true,
-                    fillColor: _kBgCard,
+                    fillColor: AppColors.bgCard,
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   ),
@@ -167,7 +168,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   child: ElevatedButton(
                     onPressed: _saveNote,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _kNavy,
+                      backgroundColor: AppColors.navy,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -187,7 +188,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       elevation: 0,
       toolbarHeight: 54,
       iconTheme: const IconThemeData(color: Colors.white, size: 20),

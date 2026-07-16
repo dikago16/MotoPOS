@@ -3,6 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:http/http.dart' as http;
 import '../data/db_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 class GoogleAuthClient extends http.BaseClient {
@@ -37,7 +38,7 @@ class GoogleDriveService {
       }
       return _currentUser;
     } catch (e) {
-      print("Error signing in: $e");
+      debugPrint("Error signing in: $e");
       return null;
     }
   }
@@ -60,7 +61,7 @@ class GoogleDriveService {
       }
       return _currentUser;
     } catch (e) {
-       print("Error signing in silently: $e");
+       debugPrint("Error signing in silently: $e");
        return null;
     }
   }
@@ -85,7 +86,7 @@ class GoogleDriveService {
       final drive.File createdFolder = await _driveApi!.files.create(folder);
       return createdFolder.id;
     } catch (e) {
-      print("Error getting folder ID: $e");
+      debugPrint("Error getting folder ID: $e");
       return null;
     }
   }
@@ -115,7 +116,7 @@ class GoogleDriveService {
       await _driveApi!.files.create(driveFile, uploadMedia: media);
       return true;
     } catch (e) {
-      print("Error backing up data: $e");
+      debugPrint("Error backing up data: $e");
       return false;
     }
   }
@@ -136,7 +137,7 @@ class GoogleDriveService {
 
       return fileList.files ?? [];
     } catch (e) {
-      print("Error getting backup list: $e");
+      debugPrint("Error getting backup list: $e");
       return [];
     }
   }
@@ -161,7 +162,7 @@ class GoogleDriveService {
       await DBHelper.importAllData(data);
       return true;
     } catch (e) {
-      print("Error restoring data: $e");
+      debugPrint("Error restoring data: $e");
       return false;
     }
   }
@@ -173,7 +174,7 @@ class GoogleDriveService {
       await _driveApi!.files.delete(fileId);
       return true;
     } catch (e) {
-      print("Error deleting backup: $e");
+      debugPrint("Error deleting backup: $e");
       return false;
     }
   }

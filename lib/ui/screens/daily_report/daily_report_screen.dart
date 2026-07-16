@@ -1,22 +1,23 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/db_helper.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kBorderMid = Color(0xFFCBD5E1);
-const _kTableHead = Color(0xFFF8FAFC);
-const _kRowAlt = Color(0xFFFAFBFD);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kGreen = Color(0xFF16A34A);
+
+
+
+
+
+
+
+
+
+
+
+
+
 const _kAmber = Color(0xFFF59E0B);
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -72,10 +73,10 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(
-              primary: _kNavy,
+              primary: AppColors.navy,
               onPrimary: Colors.white,
-              surface: _kBgCard,
-              onSurface: _kTxtHigh,
+              surface: AppColors.bgCard,
+              onSurface: AppColors.txtHigh,
             ),
           ),
           child: child!,
@@ -91,9 +92,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -130,10 +131,10 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: _kAccent))
+            ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
             : RefreshIndicator(
                 onRefresh: _loadData,
-                color: _kAccent,
+                color: AppColors.accent,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(12),
@@ -173,14 +174,14 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [_kNavy, Color(0xFF1B2D45)],
+              colors: [AppColors.navy, Color(0xFF1B2D45)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: _kNavy.withValues(alpha: 0.18),
+                color: AppColors.navy.withValues(alpha: 0.18),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -240,8 +241,8 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             Expanded(
               child: _buildMetricCard(
                 icon: Icons.receipt_long,
-                iconColor: _kAccent,
-                iconBg: _kAccentSoft,
+                iconColor: AppColors.accent,
+                iconBg: AppColors.accentSoft,
                 label: AppLocalizations.get('transactions'),
                 value: '$totalTrx',
               ),
@@ -250,7 +251,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             Expanded(
               child: _buildMetricCard(
                 icon: Icons.analytics_outlined,
-                iconColor: _kGreen,
+                iconColor: AppColors.green,
                 iconBg: const Color(0xFFF0FDF4),
                 label: AppLocalizations.get('avg_per_transaction'),
                 value: _formatRupiah(avgTrx),
@@ -282,9 +283,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +304,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: _kTxtHigh,
+              color: AppColors.txtHigh,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -313,7 +314,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             label,
             style: const TextStyle(
               fontSize: 9,
-              color: _kTxtLow,
+              color: AppColors.txtLow,
               fontWeight: FontWeight.w600,
             ),
             maxLines: 1,
@@ -337,9 +338,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,17 +349,17 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: _kBorder)),
+              border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: _kAccentSoft,
+                    color: AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Icon(Icons.pie_chart_outline, color: _kAccent, size: 14),
+                  child: const Icon(Icons.pie_chart_outline, color: AppColors.accent, size: 14),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -367,7 +368,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
-                    color: _kTxtMid,
+                    color: AppColors.txtMid,
                   ),
                 ),
               ],
@@ -380,11 +381,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.inbox_outlined, size: 28, color: _kTxtLow),
+                    const Icon(Icons.inbox_outlined, size: 28, color: AppColors.txtLow),
                     const SizedBox(height: 6),
                     Text(
                       AppLocalizations.get('no_transactions_today'),
-                      style: const TextStyle(fontSize: 12, color: _kTxtLow),
+                      style: const TextStyle(fontSize: 12, color: AppColors.txtLow),
                     ),
                   ],
                 ),
@@ -394,7 +395,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             // Table header
             ...[
               Container(
-                color: _kTableHead,
+                color: AppColors.tableHead,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                 child: Row(
                   children: [
@@ -406,7 +407,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                   ],
                 ),
               ),
-              const Divider(height: 1, color: _kBorder),
+              const Divider(height: 1, color: AppColors.border),
               ...List.generate(_categorySummary.length, (idx) {
                 final cat = _categorySummary[idx];
                 final catName = (cat['category'] as String?) ?? 'Uncategorized';
@@ -421,7 +422,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                 return Column(
                   children: [
                     Container(
-                      color: isAlt ? _kRowAlt : _kBgCard,
+                      color: isAlt ? AppColors.rowAlt : AppColors.bgCard,
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                       child: Row(
                         children: [
@@ -444,7 +445,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: _kTxtHigh,
+                                      color: AppColors.txtHigh,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -458,7 +459,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: _kAccentSoft,
+                                  color: AppColors.accentSoft,
                                   borderRadius: BorderRadius.circular(3),
                                 ),
                                 child: Text(
@@ -466,7 +467,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                   style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
-                                    color: _kAccent,
+                                    color: AppColors.accent,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -480,7 +481,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                 '$trxCount',
                                 style: const TextStyle(
                                   fontSize: 11,
-                                  color: _kTxtMid,
+                                  color: AppColors.txtMid,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -495,7 +496,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: _kTxtHigh,
+                                  color: AppColors.txtHigh,
                                 ),
                               ),
                             ),
@@ -525,13 +526,13 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                       ),
                     ),
                     if (idx < _categorySummary.length - 1)
-                      const Divider(height: 1, color: _kBorder),
+                      const Divider(height: 1, color: AppColors.border),
                   ],
                 );
               }),
               // Category total footer
               Container(
-                color: _kTableHead,
+                color: AppColors.tableHead,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                 child: Row(
                   children: [
@@ -542,7 +543,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
-                          color: _kTxtHigh,
+                          color: AppColors.txtHigh,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -555,7 +556,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
-                            color: _kAccent,
+                            color: AppColors.accent,
                           ),
                         ),
                       ),
@@ -568,7 +569,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
-                            color: _kTxtHigh,
+                            color: AppColors.txtHigh,
                           ),
                         ),
                       ),
@@ -582,7 +583,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
-                            color: _kAccent,
+                            color: AppColors.accent,
                           ),
                         ),
                       ),
@@ -596,7 +597,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: _kTxtMid,
+                            color: AppColors.txtMid,
                           ),
                         ),
                       ),
@@ -612,8 +613,8 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
 
   Color _getCategoryColor(int index) {
     const colors = [
-      _kAccent,
-      _kGreen,
+      AppColors.accent,
+      AppColors.green,
       _kAmber,
       Color(0xFF8B5CF6),
       Color(0xFFEC4899),
@@ -637,9 +638,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -648,7 +649,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: _kBorder)),
+              border: Border(bottom: BorderSide(color: AppColors.border)),
             ),
             child: Row(
               children: [
@@ -658,7 +659,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     color: const Color(0xFFF0FDF4),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Icon(Icons.list_alt, color: _kGreen, size: 14),
+                  child: const Icon(Icons.list_alt, color: AppColors.green, size: 14),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -667,23 +668,23 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
-                    color: _kTxtMid,
+                    color: AppColors.txtMid,
                   ),
                 ),
                 const Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   decoration: BoxDecoration(
-                    color: _kBgPage,
+                    color: AppColors.bgPage,
                     borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: _kBorderMid),
+                    border: Border.all(color: AppColors.borderMid),
                   ),
                   child: Text(
                     '${grouped.length} ${AppLocalizations.get('transactions')}',
                     style: const TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w600,
-                      color: _kTxtMid,
+                      color: AppColors.txtMid,
                     ),
                   ),
                 ),
@@ -697,11 +698,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.receipt_long_outlined, size: 28, color: _kTxtLow),
+                    const Icon(Icons.receipt_long_outlined, size: 28, color: AppColors.txtLow),
                     const SizedBox(height: 6),
                     Text(
                       AppLocalizations.get('no_transactions_recorded'),
-                      style: const TextStyle(fontSize: 12, color: _kTxtLow),
+                      style: const TextStyle(fontSize: 12, color: AppColors.txtLow),
                     ),
                   ],
                 ),
@@ -731,7 +732,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
 
               return Column(
                 children: [
-                  if (idx > 0) const Divider(height: 1, color: _kBorder),
+                  if (idx > 0) const Divider(height: 1, color: AppColors.border),
                   Container(
                     padding: const EdgeInsets.all(12),
                     child: Column(
@@ -744,7 +745,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                               decoration: BoxDecoration(
-                                color: _kNavy,
+                                color: AppColors.navy,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
@@ -761,21 +762,21 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: _kAccentSoft,
+                                  color: AppColors.accentSoft,
                                   borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: _kAccent.withValues(alpha: 0.2)),
+                                  border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(Icons.two_wheeler, size: 10, color: _kAccent),
+                                    const Icon(Icons.two_wheeler, size: 10, color: AppColors.accent),
                                     const SizedBox(width: 3),
                                     Text(
                                       vehicleNo,
                                       style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600,
-                                        color: _kAccent,
+                                        color: AppColors.accent,
                                       ),
                                     ),
                                   ],
@@ -786,14 +787,14 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.access_time, size: 10, color: _kTxtLow),
+                                  const Icon(Icons.access_time, size: 10, color: AppColors.txtLow),
                                   const SizedBox(width: 3),
                                   Text(
                                     timeStr,
                                     style: const TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
-                                      color: _kTxtLow,
+                                      color: AppColors.txtLow,
                                     ),
                                   ),
                                 ],
@@ -804,7 +805,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
-                                color: _kAccent,
+                                color: AppColors.accent,
                               ),
                             ),
                           ],
@@ -813,9 +814,9 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                         // Items in this transaction
                         Container(
                           decoration: BoxDecoration(
-                            color: _kBgPage,
+                            color: AppColors.bgPage,
                             borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: _kBorder),
+                            border: Border.all(color: AppColors.border),
                           ),
                           child: Column(
                             children: List.generate(items.length, (i) {
@@ -843,7 +844,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                                 style: const TextStyle(
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w600,
-                                                  color: _kTxtHigh,
+                                                  color: AppColors.txtHigh,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -852,7 +853,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                                   category,
                                                   style: const TextStyle(
                                                     fontSize: 9,
-                                                    color: _kTxtLow,
+                                                    color: AppColors.txtLow,
                                                   ),
                                                 ),
                                             ],
@@ -865,7 +866,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                             style: const TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w700,
-                                              color: _kTxtMid,
+                                              color: AppColors.txtMid,
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
@@ -877,7 +878,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                             style: const TextStyle(
                                               fontSize: 11,
                                               fontWeight: FontWeight.w600,
-                                              color: _kTxtHigh,
+                                              color: AppColors.txtHigh,
                                             ),
                                             textAlign: TextAlign.right,
                                           ),
@@ -886,7 +887,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                     ),
                                   ),
                                   if (i < items.length - 1)
-                                    const Divider(height: 1, color: _kBorder),
+                                    const Divider(height: 1, color: AppColors.border),
                                 ],
                               );
                             }),
@@ -917,7 +918,7 @@ class _ColHeader extends StatelessWidget {
       style: const TextStyle(
         fontSize: 9,
         fontWeight: FontWeight.w700,
-        color: _kTxtLow,
+        color: AppColors.txtLow,
         letterSpacing: 0.9,
       ),
     );
@@ -935,7 +936,7 @@ class _ColHeaderCenter extends StatelessWidget {
       style: const TextStyle(
         fontSize: 9,
         fontWeight: FontWeight.w700,
-        color: _kTxtLow,
+        color: AppColors.txtLow,
         letterSpacing: 0.9,
       ),
       textAlign: TextAlign.center,
@@ -954,7 +955,7 @@ class _ColHeaderRight extends StatelessWidget {
       style: const TextStyle(
         fontSize: 9,
         fontWeight: FontWeight.w700,
-        color: _kTxtLow,
+        color: AppColors.txtLow,
         letterSpacing: 0.9,
       ),
       textAlign: TextAlign.right,

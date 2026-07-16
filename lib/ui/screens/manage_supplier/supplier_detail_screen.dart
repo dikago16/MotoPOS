@@ -1,16 +1,17 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/db_helper.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class SupplierDetailScreen extends StatefulWidget {
@@ -125,26 +126,26 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   InputDecoration _inputDeco(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
     );
@@ -159,13 +160,13 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 14, color: _kAccent),
+            Icon(icon, size: 14, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -174,7 +175,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -186,9 +187,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   Widget build(BuildContext context) {
     final isEdit = widget.supplier != null;
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -229,9 +230,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: _kBgCard,
+                          color: AppColors.bgCard,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: _kBorder),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,11 +250,11 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                                         child: Checkbox(
                                           value: _isAutoCode,
                                           onChanged: _toggleAutoCode,
-                                          activeColor: _kAccent,
+                                          activeColor: AppColors.accent,
                                         ),
                                       ),
                                       const SizedBox(width: 4),
-                                      Text(AppLocalizations.get('auto_code'), style: const TextStyle(fontSize: 11, color: _kTxtMid)),
+                                      Text(AppLocalizations.get('auto_code'), style: const TextStyle(fontSize: 11, color: AppColors.txtMid)),
                                     ],
                                   ),
                               ],
@@ -261,9 +262,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             TextFormField(
                               controller: _codeCtrl,
                               readOnly: _isAutoCode,
-                              style: const TextStyle(fontSize: 13, color: _kTxtMid),
+                              style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
                               decoration: _inputDeco(AppLocalizations.get('supplier_code')).copyWith(
-                                fillColor: _isAutoCode ? _kBgPage : _kBgCard,
+                                fillColor: _isAutoCode ? AppColors.bgPage : AppColors.bgCard,
                               ),
                               validator: (value) =>
                                   value == null || value.trim().isEmpty ? 'Required' : null,
@@ -271,7 +272,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _nameCtrl,
-                              style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                              style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                               decoration: _inputDeco(AppLocalizations.get('supplier_name')),
                               validator: (value) =>
                                   value == null || value.trim().isEmpty ? 'Required' : null,
@@ -283,9 +284,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: _kBgCard,
+                          color: AppColors.bgCard,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: _kBorder),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,14 +295,14 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             TextFormField(
                               controller: _phoneCtrl,
                               keyboardType: TextInputType.phone,
-                              style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                              style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                               decoration: _inputDeco(AppLocalizations.get('phone_number')),
                             ),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _addressCtrl,
                               maxLines: 3,
-                              style: const TextStyle(fontSize: 13, color: _kTxtHigh),
+                              style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
                               decoration: _inputDeco(AppLocalizations.get('address')),
                             ),
                           ],
@@ -314,8 +315,8 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: _kBgCard,
-                border: const Border(top: BorderSide(color: _kBorder, width: 1)),
+                color: AppColors.bgCard,
+                border: const Border(top: BorderSide(color: AppColors.border, width: 1)),
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x0D000000),
@@ -333,8 +334,8 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: _kTxtMid,
-                          side: const BorderSide(color: _kBorder),
+                          foregroundColor: AppColors.txtMid,
+                          side: const BorderSide(color: AppColors.border),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),
@@ -354,7 +355,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                       child: ElevatedButton(
                         onPressed: _isSaving ? null : _saveSupplier,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _kAccent,
+                          backgroundColor: AppColors.accent,
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(

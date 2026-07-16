@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/transaction_model.dart';
@@ -7,16 +8,16 @@ import '../../../core/services/app_localizations.dart';
 import 'transaction_detail_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTableHead = Color(0xFFF8FAFC);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
+
+
+
 
 const _kColHeader = TextStyle(
   fontSize: 9,
@@ -65,10 +66,10 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: _kNavy,
+              primary: AppColors.navy,
               onPrimary: Colors.white,
-              surface: _kBgCard,
-              onSurface: _kTxtHigh,
+              surface: AppColors.bgCard,
+              onSurface: AppColors.txtHigh,
             ),
           ),
           child: child!,
@@ -88,26 +89,26 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       suffixIcon: suffixIcon,
@@ -123,13 +124,13 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 12, color: _kAccent),
+            Icon(icon, size: 12, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -138,7 +139,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -166,7 +167,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: _buildAppBar(),
       body: SafeArea(
         child: Column(
@@ -196,7 +197,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       elevation: 0,
       toolbarHeight: 54,
       iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -236,9 +237,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,19 +267,19 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                   height: 38,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    color: _selectedDate != null ? _kAccent : _kAccentSoft,
+                    color: _selectedDate != null ? AppColors.accent : AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: _selectedDate != null
-                          ? _kAccent
-                          : _kAccent.withValues(alpha: 0.2),
+                          ? AppColors.accent
+                          : AppColors.accent.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         Icons.calendar_month,
-                        color: _selectedDate != null ? Colors.white : _kAccent,
+                        color: _selectedDate != null ? Colors.white : AppColors.accent,
                         size: 16,
                       ),
                       if (_selectedDate != null) ...[
@@ -333,9 +334,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   Widget _buildTransactionsList(List<TransactionModel> filteredTransactions) {
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,7 +349,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             ),
           ),
           Container(
-            color: _kTableHead,
+            color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
@@ -370,11 +371,11 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, color: _kBorder),
+          const Divider(height: 1, color: AppColors.border),
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: Center(child: CircularProgressIndicator(color: _kAccent)),
+              child: Center(child: CircularProgressIndicator(color: AppColors.accent)),
             )
           else if (filteredTransactions.isEmpty)
             Container(
@@ -382,13 +383,13 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.receipt, size: 30, color: _kTxtLow.withValues(alpha: 0.5)),
+                  Icon(Icons.receipt, size: 30, color: AppColors.txtLow.withValues(alpha: 0.5)),
                   const SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_transactions_recorded'),
                     style: const TextStyle(
                       fontSize: 12,
-                      color: _kTxtLow,
+                      color: AppColors.txtLow,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -401,7 +402,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: filteredTransactions.length,
               separatorBuilder: (context, index) =>
-                  const Divider(height: 1, color: _kBorder),
+                  const Divider(height: 1, color: AppColors.border),
               itemBuilder: (context, index) {
                 final txn = filteredTransactions[index];
                 final date = DateTime.parse(txn.transactionDate);
@@ -433,7 +434,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: _kAccent,
+                                  color: AppColors.accent,
                                 ),
                               ),
                               if (txn.vehicleNo != null && txn.vehicleNo!.isNotEmpty) ...[
@@ -442,7 +443,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                                   txn.vehicleNo!,
                                   style: const TextStyle(
                                     fontSize: 10,
-                                    color: _kTxtMid,
+                                    color: AppColors.txtMid,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -459,7 +460,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                               style: const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
-                                color: _kTxtMid,
+                                color: AppColors.txtMid,
                               ),
                             ),
                           ),
@@ -473,7 +474,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: _kTxtHigh,
+                                color: AppColors.txtHigh,
                               ),
                             ),
                           ),

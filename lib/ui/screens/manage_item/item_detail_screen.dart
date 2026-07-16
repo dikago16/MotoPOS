@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/category_model.dart';
@@ -6,16 +7,16 @@ import '../scanner/scanner_screen.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kBorderMid = Color(0xFFCBD5E1);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
+
+
+
+
+
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class ItemDetailScreen extends StatefulWidget {
@@ -123,27 +124,27 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 12, color: _kTxtLow),
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      hintStyle: const TextStyle(fontSize: 12, color: AppColors.txtLow),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       suffixIcon: suffixIcon,
@@ -159,13 +160,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 14, color: _kAccent),
+            Icon(icon, size: 14, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -174,7 +175,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -186,9 +187,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   Widget build(BuildContext context) {
     final isEdit = widget.product != null;
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -224,9 +225,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: _kBgCard,
+                    color: AppColors.bgCard,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: _kBorder),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,7 +247,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   width: 24,
                                   child: Checkbox(
                                     value: _autoItemCode,
-                                    activeColor: _kAccent,
+                                    activeColor: AppColors.accent,
                                     onChanged: (val) {
                                       setState(() {
                                         _autoItemCode = val ?? true;
@@ -264,7 +265,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   AppLocalizations.get('auto_code'),
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: _kTxtMid,
+                                    color: AppColors.txtMid,
                                   ),
                                 ),
                               ],
@@ -281,10 +282,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               readOnly: _autoItemCode,
                               style: const TextStyle(
                                 fontSize: 13,
-                                color: _kTxtMid,
+                                color: AppColors.txtMid,
                               ),
                               decoration: _inputDeco(AppLocalizations.get('item_code')).copyWith(
-                                fillColor: _autoItemCode ? _kBgPage : _kBgCard,
+                                fillColor: _autoItemCode ? AppColors.bgPage : AppColors.bgCard,
                               ),
                             ),
                           ),
@@ -310,17 +311,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               height: 38,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: _autoItemCode ? _kBgPage : _kAccentSoft,
+                                color: _autoItemCode ? AppColors.bgPage : AppColors.accentSoft,
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
                                   color: _autoItemCode
-                                      ? _kBorderMid
-                                      : _kAccent.withValues(alpha: 0.2),
+                                      ? AppColors.borderMid
+                                      : AppColors.accent.withValues(alpha: 0.2),
                                 ),
                               ),
                               child: Icon(
                                 Icons.qr_code_scanner,
-                                color: _autoItemCode ? _kTxtLow : _kAccent,
+                                color: _autoItemCode ? AppColors.txtLow : AppColors.accent,
                                 size: 20,
                               ),
                             ),
@@ -341,8 +342,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       DropdownButtonFormField<String>(
                         initialValue: _selectedCategory,
                         decoration: _inputDeco(AppLocalizations.get('category')),
-                        style: const TextStyle(fontSize: 13, color: _kTxtHigh),
-                        dropdownColor: _kBgCard,
+                        style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
+                        dropdownColor: AppColors.bgCard,
                         items: [
                           DropdownMenuItem(
                             value: 'uncategorized',
@@ -399,7 +400,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
                               'Per',
-                              style: TextStyle(fontSize: 12, color: _kTxtMid),
+                              style: TextStyle(fontSize: 12, color: AppColors.txtMid),
                             ),
                           ),
                           Expanded(
@@ -440,7 +441,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
                               'Per',
-                              style: TextStyle(fontSize: 12, color: _kTxtMid),
+                              style: TextStyle(fontSize: 12, color: AppColors.txtMid),
                             ),
                           ),
                           Expanded(
@@ -461,27 +462,27 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         children: [
                           Text(
                             AppLocalizations.get('discount'),
-                            style: TextStyle(fontSize: 12, color: _kTxtMid),
+                            style: TextStyle(fontSize: 12, color: AppColors.txtMid),
                           ),
                           const SizedBox(width: 8),
                           Container(
                             height: 38,
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             decoration: BoxDecoration(
-                              border: Border.all(color: _kBorder),
+                              border: Border.all(color: AppColors.border),
                               borderRadius: BorderRadius.circular(6),
-                              color: _kBgCard,
+                              color: AppColors.bgCard,
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _discountType,
                                 icon: const Icon(
                                   Icons.arrow_drop_down,
-                                  color: _kTxtMid,
+                                  color: AppColors.txtMid,
                                 ),
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  color: _kTxtHigh,
+                                  color: AppColors.txtHigh,
                                 ),
                                 onChanged: (String? newValue) {
                                   if (newValue != null) {
@@ -532,7 +533,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             height: 24,
                             child: Checkbox(
                               value: _countStock,
-                              activeColor: _kAccent,
+                              activeColor: AppColors.accent,
                               onChanged: (val) {
                                 setState(() {
                                   _countStock = val ?? true;
@@ -546,7 +547,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: _kTxtHigh,
+                              color: AppColors.txtHigh,
                             ),
                           ),
                         ],
@@ -577,8 +578,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   Widget _buildBottomBar() {
     return Container(
       decoration: const BoxDecoration(
-        color: _kBgCard,
-        border: Border(top: BorderSide(color: _kBorder, width: 1)),
+        color: AppColors.bgCard,
+        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         boxShadow: [
           BoxShadow(
             color: Color(0x0D000000),
@@ -615,12 +616,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kBgPage,
-                  foregroundColor: _kTxtMid,
+                  backgroundColor: AppColors.bgPage,
+                  foregroundColor: AppColors.txtMid,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
-                    side: const BorderSide(color: _kBorderMid),
+                    side: const BorderSide(color: AppColors.borderMid),
                   ),
                 ),
                 child: Text(
@@ -721,7 +722,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kNavy,
+                  backgroundColor: AppColors.navy,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(

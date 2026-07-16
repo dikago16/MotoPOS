@@ -1,15 +1,16 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
 
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
+
+
+
+
+
+
+
 
 class LicenseInfoScreen extends StatefulWidget {
   const LicenseInfoScreen({super.key});
@@ -74,9 +75,9 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         title: Text(
           AppLocalizations.get('license_info'),
@@ -89,7 +90,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: _kAccent))
+          ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -98,9 +99,9 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: _kBgCard,
+                      color: AppColors.bgCard,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: _kBorder),
+                      border: Border.all(color: AppColors.border),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.02),
@@ -121,7 +122,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                           AppLocalizations.get('license_key'),
                           style: TextStyle(
                             fontSize: 12,
-                            color: _kTxtMid,
+                            color: AppColors.txtMid,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -132,19 +133,19 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
-                            color: _kTxtHigh,
+                            color: AppColors.txtHigh,
                             letterSpacing: 1.5,
                           ),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Divider(color: _kBorder),
+                          child: Divider(color: AppColors.border),
                         ),
                         Text(
                           AppLocalizations.get('status_expiry'),
                           style: TextStyle(
                             fontSize: 12,
-                            color: _kTxtMid,
+                            color: AppColors.txtMid,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -155,19 +156,19 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: _kTxtHigh,
+                            color: AppColors.txtHigh,
                             height: 1.5,
                           ),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Divider(color: _kBorder),
+                          child: Divider(color: AppColors.border),
                         ),
                         Text(
                           AppLocalizations.get('device_id').toUpperCase(),
                           style: TextStyle(
                             fontSize: 12,
-                            color: _kTxtMid,
+                            color: AppColors.txtMid,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -179,7 +180,7 @@ class _LicenseInfoScreenState extends State<LicenseInfoScreen> {
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             fontFamily: 'monospace',
-                            color: _kAccent,
+                            color: AppColors.accent,
                             letterSpacing: 1.5,
                           ),
                         ),

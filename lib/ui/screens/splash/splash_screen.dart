@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../core/services/api_service.dart';
 import '../activation/activation_screen.dart';
@@ -5,11 +6,11 @@ import '../selling/selling_screen.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kBorder = Color(0xFF1E3A5F);
-const _kMuted = Color(0xFF334155);
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class SplashScreen extends StatefulWidget {
@@ -162,7 +163,7 @@ class _SplashScreenState extends State<SplashScreen>
                 gradient: LinearGradient(
                   colors: [
                     Colors.transparent,
-                    _kAccent.withValues(alpha: 0.55),
+                    AppColors.accent.withValues(alpha: 0.55),
                   ],
                 ),
               ),
@@ -175,7 +176,7 @@ class _SplashScreenState extends State<SplashScreen>
               height: 5,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: _kAccent,
+                color: AppColors.accent,
               ),
             ),
           ),
@@ -185,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    _kAccent.withValues(alpha: 0.55),
+                    AppColors.accent.withValues(alpha: 0.55),
                     Colors.transparent,
                   ],
                 ),
@@ -203,7 +204,7 @@ class _SplashScreenState extends State<SplashScreen>
     final size = MediaQuery.sizeOf(context);
 
     return Scaffold(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       body: Stack(
         children: [
           // ── Latar: dot grid pattern ──────────────────────────────────────────
@@ -220,7 +221,7 @@ class _SplashScreenState extends State<SplashScreen>
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        _kAccent.withValues(alpha: 0.08),
+                        AppColors.accent.withValues(alpha: 0.08),
                         Colors.transparent,
                       ],
                     ),
@@ -240,7 +241,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Transform.scale(
                 scaleX: corner.isLeft ? 1.0 : -1.0,
                 scaleY: corner.isTop ? 1.0 : -1.0,
-                child: const _CornerBracket(color: _kBorder),
+                child: const _CornerBracket(color: AppColors.border),
               ),
             ),
 
@@ -266,17 +267,17 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: _kAccent.withValues(alpha: 0.30),
+                          color: AppColors.accent.withValues(alpha: 0.30),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(3),
-                        color: _kAccent.withValues(alpha: 0.05),
+                        color: AppColors.accent.withValues(alpha: 0.05),
                       ),
                       child: const Text(
                         'ENTERPRISE EDITION',
                         style: TextStyle(
                           fontSize: 9,
-                          color: _kTxtLow,
+                          color: AppColors.txtLow,
                           letterSpacing: 4.0,
                           fontWeight: FontWeight.w600,
                         ),
@@ -307,7 +308,7 @@ class _SplashScreenState extends State<SplashScreen>
                       'Motorcycle Service  ·  Point of Sales',
                       style: TextStyle(
                         fontSize: 12,
-                        color: _kTxtLow,
+                        color: AppColors.txtLow,
                         letterSpacing: 1.0,
                         fontWeight: FontWeight.w400,
                       ),
@@ -339,7 +340,7 @@ class _SplashScreenState extends State<SplashScreen>
                     Text(
                       AppLocalizations.get('validating_license'),
                       style: TextStyle(
-                        color: _kMuted,
+                        color: AppColors.muted,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 2.5,
@@ -504,7 +505,7 @@ class _LoadingDotsState extends State<_LoadingDots>
             height: 5,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: _kAccent.withValues(alpha: _anims[i].value),
+              color: AppColors.accent.withValues(alpha: _anims[i].value),
             ),
           ),
         );

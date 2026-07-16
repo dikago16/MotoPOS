@@ -5,7 +5,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivationUtil {
-  static const String _secretSalt = "MY_APP_SECURE_SALT_2026";
+  // Use --dart-define=APP_SALT="YOUR_SECRET_SALT" during build
+  static const String _secretSalt = String.fromEnvironment(
+    'APP_SALT',
+    defaultValue: "MY_APP_SECURE_SALT_2026",
+  );
   static const String _activationKey = "is_activated";
 
   static Future<String> getDeviceId() async {

@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -5,12 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
 
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
 
 class AskAiScreen extends StatefulWidget {
   const AskAiScreen({super.key});
@@ -171,9 +172,9 @@ class _AskAiScreenState extends State<AskAiScreen> {
     return PopScope(
       canPop: !_isAiResponding,
       child: Scaffold(
-        backgroundColor: _kBgPage,
+        backgroundColor: AppColors.bgPage,
         appBar: AppBar(
-          backgroundColor: _kNavy,
+          backgroundColor: AppColors.navy,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: _isAiResponding ? null : () => Navigator.pop(context),
@@ -229,7 +230,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
                       maxWidth: MediaQuery.of(context).size.width * 0.75,
                     ),
                     decoration: BoxDecoration(
-                      color: isUser ? _kAccent : _kBgCard,
+                      color: isUser ? AppColors.accent : AppColors.bgCard,
                       borderRadius: BorderRadius.circular(12).copyWith(
                         bottomRight: isUser
                             ? const Radius.circular(0)
@@ -238,12 +239,12 @@ class _AskAiScreenState extends State<AskAiScreen> {
                             ? const Radius.circular(12)
                             : const Radius.circular(0),
                       ),
-                      border: isUser ? null : Border.all(color: _kBorder),
+                      border: isUser ? null : Border.all(color: AppColors.border),
                     ),
                     child: Text(
                       text,
                       style: TextStyle(
-                        color: isUser ? Colors.white : _kTxtHigh,
+                        color: isUser ? Colors.white : AppColors.txtHigh,
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -265,8 +266,8 @@ class _AskAiScreenState extends State<AskAiScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: const BoxDecoration(
-              color: _kBgCard,
-              border: Border(top: BorderSide(color: _kBorder)),
+              color: AppColors.bgCard,
+              border: Border(top: BorderSide(color: AppColors.border)),
             ),
             child: Row(
               children: [
@@ -282,7 +283,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: _kBgPage,
+                      fillColor: AppColors.bgPage,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 12,
@@ -300,7 +301,7 @@ class _AskAiScreenState extends State<AskAiScreen> {
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: _isAiResponding ? Colors.grey : _kAccent,
+                      color: _isAiResponding ? Colors.grey : AppColors.accent,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(

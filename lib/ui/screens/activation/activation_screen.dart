@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/services/api_service.dart';
@@ -6,14 +7,14 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
+
 const _kCard = Color(0xFF0F2137);
 const _kInputBg = Color(0xFF091624);
-const _kAccent = Color(0xFF2563EB);
+
 const _kAccentLt = Color(0xFF60A5FA);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kBorder = Color(0xFF1E3A5F);
-const _kMuted = Color(0xFF334155);
+
+
+
 const _kDanger = Color(0xFFEF4444);
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -116,7 +117,7 @@ class _ActivationScreenState extends State<ActivationScreen>
     final size = MediaQuery.sizeOf(context);
 
     return Scaffold(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
@@ -135,7 +136,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          _kAccent.withValues(alpha: 0.07),
+                          AppColors.accent.withValues(alpha: 0.07),
                           Colors.transparent,
                         ],
                       ),
@@ -155,7 +156,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                 child: Transform.scale(
                   scaleX: c.isLeft ? 1.0 : -1.0,
                   scaleY: c.isTop ? 1.0 : -1.0,
-                  child: const _CornerBracket(color: _kBorder),
+                  child: const _CornerBracket(color: AppColors.border),
                 ),
               ),
 
@@ -263,7 +264,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        _kAccent.withValues(alpha: 0.5),
+                        AppColors.accent.withValues(alpha: 0.5),
                       ],
                     ),
                   ),
@@ -276,7 +277,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                   height: 4,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _kAccent,
+                    color: AppColors.accent,
                   ),
                 ),
               ),
@@ -286,7 +287,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        _kAccent.withValues(alpha: 0.5),
+                        AppColors.accent.withValues(alpha: 0.5),
                         Colors.transparent,
                       ],
                     ),
@@ -318,7 +319,7 @@ class _ActivationScreenState extends State<ActivationScreen>
     return Row(
       children: [
         Expanded(
-          child: Container(height: 1, color: _kBorder.withValues(alpha: 0.5)),
+          child: Container(height: 1, color: AppColors.border.withValues(alpha: 0.5)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -326,14 +327,14 @@ class _ActivationScreenState extends State<ActivationScreen>
             AppLocalizations.get('device_information'),
             style: TextStyle(
               fontSize: 8,
-              color: _kMuted,
+              color: AppColors.muted,
               letterSpacing: 2.5,
               fontWeight: FontWeight.w600,
             ),
           ),
         ),
         Expanded(
-          child: Container(height: 1, color: _kBorder.withValues(alpha: 0.5)),
+          child: Container(height: 1, color: AppColors.border.withValues(alpha: 0.5)),
         ),
       ],
     );
@@ -346,7 +347,7 @@ class _ActivationScreenState extends State<ActivationScreen>
       decoration: BoxDecoration(
         color: _kCard,
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: _kBorder, width: 1),
+        border: Border.all(color: AppColors.border, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,7 +360,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                 AppLocalizations.get('your_device_id'),
                 style: TextStyle(
                   fontSize: 9,
-                  color: _kTxtLow,
+                  color: AppColors.txtLow,
                   letterSpacing: 3,
                   fontWeight: FontWeight.w600,
                 ),
@@ -367,10 +368,10 @@ class _ActivationScreenState extends State<ActivationScreen>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: _kAccent.withValues(alpha: 0.08),
+                  color: AppColors.accent.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(2),
                   border: Border.all(
-                    color: _kAccent.withValues(alpha: 0.25),
+                    color: AppColors.accent.withValues(alpha: 0.25),
                     width: 1,
                   ),
                 ),
@@ -396,7 +397,7 @@ class _ActivationScreenState extends State<ActivationScreen>
               color: _kInputBg,
               borderRadius: BorderRadius.circular(5),
               border: Border.all(
-                color: _kBorder.withValues(alpha: 0.6),
+                color: AppColors.border.withValues(alpha: 0.6),
                 width: 1,
               ),
             ),
@@ -425,12 +426,12 @@ class _ActivationScreenState extends State<ActivationScreen>
                       padding: const EdgeInsets.all(7),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: _kBorder, width: 1),
+                        border: Border.all(color: AppColors.border, width: 1),
                       ),
                       child: Icon(
                         Icons.copy_rounded,
                         size: 13,
-                        color: _kTxtLow.withValues(alpha: 0.8),
+                        color: AppColors.txtLow.withValues(alpha: 0.8),
                       ),
                     ),
                   ),
@@ -446,7 +447,7 @@ class _ActivationScreenState extends State<ActivationScreen>
               Icon(
                 Icons.info_outline_rounded,
                 size: 11,
-                color: _kTxtLow.withValues(alpha: 0.7),
+                color: AppColors.txtLow.withValues(alpha: 0.7),
               ),
               const SizedBox(width: 6),
               Expanded(
@@ -454,7 +455,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                   AppLocalizations.get('share_device_id_desc'),
                   style: TextStyle(
                     fontSize: 10,
-                    color: _kTxtLow,
+                    color: AppColors.txtLow,
                     letterSpacing: 0.2,
                     height: 1.5,
                   ),
@@ -478,7 +479,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             Expanded(
               child: Container(
                 height: 1,
-                color: _kBorder.withValues(alpha: 0.5),
+                color: AppColors.border.withValues(alpha: 0.5),
               ),
             ),
             Padding(
@@ -487,7 +488,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                 AppLocalizations.get('license_key'),
                 style: TextStyle(
                   fontSize: 8,
-                  color: _kMuted,
+                  color: AppColors.muted,
                   letterSpacing: 2.5,
                   fontWeight: FontWeight.w600,
                 ),
@@ -496,7 +497,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             Expanded(
               child: Container(
                 height: 1,
-                color: _kBorder.withValues(alpha: 0.5),
+                color: AppColors.border.withValues(alpha: 0.5),
               ),
             ),
           ],
@@ -510,13 +511,13 @@ class _ActivationScreenState extends State<ActivationScreen>
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: _isFocused ? _kAccent : _kBorder,
+              color: _isFocused ? AppColors.accent : AppColors.border,
               width: _isFocused ? 1.5 : 1.0,
             ),
             boxShadow: _isFocused
                 ? [
                     BoxShadow(
-                      color: _kAccent.withValues(alpha: 0.14),
+                      color: AppColors.accent.withValues(alpha: 0.14),
                       blurRadius: 10,
                       spreadRadius: 0,
                     ),
@@ -538,7 +539,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             decoration: InputDecoration(
               hintText: 'XXXX-XXXX-XXXX-XXXX',
               hintStyle: TextStyle(
-                color: _kMuted.withValues(alpha: 0.7),
+                color: AppColors.muted.withValues(alpha: 0.7),
                 fontSize: 13,
                 letterSpacing: 2.5,
                 fontFamily: 'monospace',
@@ -551,7 +552,7 @@ class _ActivationScreenState extends State<ActivationScreen>
               ),
               prefixIcon: const Padding(
                 padding: EdgeInsets.only(left: 14, right: 10),
-                child: Icon(Icons.key_rounded, color: _kMuted, size: 18),
+                child: Icon(Icons.key_rounded, color: AppColors.muted, size: 18),
               ),
               prefixIconConstraints: const BoxConstraints(minWidth: 0),
               contentPadding: const EdgeInsets.symmetric(
@@ -566,7 +567,7 @@ class _ActivationScreenState extends State<ActivationScreen>
 
         Text(
           AppLocalizations.get('license_format_desc'),
-          style: TextStyle(fontSize: 10, color: _kMuted, letterSpacing: 0.3),
+          style: TextStyle(fontSize: 10, color: AppColors.muted, letterSpacing: 0.3),
         ),
       ],
     );
@@ -579,8 +580,8 @@ class _ActivationScreenState extends State<ActivationScreen>
       child: ElevatedButton(
         onPressed: _isLoading ? null : _activate,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _kAccent,
-          disabledBackgroundColor: _kAccent.withValues(alpha: 0.35),
+          backgroundColor: AppColors.accent,
+          disabledBackgroundColor: AppColors.accent.withValues(alpha: 0.35),
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         ),
@@ -611,9 +612,9 @@ class _ActivationScreenState extends State<ActivationScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: _kAccent.withValues(alpha: 0.04),
+        color: AppColors.accent.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: _kAccent.withValues(alpha: 0.13), width: 1),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.13), width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -628,7 +629,7 @@ class _ActivationScreenState extends State<ActivationScreen>
                   AppLocalizations.get('license_support_desc'),
                   style: TextStyle(
                     fontSize: 11,
-                    color: _kTxtLow,
+                    color: AppColors.txtLow,
                     height: 1.65,
                     letterSpacing: 0.2,
                   ),

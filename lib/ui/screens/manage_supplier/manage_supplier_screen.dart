@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'supplier_detail_screen.dart';
 import '../../../data/models/supplier_model.dart';
@@ -5,16 +6,16 @@ import '../../../data/db_helper.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTableHead = Color(0xFFF8FAFC);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
+
+
+
 
 const _kColHeader = TextStyle(
   fontSize: 9,
@@ -53,7 +54,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: _buildAppBar(),
       body: SafeArea(
         child: Column(
@@ -83,7 +84,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: _kNavy,
+      backgroundColor: AppColors.navy,
       elevation: 0,
       toolbarHeight: 54,
       iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -132,26 +133,26 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       suffixIcon: suffixIcon,
@@ -167,13 +168,13 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 12, color: _kAccent),
+            Icon(icon, size: 12, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -182,7 +183,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -194,9 +195,9 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,13 +222,13 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                   height: 38,
                   width: 44,
                   decoration: BoxDecoration(
-                    color: _kAccentSoft,
+                    color: AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: _kAccent.withValues(alpha: 0.2)),
+                    border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
                   ),
                   child: const Icon(
                     Icons.filter_list,
-                    color: _kAccent,
+                    color: AppColors.accent,
                     size: 18,
                   ),
                 ),
@@ -242,9 +243,9 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
   Widget _buildSuppliersList() {
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +255,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
             child: _sectionLabel(AppLocalizations.get('supplier_list'), icon: Icons.business),
           ),
           Container(
-            color: _kTableHead,
+            color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
@@ -264,7 +265,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, color: _kBorder),
+          const Divider(height: 1, color: AppColors.border),
 
           if (_isLoading)
             const Padding(
@@ -277,13 +278,13 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  const Icon(Icons.business, size: 30, color: _kTxtLow),
+                  const Icon(Icons.business, size: 30, color: AppColors.txtLow),
                   const SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_suppliers_found'),
                     style: const TextStyle(
                       fontSize: 12,
-                      color: _kTxtLow,
+                      color: AppColors.txtLow,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -296,7 +297,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _suppliers.length,
               separatorBuilder: (context, index) =>
-                  const Divider(height: 1, color: _kBorder),
+                  const Divider(height: 1, color: AppColors.border),
               itemBuilder: (context, index) {
                 final supplier = _suppliers[index];
                 return Padding(
@@ -318,7 +319,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: _kTxtHigh,
+                                color: AppColors.txtHigh,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -326,7 +327,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                               supplier.supplierCode,
                               style: const TextStyle(
                                 fontSize: 10,
-                                color: _kTxtMid,
+                                color: AppColors.txtMid,
                               ),
                             ),
                           ],
@@ -342,7 +343,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: _kTxtMid,
+                                color: AppColors.txtMid,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -350,7 +351,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                               supplier.address.isEmpty ? '-' : supplier.address,
                               style: const TextStyle(
                                 fontSize: 10,
-                                color: _kTxtLow,
+                                color: AppColors.txtLow,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -363,7 +364,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                         icon: const Icon(
                           Icons.more_vert,
                           size: 16,
-                          color: _kTxtMid,
+                          color: AppColors.txtMid,
                         ),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -419,7 +420,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: _kBgCard,
+          backgroundColor: AppColors.bgCard,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           title: Row(
             children: [
@@ -430,7 +431,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: _kTxtHigh,
+                  color: AppColors.txtHigh,
                 ),
               ),
             ],
@@ -439,7 +440,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
             text: TextSpan(
               style: const TextStyle(
                 fontSize: 13,
-                color: _kTxtMid,
+                color: AppColors.txtMid,
                 height: 1.5,
               ),
               children: [
@@ -449,7 +450,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
                       '${supplier.supplierName.isEmpty ? AppLocalizations.get('unknown_supplier') : supplier.supplierName} (${supplier.supplierCode})',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: _kTxtHigh,
+                    color: AppColors.txtHigh,
                   ),
                 ),
                 const TextSpan(text: '?\nThis action cannot be undone.'),
@@ -464,7 +465,7 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
             TextButton(
               onPressed: () => Navigator.pop(context, false),
               style: TextButton.styleFrom(
-                foregroundColor: _kTxtMid,
+                foregroundColor: AppColors.txtMid,
                 textStyle: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,

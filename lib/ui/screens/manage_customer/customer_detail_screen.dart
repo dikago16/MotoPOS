@@ -1,19 +1,20 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../data/db_helper.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kBorderMid = Color(0xFFCBD5E1);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kRed = Color(0xFFDC2626);
+
+
+
+
+
+
+
+
+
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class CustomerDetailScreen extends StatefulWidget {
@@ -80,29 +81,29 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: _kBgCard,
+        backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: const Text(
           'Delete Customer',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 15,
-            color: _kTxtHigh,
+            color: AppColors.txtHigh,
           ),
         ),
         content: const Text(
           'Are you sure you want to delete this customer? This action cannot be undone.',
-          style: TextStyle(fontSize: 13, color: _kTxtMid),
+          style: TextStyle(fontSize: 13, color: AppColors.txtMid),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('CANCEL', style: TextStyle(color: _kTxtLow)),
+            child: const Text('CANCEL', style: TextStyle(color: AppColors.txtLow)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: _kRed,
+              backgroundColor: AppColors.red,
               foregroundColor: Colors.white,
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -131,27 +132,27 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 12, color: _kTxtLow),
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      hintStyle: const TextStyle(fontSize: 12, color: AppColors.txtLow),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       suffixIcon: suffixIcon,
@@ -167,13 +168,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 14, color: _kAccent),
+            Icon(icon, size: 14, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -182,7 +183,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -194,9 +195,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   Widget build(BuildContext context) {
     final isEdit = widget.customer != null;
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -225,7 +226,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         actions: [
           if (isEdit)
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: _kRed, size: 20),
+              icon: const Icon(Icons.delete_outline, color: AppColors.red, size: 20),
               onPressed: _deleteCustomer,
               tooltip: 'Delete',
             ),
@@ -243,9 +244,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: _kBgCard,
+                        color: AppColors.bgCard,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: _kBorder),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +266,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                       width: 24,
                                       child: Checkbox(
                                         value: _autoCode,
-                                        activeColor: _kAccent,
+                                        activeColor: AppColors.accent,
                                         onChanged: (val) {
                                           setState(() {
                                             _autoCode = val ?? true;
@@ -284,7 +285,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                       AppLocalizations.get('auto_code'),
                                       style: TextStyle(
                                         fontSize: 11,
-                                        color: _kTxtMid,
+                                        color: AppColors.txtMid,
                                       ),
                                     ),
                                   ],
@@ -298,10 +299,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             readOnly: _autoCode,
                             style: const TextStyle(
                               fontSize: 13,
-                              color: _kTxtMid,
+                              color: AppColors.txtMid,
                             ),
                             decoration: _inputDeco(AppLocalizations.get('customer_code')).copyWith(
-                              fillColor: _autoCode ? _kBgPage : _kBgCard,
+                              fillColor: _autoCode ? AppColors.bgPage : AppColors.bgCard,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -345,9 +346,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: _kBgCard,
+                        color: AppColors.bgCard,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: _kBorder),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,8 +397,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   Widget _buildBottomBar() {
     return Container(
       decoration: const BoxDecoration(
-        color: _kBgCard,
-        border: Border(top: BorderSide(color: _kBorder, width: 1)),
+        color: AppColors.bgCard,
+        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         boxShadow: [
           BoxShadow(
             color: Color(0x0D000000),
@@ -430,12 +431,12 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kBgPage,
-                  foregroundColor: _kTxtMid,
+                  backgroundColor: AppColors.bgPage,
+                  foregroundColor: AppColors.txtMid,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
-                    side: const BorderSide(color: _kBorderMid),
+                    side: const BorderSide(color: AppColors.borderMid),
                   ),
                 ),
                 child: Text(
@@ -527,7 +528,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _kNavy,
+                  backgroundColor: AppColors.navy,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(

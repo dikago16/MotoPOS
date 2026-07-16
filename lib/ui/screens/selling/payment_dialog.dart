@@ -1,22 +1,23 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kAccentSoft = Color(0xFFEFF6FF);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kBorderMid = Color(0xFFCBD5E1);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kGreen = Color(0xFF16A34A);
+
+
+
+
+
+
+
+
+
+
+
 const _kGreenSoft = Color(0xFFF0FDF4);
-const _kRed = Color(0xFFDC2626);
+
 // ──────────────────────────────────────────────────────────────────────────────
 
 class PaymentDialog extends StatefulWidget {
@@ -99,30 +100,30 @@ class _PaymentDialogState extends State<PaymentDialog> {
   InputDecoration _inputDeco(String label, {String? prefix, String? hint}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 11, color: _kTxtMid),
-      floatingLabelStyle: const TextStyle(fontSize: 11, color: _kAccent),
+      labelStyle: const TextStyle(fontSize: 11, color: AppColors.txtMid),
+      floatingLabelStyle: const TextStyle(fontSize: 11, color: AppColors.accent),
       hintText: hint,
-      hintStyle: const TextStyle(fontSize: 13, color: _kTxtLow),
+      hintStyle: const TextStyle(fontSize: 13, color: AppColors.txtLow),
       prefixText: prefix,
       prefixStyle: const TextStyle(
-        color: _kTxtHigh,
+        color: AppColors.txtHigh,
         fontSize: 15,
         fontWeight: FontWeight.w700,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       isDense: true,
     );
@@ -140,11 +141,11 @@ class _PaymentDialogState extends State<PaymentDialog> {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 400),
         decoration: BoxDecoration(
-          color: _kBgCard,
+          color: AppColors.bgCard,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: _kNavy.withValues(alpha: 0.15),
+              color: AppColors.navy.withValues(alpha: 0.15),
               blurRadius: 30,
               offset: const Offset(0, 10),
             ),
@@ -159,7 +160,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                 padding: const EdgeInsets.fromLTRB(16, 14, 10, 14),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [_kNavy, Color(0xFF1B2D45)],
+                    colors: [AppColors.navy, Color(0xFF1B2D45)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -225,8 +226,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: const BoxDecoration(
-                  color: _kBgPage,
-                  border: Border(bottom: BorderSide(color: _kBorder)),
+                  color: AppColors.bgPage,
+                  border: Border(bottom: BorderSide(color: AppColors.border)),
                 ),
                 child: Column(
                   children: [
@@ -235,7 +236,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w700,
-                        color: _kTxtLow,
+                        color: AppColors.txtLow,
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -245,7 +246,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
-                        color: _kTxtHigh,
+                        color: AppColors.txtHigh,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -278,7 +279,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                               child: Icon(
                                 Icons.two_wheeler,
                                 size: 16,
-                                color: _kTxtLow,
+                                color: AppColors.txtLow,
                               ),
                             ),
                             prefixIconConstraints: const BoxConstraints(
@@ -321,12 +322,12 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: isValid ? _kGreenSoft : _kBgPage,
+                        color: isValid ? _kGreenSoft : AppColors.bgPage,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: isValid
-                              ? _kGreen.withValues(alpha: 0.25)
-                              : _kBorder,
+                              ? AppColors.green.withValues(alpha: 0.25)
+                              : AppColors.border,
                         ),
                       ),
                       child: Row(
@@ -335,8 +336,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               color: isValid
-                                  ? _kGreen.withValues(alpha: 0.12)
-                                  : _kBorder.withValues(alpha: 0.5),
+                                  ? AppColors.green.withValues(alpha: 0.12)
+                                  : AppColors.border.withValues(alpha: 0.5),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Icon(
@@ -344,7 +345,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                   ? Icons.check_circle_outline
                                   : Icons.info_outline,
                               size: 16,
-                              color: isValid ? _kGreen : _kTxtLow,
+                              color: isValid ? AppColors.green : AppColors.txtLow,
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -356,7 +357,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                 style: TextStyle(
                                   fontSize: 9,
                                   fontWeight: FontWeight.w700,
-                                  color: isValid ? _kGreen : _kTxtLow,
+                                  color: isValid ? AppColors.green : AppColors.txtLow,
                                   letterSpacing: 1.0,
                                 ),
                               ),
@@ -370,7 +371,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w800,
-                                  color: isValid ? _kGreen : _kRed,
+                                  color: isValid ? AppColors.green : AppColors.red,
                                 ),
                               ),
                             ],
@@ -393,8 +394,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
                             child: OutlinedButton(
                               onPressed: () => Navigator.pop(context),
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: _kTxtMid,
-                                side: const BorderSide(color: _kBorderMid),
+                                foregroundColor: AppColors.txtMid,
+                                side: const BorderSide(color: AppColors.borderMid),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -435,10 +436,10 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _kGreen,
+                                backgroundColor: AppColors.green,
                                 foregroundColor: Colors.white,
-                                disabledBackgroundColor: _kBorder,
-                                disabledForegroundColor: _kTxtLow,
+                                disabledBackgroundColor: AppColors.border,
+                                disabledForegroundColor: AppColors.txtLow,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -475,12 +476,12 @@ class _PaymentDialogState extends State<PaymentDialog> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: canPrint ? (_printReceipt ? _kGreenSoft : _kBgCard) : _kBgPage,
+          color: canPrint ? (_printReceipt ? _kGreenSoft : AppColors.bgCard) : AppColors.bgPage,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: canPrint
-                ? (_printReceipt ? _kGreen.withValues(alpha: 0.3) : _kBorder)
-                : _kBorder.withValues(alpha: 0.5),
+                ? (_printReceipt ? AppColors.green.withValues(alpha: 0.3) : AppColors.border)
+                : AppColors.border.withValues(alpha: 0.5),
           ),
         ),
         child: Row(
@@ -491,13 +492,13 @@ class _PaymentDialogState extends State<PaymentDialog> {
               height: 20,
               decoration: BoxDecoration(
                 color: canPrint
-                    ? (_printReceipt ? _kGreen : _kBgCard)
-                    : _kBgPage,
+                    ? (_printReceipt ? AppColors.green : AppColors.bgCard)
+                    : AppColors.bgPage,
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
                   color: canPrint
-                      ? (_printReceipt ? _kGreen : _kBorderMid)
-                      : _kBorder,
+                      ? (_printReceipt ? AppColors.green : AppColors.borderMid)
+                      : AppColors.border,
                   width: 1.5,
                 ),
               ),
@@ -507,7 +508,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
             ),
             const SizedBox(width: 10),
             // Label
-            Icon(Icons.print, size: 16, color: canPrint ? _kTxtMid : _kTxtLow),
+            Icon(Icons.print, size: 16, color: canPrint ? AppColors.txtMid : AppColors.txtLow),
             const SizedBox(width: 6),
             Expanded(
               child: Column(
@@ -518,7 +519,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: canPrint ? _kTxtHigh : _kTxtLow,
+                      color: canPrint ? AppColors.txtHigh : AppColors.txtLow,
                     ),
                   ),
                   Text(
@@ -527,7 +528,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                         : AppLocalizations.get('printer_not_connected'),
                     style: TextStyle(
                       fontSize: 9,
-                      color: canPrint ? _kTxtMid : _kTxtLow,
+                      color: canPrint ? AppColors.txtMid : AppColors.txtLow,
                     ),
                   ),
                 ],
@@ -537,7 +538,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: _kRed.withValues(alpha: 0.08),
+                  color: AppColors.red.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -545,7 +546,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                   style: TextStyle(
                     fontSize: 8,
                     fontWeight: FontWeight.w700,
-                    color: _kRed,
+                    color: AppColors.red,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -565,17 +566,17 @@ class _PaymentDialogState extends State<PaymentDialog> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
-              ? _kAccent
+              ? AppColors.accent
               : isExact
-              ? _kAccentSoft
-              : _kBgCard,
+              ? AppColors.accentSoft
+              : AppColors.bgCard,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: isSelected
-                ? _kAccent
+                ? AppColors.accent
                 : isExact
-                ? _kAccent.withValues(alpha: 0.3)
-                : _kBorderMid,
+                ? AppColors.accent.withValues(alpha: 0.3)
+                : AppColors.borderMid,
           ),
         ),
         child: Text(
@@ -586,8 +587,8 @@ class _PaymentDialogState extends State<PaymentDialog> {
             color: isSelected
                 ? Colors.white
                 : isExact
-                ? _kAccent
-                : _kTxtMid,
+                ? AppColors.accent
+                : AppColors.txtMid,
           ),
         ),
       ),

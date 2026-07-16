@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../data/db_helper.dart';
@@ -5,15 +6,15 @@ import '../../../core/services/app_localizations.dart';
 import 'customer_detail_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTableHead = Color(0xFFF8FAFC);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
+
+
 
 const _kColHeader = TextStyle(
   fontSize: 9,
@@ -53,26 +54,26 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 12, color: _kTxtMid),
+      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
-        color: _kAccent,
+        color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kBorder),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: _kAccent, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
       ),
       filled: true,
-      fillColor: _kBgCard,
+      fillColor: AppColors.bgCard,
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
       suffixIcon: suffixIcon,
@@ -88,13 +89,13 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
             width: 3,
             height: 14,
             decoration: BoxDecoration(
-              color: _kAccent,
+              color: AppColors.accent,
               borderRadius: BorderRadius.circular(2),
             ),
             margin: const EdgeInsets.only(right: 8),
           ),
           if (icon != null) ...[
-            Icon(icon, size: 12, color: _kAccent),
+            Icon(icon, size: 12, color: AppColors.accent),
             const SizedBox(width: 5),
           ],
           Text(
@@ -103,7 +104,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: _kTxtMid,
+              color: AppColors.txtMid,
             ),
           ),
         ],
@@ -122,9 +123,9 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -197,9 +198,9 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 14),
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +210,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
             style: const TextStyle(fontSize: 13),
             decoration: _inputDeco(
               AppLocalizations.get('code_name'),
-              suffixIcon: const Icon(Icons.search, size: 18, color: _kTxtLow),
+              suffixIcon: const Icon(Icons.search, size: 18, color: AppColors.txtLow),
             ),
             onChanged: (val) {
               setState(() {
@@ -225,9 +226,9 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
   Widget _buildCustomersList(List<CustomerModel> filtered) {
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +238,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
             child: _sectionLabel(AppLocalizations.get('customers_list'), icon: Icons.people),
           ),
           Container(
-            color: _kTableHead,
+            color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
@@ -252,11 +253,11 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, color: _kBorder),
+          const Divider(height: 1, color: AppColors.border),
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: Center(child: CircularProgressIndicator(color: _kAccent)),
+              child: Center(child: CircularProgressIndicator(color: AppColors.accent)),
             )
           else if (filtered.isEmpty)
             Container(
@@ -267,14 +268,14 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                   Icon(
                     Icons.person_off,
                     size: 30,
-                    color: _kTxtLow.withValues(alpha: 0.5),
+                    color: AppColors.txtLow.withValues(alpha: 0.5),
                   ),
                   const SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_customers_found'),
                     style: const TextStyle(
                       fontSize: 12,
-                      color: _kTxtLow,
+                      color: AppColors.txtLow,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -287,7 +288,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: filtered.length,
               separatorBuilder: (context, index) =>
-                  const Divider(height: 1, color: _kBorder),
+                  const Divider(height: 1, color: AppColors.border),
               itemBuilder: (context, index) {
                 final cust = filtered[index];
                 return InkWell(
@@ -318,7 +319,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  color: _kTxtHigh,
+                                  color: AppColors.txtHigh,
                                 ),
                               ),
                               if (cust.phone.isNotEmpty) ...[
@@ -327,7 +328,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                                   cust.phone,
                                   style: const TextStyle(
                                     fontSize: 10,
-                                    color: _kTxtMid,
+                                    color: AppColors.txtMid,
                                   ),
                                 ),
                               ],
@@ -344,7 +345,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
-                                  color: _kTxtHigh,
+                                  color: AppColors.txtHigh,
                                 ),
                               ),
                               if (cust.vehicleType.isNotEmpty) ...[
@@ -353,7 +354,7 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                                   cust.vehicleType,
                                   style: const TextStyle(
                                     fontSize: 10,
-                                    color: _kTxtMid,
+                                    color: AppColors.txtMid,
                                   ),
                                 ),
                               ],

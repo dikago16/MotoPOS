@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../core/services/app_localizations.dart';
 import 'language_screen.dart';
@@ -5,12 +6,12 @@ import 'license_info_screen.dart';
 import 'my_store_screen.dart';
 import 'backup_restore_screen.dart';
 
-const _kNavy = Color(0xFF0D1B2A);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
+
+
+
+
+
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -18,9 +19,9 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         title: Text(
           AppLocalizations.get('settings'),
@@ -82,25 +83,25 @@ class SettingsScreen extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: _kBgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _kBorder),
+        border: Border.all(color: AppColors.border),
       ),
       child: ListTile(
-        leading: Icon(icon, color: _kNavy),
+        leading: Icon(icon, color: AppColors.navy),
         title: Text(
           title,
           style: const TextStyle(
-            color: _kTxtHigh,
+            color: AppColors.txtHigh,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(color: _kTxtMid, fontSize: 12),
+          style: const TextStyle(color: AppColors.txtMid, fontSize: 12),
         ),
-        trailing: const Icon(Icons.chevron_right, color: _kTxtMid),
+        trailing: const Icon(Icons.chevron_right, color: AppColors.txtMid),
         onTap: () {
           Navigator.push(
             context,

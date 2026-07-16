@@ -1,16 +1,17 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../data/db_helper.dart';
 import '../../../data/models/store_info_model.dart';
 import '../../../core/services/app_localizations.dart';
 
-const _kNavy = Color(0xFF0D1B2A);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kAccent = Color(0xFF2563EB);
-const _kTxtHigh = Color(0xFF0F172A);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
+
+
+
+
+
+
+
+
 
 class MyStoreScreen extends StatefulWidget {
   const MyStoreScreen({super.key});
@@ -83,9 +84,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         title: Text(
           AppLocalizations.get('my_store'),
@@ -110,9 +111,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: _kBgCard,
+                          color: AppColors.bgCard,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: _kBorder),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +123,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
-                                color: _kTxtLow,
+                                color: AppColors.txtLow,
                                 letterSpacing: 1.5,
                               ),
                             ),
@@ -185,9 +186,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: _kBgCard,
+                          color: AppColors.bgCard,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: _kBorder),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +198,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
-                                color: _kTxtLow,
+                                color: AppColors.txtLow,
                                 letterSpacing: 1.5,
                               ),
                             ),
@@ -229,7 +230,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                           fontSize: 14,
                                           fontWeight: FontWeight.w800,
                                           fontFamily: 'monospace',
-                                          color: _kTxtHigh,
+                                          color: AppColors.txtHigh,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -241,7 +242,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                         style: const TextStyle(
                                           fontSize: 11,
                                           fontFamily: 'monospace',
-                                          color: _kTxtMid,
+                                          color: AppColors.txtMid,
                                         ),
                                       ),
                                       const SizedBox(height: 2),
@@ -253,7 +254,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                         style: const TextStyle(
                                           fontSize: 11,
                                           fontFamily: 'monospace',
-                                          color: _kTxtMid,
+                                          color: AppColors.txtMid,
                                         ),
                                       ),
                                       const SizedBox(height: 8),
@@ -262,7 +263,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                         style: const TextStyle(
                                           fontSize: 10,
                                           fontFamily: 'monospace',
-                                          color: _kTxtLow,
+                                          color: AppColors.txtLow,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -271,7 +272,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                         style: TextStyle(
                                           fontSize: 10,
                                           fontFamily: 'monospace',
-                                          color: _kTxtLow,
+                                          color: AppColors.txtLow,
                                         ),
                                       ),
                                     ],
@@ -291,8 +292,8 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                         child: ElevatedButton(
                           onPressed: _isSaving ? null : _save,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _kAccent,
-                            disabledBackgroundColor: _kAccent.withValues(
+                            backgroundColor: AppColors.accent,
+                            disabledBackgroundColor: AppColors.accent.withValues(
                               alpha: 0.4,
                             ),
                             elevation: 0,
@@ -334,7 +335,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
       style: const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
-        color: _kTxtHigh,
+        color: AppColors.txtHigh,
       ),
     );
   }
@@ -345,21 +346,21 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(fontSize: 13, color: _kTxtLow),
-      prefixIcon: Icon(icon, size: 18, color: _kTxtMid),
+      hintStyle: const TextStyle(fontSize: 13, color: AppColors.txtLow),
+      prefixIcon: Icon(icon, size: 18, color: AppColors.txtMid),
       filled: true,
-      fillColor: _kBgPage,
+      fillColor: AppColors.bgPage,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: _kBorder),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: _kBorder),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: _kAccent, width: 1.5),
+        borderSide: BorderSide(color: AppColors.accent, width: 1.5),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       isDense: true,

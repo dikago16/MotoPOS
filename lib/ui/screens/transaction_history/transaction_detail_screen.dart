@@ -1,3 +1,4 @@
+import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,16 +9,16 @@ import '../../../providers/printer_provider.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-const _kNavy = Color(0xFF0D1B2A);
-const _kAccent = Color(0xFF2563EB);
-const _kBgPage = Color(0xFFF1F5F9);
-const _kBgCard = Color(0xFFFFFFFF);
-const _kBorder = Color(0xFFE2E8F0);
-const _kTableHead = Color(0xFFF8FAFC);
-const _kRowAlt = Color(0xFFFAFBFD);
-const _kTxtMid = Color(0xFF475569);
-const _kTxtLow = Color(0xFF94A3B8);
-const _kTxtHigh = Color(0xFF0F172A);
+
+
+
+
+
+
+
+
+
+
 
 const _kColHeader = TextStyle(
   fontSize: 9,
@@ -67,9 +68,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     final bool isPrinterConnected = printerProvider.isConnected;
 
     return Scaffold(
-      backgroundColor: _kBgPage,
+      backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        backgroundColor: _kNavy,
+        backgroundColor: AppColors.navy,
         elevation: 0,
         toolbarHeight: 54,
         iconTheme: const IconThemeData(color: Colors.white, size: 20),
@@ -124,7 +125,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             Expanded(
               child: _isLoading
                   ? const Center(
-                      child: CircularProgressIndicator(color: _kAccent),
+                      child: CircularProgressIndicator(color: AppColors.accent),
                     )
                   : _buildItemsList(),
             ),
@@ -137,7 +138,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   Widget _buildTransactionInfo(DateTime date) {
     return Container(
       width: double.infinity,
-      color: _kBgCard,
+      color: AppColors.bgCard,
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 8),
       child: Column(
@@ -161,7 +162,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: _kTxtHigh,
+                        color: AppColors.txtHigh,
                       ),
                     ),
                   ],
@@ -177,7 +178,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: _kTxtMid,
+                      color: AppColors.txtMid,
                     ),
                   ),
                 ],
@@ -195,7 +196,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     _formatRupiah(widget.transaction.cashAmount),
-                    style: const TextStyle(fontSize: 12, color: _kTxtMid),
+                    style: const TextStyle(fontSize: 12, color: AppColors.txtMid),
                   ),
                 ],
               ),
@@ -206,7 +207,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     _formatRupiah(widget.transaction.changeAmount),
-                    style: const TextStyle(fontSize: 12, color: _kTxtMid),
+                    style: const TextStyle(fontSize: 12, color: AppColors.txtMid),
                   ),
                 ],
               ),
@@ -219,12 +220,12 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
 
   Widget _buildItemsList() {
     return Container(
-      color: _kBgCard,
+      color: AppColors.bgCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: _kTableHead,
+            color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
@@ -235,17 +236,17 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, color: _kBorder),
+          const Divider(height: 1, color: AppColors.border),
           Expanded(
             child: ListView.separated(
               itemCount: _items.length,
               separatorBuilder: (context, index) =>
-                  const Divider(height: 1, color: _kBorder),
+                  const Divider(height: 1, color: AppColors.border),
               itemBuilder: (context, index) {
                 final item = _items[index];
                 final isAlt = index % 2 == 1;
                 return Container(
-                  color: isAlt ? _kRowAlt : _kBgCard,
+                  color: isAlt ? AppColors.rowAlt : AppColors.bgCard,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 10,
@@ -262,14 +263,14 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: _kTxtHigh,
+                                color: AppColors.txtHigh,
                               ),
                             ),
                             Text(
                               item.category,
                               style: const TextStyle(
                                 fontSize: 10,
-                                color: _kTxtLow,
+                                color: AppColors.txtLow,
                               ),
                             ),
                           ],
@@ -282,7 +283,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                             '${item.quantity}',
                             style: const TextStyle(
                               fontSize: 11,
-                              color: _kTxtMid,
+                              color: AppColors.txtMid,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -296,7 +297,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                             _formatRupiah(item.price),
                             style: const TextStyle(
                               fontSize: 11,
-                              color: _kTxtMid,
+                              color: AppColors.txtMid,
                             ),
                           ),
                         ),
@@ -310,7 +311,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
-                              color: _kTxtHigh,
+                              color: AppColors.txtHigh,
                             ),
                           ),
                         ),
@@ -322,7 +323,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             ),
           ),
           Container(
-            color: _kTableHead,
+            color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -333,7 +334,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: _kAccent,
+                    color: AppColors.accent,
                   ),
                 ),
               ],
@@ -366,7 +367,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: _kBgCard,
+        backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: Row(
           children: [
@@ -388,21 +389,21 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: _kTxtHigh,
+                color: AppColors.txtHigh,
               ),
             ),
           ],
         ),
         content: Text(
           AppLocalizations.get('print_confirm_msg'),
-          style: const TextStyle(fontSize: 13, color: _kTxtMid),
+          style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               AppLocalizations.get('cancel'),
-              style: const TextStyle(color: _kTxtLow, fontWeight: FontWeight.w600),
+              style: const TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
             ),
           ),
           ElevatedButton.icon(

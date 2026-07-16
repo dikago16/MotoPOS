@@ -1,9 +1,12 @@
+import 'dart:ui'; // Diperlukan untuk PlatformDispatcher
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// Tambahkan 3 baris import Firebase ini
+
+// Import Firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'firebase_options.dart'; // File ini dihasilkan oleh flutterfire configure
+import 'package:firebase_crashlytics/firebase_crashlytics.dart'; // Tambahkan ini
+import 'firebase_options.dart';
 
 import 'providers/selling_provider.dart';
 import 'providers/printer_provider.dart';
@@ -12,14 +15,20 @@ import 'core/constants/app_colors.dart';
 import 'ui/screens/splash/splash_screen.dart';
 import 'core/services/app_localizations.dart';
 
-// Ubah main menjadi async
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Tambahkan blok inisialisasi Firebase ini
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Initialize localization
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   await AppLocalizations.init();
 
   runApp(
@@ -37,8 +46,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // (Opsional) Buat instance Analytics di sini agar mudah diakses
-  // jika Anda ingin melemparnya ke widget lain atau untuk NavigatorObserver nanti.
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
