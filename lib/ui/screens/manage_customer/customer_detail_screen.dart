@@ -1,6 +1,7 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../../core/utils/validators.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
@@ -30,6 +31,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   final _vehicleNoCtrl = TextEditingController();
   final _vehicleTypeCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -247,161 +249,173 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    // ── Customer Info Card ──
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.bgCard,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _sectionLabel(
-                                'Customer Information',
-                                icon: Icons.person_outline,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // ── Customer Info Card ──
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.bgCard,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _sectionLabel(
+                                  'Customer Information',
+                                  icon: Icons.person_outline,
+                                ),
+                                if (!isEdit)
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Checkbox(
+                                          value: _autoCode,
+                                          activeColor: AppColors.accent,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              _autoCode = val ?? true;
+                                              if (_autoCode) {
+                                                _customerCodeCtrl.text =
+                                                    _generatedCode;
+                                              } else {
+                                                _customerCodeCtrl.text = '';
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        AppLocalizations.get('auto_code'),
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: AppColors.txtMid,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+
+                            // Customer Code
+                            TextFormField(
+                              controller: _customerCodeCtrl,
+                              readOnly: _autoCode,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.txtMid,
                               ),
-                              if (!isEdit)
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: Checkbox(
-                                        value: _autoCode,
-                                        activeColor: AppColors.accent,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            _autoCode = val ?? true;
-                                            if (_autoCode) {
-                                              _customerCodeCtrl.text =
-                                                  _generatedCode;
-                                            } else {
-                                              _customerCodeCtrl.text = '';
-                                            }
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      AppLocalizations.get('auto_code'),
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: AppColors.txtMid,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            ],
-                          ),
-
-                          // Customer Code
-                          TextFormField(
-                            controller: _customerCodeCtrl,
-                            readOnly: _autoCode,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.txtMid,
+                              decoration:
+                                  _inputDeco(
+                                    AppLocalizations.get('customer_code'),
+                                  ).copyWith(
+                                    fillColor: _autoCode
+                                        ? AppColors.bgPage
+                                        : AppColors.bgCard,
+                                  ),
                             ),
-                            decoration:
-                                _inputDeco(
-                                  AppLocalizations.get('customer_code'),
-                                ).copyWith(
-                                  fillColor: _autoCode
-                                      ? AppColors.bgPage
-                                      : AppColors.bgCard,
-                                ),
-                          ),
-                          const SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
-                          // Name
-                          TextFormField(
-                            controller: _nameCtrl,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(
-                              AppLocalizations.get('customer_name'),
+                            // Name
+                            TextFormField(
+                              controller: _nameCtrl,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: _inputDeco(
+                                AppLocalizations.get('customer_name'),
+                              ),
+                              textCapitalization: TextCapitalization.words,
+                              validator: (v) => AppValidators.required(
+                                v,
+                                AppLocalizations.get('customer_name'),
+                              ),
                             ),
-                            textCapitalization: TextCapitalization.words,
-                          ),
-                          const SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
-                          // Phone
-                          TextFormField(
-                            controller: _phoneCtrl,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(
-                              'Phone Number',
-                              hintText: 'e.g. 08123456789',
+                            // Phone
+                            TextFormField(
+                              controller: _phoneCtrl,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: _inputDeco(
+                                AppLocalizations.get('phone_number'),
+                                hintText: 'e.g. 081234567890',
+                              ),
+                              keyboardType: TextInputType.phone,
+                              validator: (v) => AppValidators.phone(
+                                v,
+                                AppLocalizations.get('phone_number'),
+                                isRequired: false,
+                              ),
                             ),
-                            keyboardType: TextInputType.phone,
-                          ),
-                          const SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
-                          // Address
-                          TextFormField(
-                            controller: _addressCtrl,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(
-                              AppLocalizations.get('address'),
+                            // Address
+                            TextFormField(
+                              controller: _addressCtrl,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: _inputDeco(
+                                AppLocalizations.get('address'),
+                              ),
+                              maxLines: 2,
+                              textCapitalization: TextCapitalization.words,
                             ),
-                            maxLines: 2,
-                            textCapitalization: TextCapitalization.words,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                    // ── Vehicle Info Card ──
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.bgCard,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _sectionLabel(
-                            AppLocalizations.get('basic_information'),
-                            icon: Icons.two_wheeler,
-                          ),
-
-                          // Vehicle No
-                          TextFormField(
-                            controller: _vehicleNoCtrl,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(
-                              'Vehicle No (Plat)',
-                              hintText: 'e.g. B 1234 ABC',
+                      // ── Vehicle Info Card ──
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.bgCard,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _sectionLabel(
+                              AppLocalizations.get('basic_information'),
+                              icon: Icons.two_wheeler,
                             ),
-                            textCapitalization: TextCapitalization.characters,
-                          ),
-                          const SizedBox(height: 8),
 
-                          // Vehicle Type
-                          TextFormField(
-                            controller: _vehicleTypeCtrl,
-                            style: const TextStyle(fontSize: 13),
-                            decoration: _inputDeco(
-                              'Vehicle Type',
-                              hintText: 'e.g. Honda Beat 2019',
+                            // Vehicle No
+                            TextFormField(
+                              controller: _vehicleNoCtrl,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: _inputDeco(
+                                'Vehicle No (Plat)',
+                                hintText: 'e.g. B 1234 ABC',
+                              ),
+                              textCapitalization: TextCapitalization.characters,
                             ),
-                            textCapitalization: TextCapitalization.words,
-                          ),
-                        ],
+                            const SizedBox(height: 8),
+
+                            // Vehicle Type
+                            TextFormField(
+                              controller: _vehicleTypeCtrl,
+                              style: const TextStyle(fontSize: 13),
+                              decoration: _inputDeco(
+                                'Vehicle Type',
+                                hintText: 'e.g. Honda Beat 2019',
+                              ),
+                              textCapitalization: TextCapitalization.words,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -476,16 +490,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 onPressed: _isSaving
                     ? null
                     : () async {
-                        if (_nameCtrl.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppLocalizations.get('customer_name_empty'),
-                              ),
-                              backgroundColor: Colors.red.shade600,
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
+                        if (!_formKey.currentState!.validate()) {
                           return;
                         }
 
@@ -538,11 +543,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         }
                       },
                 icon: _isSaving
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: const AppLoading(),
-                      )
+                    ? const SizedBox(height: 16, width: 16, child: AppLoading())
                     : const Icon(Icons.check, size: 16),
                 label: Text(
                   _isSaving

@@ -12,16 +12,6 @@ import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -53,7 +43,9 @@ class _ManagePurchaseInvoiceScreenState
 
   Future<void> _fetchInvoices() async {
     setState(() => _isLoading = true);
-    final invoices = await context.read<DatabaseService>().getPurchaseInvoices();
+    final invoices = await context
+        .read<DatabaseService>()
+        .getPurchaseInvoices();
     setState(() {
       _allInvoices = invoices;
       _isLoading = false;
@@ -158,13 +150,15 @@ class _ManagePurchaseInvoiceScreenState
       bool matchesSearch = true;
       if (_searchQuery.isNotEmpty) {
         final query = _searchQuery.toLowerCase();
-        matchesSearch = invoice.invoiceCode.toLowerCase().contains(query) ||
+        matchesSearch =
+            invoice.invoiceCode.toLowerCase().contains(query) ||
             invoice.supplierName.toLowerCase().contains(query);
       }
       bool matchesDate = true;
       if (_selectedDate != null) {
         final invoiceDate = DateTime.parse(invoice.invoiceDate);
-        matchesDate = invoiceDate.year == _selectedDate!.year &&
+        matchesDate =
+            invoiceDate.year == _selectedDate!.year &&
             invoiceDate.month == _selectedDate!.month &&
             invoiceDate.day == _selectedDate!.day;
       }
@@ -259,7 +253,10 @@ class _ManagePurchaseInvoiceScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel(AppLocalizations.get('search_invoices'), icon: Icons.search),
+          _sectionLabel(
+            AppLocalizations.get('search_invoices'),
+            icon: Icons.search,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -282,7 +279,9 @@ class _ManagePurchaseInvoiceScreenState
                   height: 38,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    color: _selectedDate != null ? AppColors.accent : AppColors.accentSoft,
+                    color: _selectedDate != null
+                        ? AppColors.accent
+                        : AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: _selectedDate != null
@@ -294,7 +293,9 @@ class _ManagePurchaseInvoiceScreenState
                     children: [
                       Icon(
                         Icons.calendar_month,
-                        color: _selectedDate != null ? Colors.white : AppColors.accent,
+                        color: _selectedDate != null
+                            ? Colors.white
+                            : AppColors.accent,
                         size: 16,
                       ),
                       if (_selectedDate != null) ...[
@@ -307,7 +308,7 @@ class _ManagePurchaseInvoiceScreenState
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ]
+                      ],
                     ],
                   ),
                 ),
@@ -368,19 +369,31 @@ class _ManagePurchaseInvoiceScreenState
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text(AppLocalizations.get('invoice').toUpperCase(), style: _kColHeader)),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    AppLocalizations.get('invoice').toUpperCase(),
+                    style: _kColHeader,
+                  ),
+                ),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.get('date').toUpperCase(), style: _kColHeader),
+                    child: Text(
+                      AppLocalizations.get('date').toUpperCase(),
+                      style: _kColHeader,
+                    ),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(AppLocalizations.get('total').toUpperCase(), style: _kColHeader),
+                    child: Text(
+                      AppLocalizations.get('total').toUpperCase(),
+                      style: _kColHeader,
+                    ),
                   ),
                 ),
               ],
@@ -390,7 +403,7 @@ class _ManagePurchaseInvoiceScreenState
           if (_isLoading)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
-              child: const AppLoading(isFullScreen: true),
+              child: AppLoading(isFullScreen: true),
             )
           else if (filteredInvoices.isEmpty)
             Container(
@@ -398,7 +411,11 @@ class _ManagePurchaseInvoiceScreenState
               width: double.infinity,
               child: Column(
                 children: [
-                  Icon(Icons.receipt_long, size: 30, color: AppColors.txtLow.withValues(alpha: 0.5)),
+                  Icon(
+                    Icons.receipt_long,
+                    size: 30,
+                    color: AppColors.txtLow.withValues(alpha: 0.5),
+                  ),
                   const SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_invoices_recorded'),
@@ -426,9 +443,8 @@ class _ManagePurchaseInvoiceScreenState
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PurchaseInvoiceDetailScreen(
-                          invoice: invoice,
-                        ),
+                        builder: (context) =>
+                            PurchaseInvoiceDetailScreen(invoice: invoice),
                       ),
                     );
                   },
@@ -454,7 +470,9 @@ class _ManagePurchaseInvoiceScreenState
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                invoice.supplierName.isEmpty ? AppLocalizations.get('unknown_supplier') : invoice.supplierName,
+                                invoice.supplierName.isEmpty
+                                    ? AppLocalizations.get('unknown_supplier')
+                                    : invoice.supplierName,
                                 style: const TextStyle(
                                   fontSize: 10,
                                   color: AppColors.txtMid,

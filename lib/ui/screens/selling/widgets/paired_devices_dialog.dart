@@ -83,7 +83,11 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
               color: AppColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.bluetooth, color: AppColors.accent, size: 20),
+            child: const Icon(
+              Icons.bluetooth,
+              color: AppColors.accent,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -100,10 +104,7 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
                 ),
                 Text(
                   AppLocalizations.get('saved_bluetooth_devices'),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: AppColors.txtMid,
-                  ),
+                  style: const TextStyle(fontSize: 10, color: AppColors.txtMid),
                 ),
               ],
             ),
@@ -115,106 +116,109 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
         child: _isLoading
             ? const Padding(
                 padding: EdgeInsets.symmetric(vertical: 24),
-                child: const AppLoading(isFullScreen: true),
+                child: AppLoading(isFullScreen: true),
               )
             : _devices.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.bluetooth_searching,
-                            size: 36, color: AppColors.txtLow),
-                        SizedBox(height: 10),
-                        Text(
-                          'No saved devices.\n\nPair a printer through\nyour device\'s Bluetooth settings.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.txtMid,
-                          ),
-                        ),
-                      ],
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(
+                      Icons.bluetooth_searching,
+                      size: 36,
+                      color: AppColors.txtLow,
                     ),
-                  )
-                : ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: _devices.length,
-                    separatorBuilder: (_, _) =>
-                        const Divider(height: 1, color: AppColors.border),
-                    itemBuilder: (context, index) {
-                      final device = _devices[index];
-                      final bool isThisConnecting =
-                          _isConnecting && _connectingAddress == device.address;
+                    SizedBox(height: 10),
+                    Text(
+                      'No saved devices.\n\nPair a printer through\nyour device\'s Bluetooth settings.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: AppColors.txtMid),
+                    ),
+                  ],
+                ),
+              )
+            : ListView.separated(
+                shrinkWrap: true,
+                itemCount: _devices.length,
+                separatorBuilder: (_, _) =>
+                    const Divider(height: 1, color: AppColors.border),
+                itemBuilder: (context, index) {
+                  final device = _devices[index];
+                  final bool isThisConnecting =
+                      _isConnecting && _connectingAddress == device.address;
 
-                      return InkWell(
-                        onTap: _isConnecting
-                            ? null
-                            : () => _connectToDevice(device),
-                        borderRadius: BorderRadius.circular(8),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 12,
+                  return InkWell(
+                    onTap: _isConnecting
+                        ? null
+                        : () => _connectToDevice(device),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 12,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.print,
+                            size: 20,
+                            color: isThisConnecting
+                                ? AppColors.accent
+                                : AppColors.txtMid,
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.print,
-                                size: 20,
-                                color: isThisConnecting
-                                    ? AppColors.accent
-                                    : AppColors.txtMid,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      device.name ?? AppLocalizations.get('unknown_device'),
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.txtHigh,
-                                      ),
-                                    ),
-                                    Text(
-                                      device.address,
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: AppColors.txtLow,
-                                      ),
-                                    ),
-                                  ],
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  device.name ??
+                                      AppLocalizations.get('unknown_device'),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.txtHigh,
+                                  ),
                                 ),
-                              ),
-                              if (isThisConnecting)
-                                const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: const AppLoading(),
-                                )
-                              else
-                                const Icon(
-                                  Icons.chevron_right,
-                                  color: AppColors.txtLow,
-                                  size: 20,
+                                Text(
+                                  device.address,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: AppColors.txtLow,
+                                  ),
                                 ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                          if (isThisConnecting)
+                            const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: AppLoading(),
+                            )
+                          else
+                            const Icon(
+                              Icons.chevron_right,
+                              color: AppColors.txtLow,
+                              size: 20,
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
       ),
       actions: [
         TextButton(
           onPressed: _isConnecting ? null : () => Navigator.pop(context),
           child: Text(
             AppLocalizations.get('cancel'),
-            style: const TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              color: AppColors.txtLow,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],

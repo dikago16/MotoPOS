@@ -1,6 +1,7 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../../core/utils/validators.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/database_service.dart';
@@ -9,15 +10,6 @@ import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-
-
-
-
-
-
-
-
-
 
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -50,6 +42,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final _discountValueCtrl = TextEditingController();
   final _unitCtrl = TextEditingController();
   final _stockQtyCtrl = TextEditingController(text: '0');
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -200,7 +193,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? AppLocalizations.get('edit_item') : AppLocalizations.get('new_item'),
+              isEdit
+                  ? AppLocalizations.get('edit_item')
+                  : AppLocalizations.get('new_item'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -208,7 +203,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_item'),
+              isEdit
+                  ? AppLocalizations.get('update_details')
+                  : AppLocalizations.get('add_new_item'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -231,341 +228,419 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.border),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _sectionLabel(
-                            AppLocalizations.get('basic_information'),
-                            icon: Icons.info_outline,
-                          ),
-                          if (widget.product == null)
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: Checkbox(
-                                    value: _autoItemCode,
-                                    activeColor: AppColors.accent,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        _autoItemCode = val ?? true;
-                                        if (_autoItemCode) {
-                                          _itemCodeCtrl.text = _generatedCode;
-                                        } else {
-                                          _itemCodeCtrl.text = '';
-                                        }
-                                      });
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  AppLocalizations.get('auto_code'),
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: AppColors.txtMid,
-                                  ),
-                                ),
-                              ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _sectionLabel(
+                              AppLocalizations.get('basic_information'),
+                              icon: Icons.info_outline,
                             ),
-                        ],
-                      ),
-                      // Item Code with Barcode Button
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _itemCodeCtrl,
-                              readOnly: _autoItemCode,
-                              style: const TextStyle(
-                                fontSize: 13,
+                            if (widget.product == null)
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: Checkbox(
+                                      value: _autoItemCode,
+                                      activeColor: AppColors.accent,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _autoItemCode = val ?? true;
+                                          if (_autoItemCode) {
+                                            _itemCodeCtrl.text = _generatedCode;
+                                          } else {
+                                            _itemCodeCtrl.text = '';
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    AppLocalizations.get('auto_code'),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppColors.txtMid,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                        // Item Code with Barcode Button
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _itemCodeCtrl,
+                                readOnly: _autoItemCode,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.txtMid,
+                                ),
+                                decoration:
+                                    _inputDeco(
+                                      AppLocalizations.get('item_code'),
+                                    ).copyWith(
+                                      fillColor: _autoItemCode
+                                          ? AppColors.bgPage
+                                          : AppColors.bgCard,
+                                    ),
+                                validator: (v) => AppValidators.required(
+                                  v,
+                                  AppLocalizations.get('item_code'),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            InkWell(
+                              onTap: _autoItemCode
+                                  ? null
+                                  : () async {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ScannerScreen(),
+                                        ),
+                                      );
+                                      if (result != null && result is String) {
+                                        setState(() {
+                                          _itemCodeCtrl.text = result;
+                                        });
+                                      }
+                                    },
+                              borderRadius: BorderRadius.circular(6),
+                              child: Container(
+                                height: 38,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  color: _autoItemCode
+                                      ? AppColors.bgPage
+                                      : AppColors.accentSoft,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: _autoItemCode
+                                        ? AppColors.borderMid
+                                        : AppColors.accent.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.qr_code_scanner,
+                                  color: _autoItemCode
+                                      ? AppColors.txtLow
+                                      : AppColors.accent,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Item Name
+                        TextFormField(
+                          controller: _itemNameCtrl,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: _inputDeco(
+                            AppLocalizations.get('item_name'),
+                          ),
+                          validator: (v) => AppValidators.required(
+                            v,
+                            AppLocalizations.get('item_name'),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Category
+                        DropdownButtonFormField<String>(
+                          initialValue: _selectedCategory,
+                          decoration: _inputDeco(
+                            AppLocalizations.get('category'),
+                          ),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.txtHigh,
+                          ),
+                          dropdownColor: AppColors.bgCard,
+                          items: [
+                            DropdownMenuItem(
+                              value: 'uncategorized',
+                              child: Text(
+                                AppLocalizations.get('uncategorized'),
+                              ),
+                            ),
+                            ..._categories.map(
+                              (c) => DropdownMenuItem(
+                                value: c.categoryName,
+                                child: Text(
+                                  c.categoryName.isEmpty
+                                      ? AppLocalizations.get('unknown_category')
+                                      : c.categoryName,
+                                ),
+                              ),
+                            ),
+                            // Prevent assertion error before categories finish loading
+                            if (_selectedCategory != 'uncategorized' &&
+                                !_categories.any(
+                                  (c) => c.categoryName == _selectedCategory,
+                                ))
+                              DropdownMenuItem(
+                                value: _selectedCategory,
+                                child: Text(_selectedCategory),
+                              ),
+                          ],
+                          onChanged: (val) {
+                            if (val != null) {
+                              setState(() => _selectedCategory = val);
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Buying Price
+                        TextFormField(
+                          controller: _buyingPriceCtrl,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: _inputDeco(
+                            AppLocalizations.get('buying_price'),
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (v) => AppValidators.numeric(
+                            v,
+                            AppLocalizations.get('buying_price'),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Packet Buy Price & Packet Quantity
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: _packetBuyPriceCtrl,
+                                style: const TextStyle(fontSize: 13),
+                                decoration: _inputDeco(
+                                  AppLocalizations.get('packet_buy_price'),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                'Per',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.txtMid,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: _packetBuyQtyCtrl,
+                                style: const TextStyle(fontSize: 13),
+                                decoration: _inputDeco(
+                                  AppLocalizations.get('packet_quantity'),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Selling Price
+                        TextFormField(
+                          controller: _sellingPriceCtrl,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: _inputDeco(
+                            AppLocalizations.get('selling_price'),
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (v) => AppValidators.numeric(
+                            v,
+                            AppLocalizations.get('selling_price'),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Packet Sell Price & Packet Quantity
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: _packetSellPriceCtrl,
+                                style: const TextStyle(fontSize: 13),
+                                decoration: _inputDeco(
+                                  AppLocalizations.get('packet_sell_price'),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                'Per',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.txtMid,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: _packetSellQtyCtrl,
+                                style: const TextStyle(fontSize: 13),
+                                decoration: _inputDeco(
+                                  AppLocalizations.get('packet_quantity'),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Discount
+                        Row(
+                          children: [
+                            Text(
+                              AppLocalizations.get('discount'),
+                              style: TextStyle(
+                                fontSize: 12,
                                 color: AppColors.txtMid,
                               ),
-                              decoration: _inputDeco(AppLocalizations.get('item_code')).copyWith(
-                                fillColor: _autoItemCode ? AppColors.bgPage : AppColors.bgCard,
-                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          InkWell(
-                            onTap: _autoItemCode
-                                ? null
-                                : () async {
-                                    final result = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const ScannerScreen(),
-                                      ),
-                                    );
-                                    if (result != null && result is String) {
+                            const SizedBox(width: 8),
+                            Container(
+                              height: 38,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.border),
+                                borderRadius: BorderRadius.circular(6),
+                                color: AppColors.bgCard,
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _discountType,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: AppColors.txtMid,
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.txtHigh,
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
                                       setState(() {
-                                        _itemCodeCtrl.text = result;
+                                        _discountType = newValue;
                                       });
                                     }
                                   },
-                            borderRadius: BorderRadius.circular(6),
-                            child: Container(
-                              height: 38,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: _autoItemCode ? AppColors.bgPage : AppColors.accentSoft,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: _autoItemCode
-                                      ? AppColors.borderMid
-                                      : AppColors.accent.withValues(alpha: 0.2),
+                                  items:
+                                      <String>[
+                                        AppLocalizations.get('percent'),
+                                        AppLocalizations.get('amount'),
+                                      ].map<DropdownMenuItem<String>>((
+                                        String value,
+                                      ) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                 ),
                               ),
-                              child: Icon(
-                                Icons.qr_code_scanner,
-                                color: _autoItemCode ? AppColors.txtLow : AppColors.accent,
-                                size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _discountValueCtrl,
+                                style: const TextStyle(fontSize: 13),
+                                decoration: _inputDeco(''),
+                                keyboardType: TextInputType.number,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Item Name
-                      TextFormField(
-                        controller: _itemNameCtrl,
-                        style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco(AppLocalizations.get('item_name')),
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Category
-                      DropdownButtonFormField<String>(
-                        initialValue: _selectedCategory,
-                        decoration: _inputDeco(AppLocalizations.get('category')),
-                        style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
-                        dropdownColor: AppColors.bgCard,
-                        items: [
-                          DropdownMenuItem(
-                            value: 'uncategorized',
-                            child: Text(AppLocalizations.get('uncategorized')),
-                          ),
-                          ..._categories.map(
-                            (c) => DropdownMenuItem(
-                              value: c.categoryName,
-                              child: Text(
-                                c.categoryName.isEmpty
-                                    ? AppLocalizations.get('unknown_category')
-                                    : c.categoryName,
-                              ),
-                            ),
-                          ),
-                          // Prevent assertion error before categories finish loading
-                          if (_selectedCategory != 'uncategorized' &&
-                              !_categories.any((c) => c.categoryName == _selectedCategory))
-                            DropdownMenuItem(
-                              value: _selectedCategory,
-                              child: Text(_selectedCategory),
-                            ),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() => _selectedCategory = val);
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Buying Price
-                      TextFormField(
-                        controller: _buyingPriceCtrl,
-                        style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco(AppLocalizations.get('buying_price')),
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Packet Buy Price & Packet Quantity
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: TextFormField(
-                              controller: _packetBuyPriceCtrl,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco(AppLocalizations.get('packet_buy_price')),
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              'Per',
-                              style: TextStyle(fontSize: 12, color: AppColors.txtMid),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: TextFormField(
-                              controller: _packetBuyQtyCtrl,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco(AppLocalizations.get('packet_quantity')),
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Selling Price
-                      TextFormField(
-                        controller: _sellingPriceCtrl,
-                        style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco(AppLocalizations.get('selling_price')),
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Packet Sell Price & Packet Quantity
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: TextFormField(
-                              controller: _packetSellPriceCtrl,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco(AppLocalizations.get('packet_sell_price')),
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              'Per',
-                              style: TextStyle(fontSize: 12, color: AppColors.txtMid),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: TextFormField(
-                              controller: _packetSellQtyCtrl,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco(AppLocalizations.get('packet_quantity')),
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Discount
-                      Row(
-                        children: [
-                          Text(
-                            AppLocalizations.get('discount'),
-                            style: TextStyle(fontSize: 12, color: AppColors.txtMid),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            height: 38,
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.border),
-                              borderRadius: BorderRadius.circular(6),
-                              color: AppColors.bgCard,
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _discountType,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: AppColors.txtMid,
-                                ),
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.txtHigh,
-                                ),
-                                onChanged: (String? newValue) {
-                                  if (newValue != null) {
-                                    setState(() {
-                                      _discountType = newValue;
-                                    });
-                                  }
-                                },
-                                items: <String>[AppLocalizations.get('percent'), AppLocalizations.get('amount')]
-                                    .map<DropdownMenuItem<String>>((
-                                      String value,
-                                    ) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    })
-                                    .toList(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _discountValueCtrl,
-                              style: const TextStyle(fontSize: 13),
-                              decoration: _inputDeco(''),
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Unit
-                      TextFormField(
-                        controller: _unitCtrl,
-                        style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco(AppLocalizations.get('unit'), hintText: AppLocalizations.get('unit_hint')),
-                      ),
-                      const SizedBox(height: 8),
-
-                      // Count stock Checkbox
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Checkbox(
-                              value: _countStock,
-                              activeColor: AppColors.accent,
-                              onChanged: (val) {
-                                setState(() {
-                                  _countStock = val ?? true;
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppLocalizations.get('count_stock'),
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.txtHigh,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      // Conditionally show Stock Quantity
-                      if (_countStock) ...[
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _stockQtyCtrl,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: _inputDeco(AppLocalizations.get('stock_quantity')),
-                          keyboardType: TextInputType.number,
+                          ],
                         ),
+                        const SizedBox(height: 8),
+
+                        // Unit
+                        TextFormField(
+                          controller: _unitCtrl,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: _inputDeco(
+                            AppLocalizations.get('unit'),
+                            hintText: AppLocalizations.get('unit_hint'),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Count stock Checkbox
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: Checkbox(
+                                value: _countStock,
+                                activeColor: AppColors.accent,
+                                onChanged: (val) {
+                                  setState(() {
+                                    _countStock = val ?? true;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.get('count_stock'),
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.txtHigh,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Conditionally show Stock Quantity
+                        if (_countStock) ...[
+                          const SizedBox(height: 8),
+                          TextFormField(
+                            controller: _stockQtyCtrl,
+                            style: const TextStyle(fontSize: 13),
+                            decoration: _inputDeco(
+                              AppLocalizations.get('stock_quantity'),
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (v) => _countStock
+                                ? AppValidators.numeric(
+                                    v,
+                                    AppLocalizations.get('stock_quantity'),
+                                  )
+                                : null,
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -645,13 +720,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 onPressed: _isSaving
                     ? null
                     : () async {
-                        if (_itemNameCtrl.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(AppLocalizations.get('item_name_empty')),
-                              backgroundColor: Colors.red.shade600,
-                            ),
-                          );
+                        if (!_formKey.currentState!.validate()) {
                           return;
                         }
 
@@ -663,14 +732,18 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             itemCode: _itemCodeCtrl.text,
                             itemName: _itemNameCtrl.text,
                             category: _selectedCategory,
-                            buyingPrice: double.tryParse(_buyingPriceCtrl.text) ?? 0,
+                            buyingPrice:
+                                double.tryParse(_buyingPriceCtrl.text) ?? 0,
                             packetBuyPrice:
                                 double.tryParse(_packetBuyPriceCtrl.text) ?? 0,
-                            packetBuyQty: int.tryParse(_packetBuyQtyCtrl.text) ?? 0,
-                            sellingPrice: double.tryParse(_sellingPriceCtrl.text) ?? 0,
+                            packetBuyQty:
+                                int.tryParse(_packetBuyQtyCtrl.text) ?? 0,
+                            sellingPrice:
+                                double.tryParse(_sellingPriceCtrl.text) ?? 0,
                             packetSellPrice:
                                 double.tryParse(_packetSellPriceCtrl.text) ?? 0,
-                            packetSellQty: int.tryParse(_packetSellQtyCtrl.text) ?? 0,
+                            packetSellQty:
+                                int.tryParse(_packetSellQtyCtrl.text) ?? 0,
                             discountType: _discountType,
                             discountValue:
                                 double.tryParse(_discountValueCtrl.text) ?? 0,
@@ -679,11 +752,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             stockQty: int.tryParse(_stockQtyCtrl.text) ?? 0,
                           );
                           if (widget.product != null) {
-                            await context.read<DatabaseService>().updateProduct(product);
+                            await context.read<DatabaseService>().updateProduct(
+                              product,
+                            );
                           } else {
-                            await context.read<DatabaseService>().insertProduct(product);
+                            await context.read<DatabaseService>().insertProduct(
+                              product,
+                            );
                           }
-                          
+
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -698,7 +775,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           setState(() => _isSaving = false);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('${AppLocalizations.get('item_save_failed')}: $e'),
+                              content: Text(
+                                '${AppLocalizations.get('item_save_failed')}: $e',
+                              ),
                               backgroundColor: const Color(0xFFDC2626),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -706,14 +785,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         }
                       },
                 icon: _isSaving
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: const AppLoading(),
-                      )
+                    ? const SizedBox(height: 16, width: 16, child: AppLoading())
                     : const Icon(Icons.check, size: 16),
                 label: Text(
-                  _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save'),
+                  _isSaving
+                      ? AppLocalizations.get('saving')
+                      : AppLocalizations.get('save'),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

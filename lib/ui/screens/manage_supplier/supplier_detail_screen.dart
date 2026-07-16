@@ -1,18 +1,13 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../../core/utils/validators.dart';
 import '../../../data/models/supplier_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-
-
-
-
-
-
 
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -26,7 +21,7 @@ class SupplierDetailScreen extends StatefulWidget {
 
 class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   late TextEditingController _codeCtrl;
   late TextEditingController _nameCtrl;
   late TextEditingController _phoneCtrl;
@@ -38,8 +33,12 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _codeCtrl = TextEditingController(text: widget.supplier?.supplierCode ?? '');
-    _nameCtrl = TextEditingController(text: widget.supplier?.supplierName ?? '');
+    _codeCtrl = TextEditingController(
+      text: widget.supplier?.supplierCode ?? '',
+    );
+    _nameCtrl = TextEditingController(
+      text: widget.supplier?.supplierName ?? '',
+    );
     _phoneCtrl = TextEditingController(text: widget.supplier?.phone ?? '');
     _addressCtrl = TextEditingController(text: widget.supplier?.address ?? '');
 
@@ -116,7 +115,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${AppLocalizations.get('supplier_save_failed')}: $e'),
+            content: Text(
+              '${AppLocalizations.get('supplier_save_failed')}: $e',
+            ),
             backgroundColor: const Color(0xFFDC2626),
             behavior: SnackBarBehavior.floating,
           ),
@@ -125,9 +126,10 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
     }
   }
 
-  InputDecoration _inputDeco(String label) {
+  InputDecoration _inputDeco(String label, {String? hintText}) {
     return InputDecoration(
       labelText: label,
+      hintText: hintText,
       labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
         fontSize: 11,
@@ -200,7 +202,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? AppLocalizations.get('edit_supplier') : AppLocalizations.get('new_supplier'),
+              isEdit
+                  ? AppLocalizations.get('edit_supplier')
+                  : AppLocalizations.get('new_supplier'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -208,7 +212,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_supplier'),
+              isEdit
+                  ? AppLocalizations.get('update_details')
+                  : AppLocalizations.get('add_new_supplier'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -242,7 +248,10 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _sectionLabel('Basic Information', icon: Icons.info_outline),
+                                _sectionLabel(
+                                  'Basic Information',
+                                  icon: Icons.info_outline,
+                                ),
                                 if (widget.supplier == null)
                                   Row(
                                     children: [
@@ -256,7 +265,13 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: 4),
-                                      Text(AppLocalizations.get('auto_code'), style: const TextStyle(fontSize: 11, color: AppColors.txtMid)),
+                                      Text(
+                                        AppLocalizations.get('auto_code'),
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          color: AppColors.txtMid,
+                                        ),
+                                      ),
                                     ],
                                   ),
                               ],
@@ -264,20 +279,37 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             TextFormField(
                               controller: _codeCtrl,
                               readOnly: _isAutoCode,
-                              style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
-                              decoration: _inputDeco(AppLocalizations.get('supplier_code')).copyWith(
-                                fillColor: _isAutoCode ? AppColors.bgPage : AppColors.bgCard,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.txtMid,
                               ),
-                              validator: (value) =>
-                                  value == null || value.trim().isEmpty ? 'Required' : null,
+                              decoration:
+                                  _inputDeco(
+                                    AppLocalizations.get('supplier_code'),
+                                  ).copyWith(
+                                    fillColor: _isAutoCode
+                                        ? AppColors.bgPage
+                                        : AppColors.bgCard,
+                                  ),
+                              validator: (v) => AppValidators.required(
+                                v,
+                                AppLocalizations.get('supplier_code'),
+                              ),
                             ),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _nameCtrl,
-                              style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
-                              decoration: _inputDeco(AppLocalizations.get('supplier_name')),
-                              validator: (value) =>
-                                  value == null || value.trim().isEmpty ? 'Required' : null,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.txtHigh,
+                              ),
+                              decoration: _inputDeco(
+                                AppLocalizations.get('supplier_name'),
+                              ),
+                              validator: (v) => AppValidators.required(
+                                v,
+                                AppLocalizations.get('supplier_name'),
+                              ),
                             ),
                           ],
                         ),
@@ -293,19 +325,38 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _sectionLabel('Contact Details', icon: Icons.contact_phone_outlined),
+                            _sectionLabel(
+                              'Contact Details',
+                              icon: Icons.contact_phone_outlined,
+                            ),
                             TextFormField(
                               controller: _phoneCtrl,
                               keyboardType: TextInputType.phone,
-                              style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
-                              decoration: _inputDeco(AppLocalizations.get('phone_number')),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.txtHigh,
+                              ),
+                              decoration: _inputDeco(
+                                AppLocalizations.get('phone_number'),
+                                hintText: 'e.g. 0812...',
+                              ),
+                              validator: (v) => AppValidators.phone(
+                                v,
+                                AppLocalizations.get('phone_number'),
+                                isRequired: false,
+                              ),
                             ),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _addressCtrl,
                               maxLines: 3,
-                              style: const TextStyle(fontSize: 13, color: AppColors.txtHigh),
-                              decoration: _inputDeco(AppLocalizations.get('address')),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.txtHigh,
+                              ),
+                              decoration: _inputDeco(
+                                AppLocalizations.get('address'),
+                              ),
                             ),
                           ],
                         ),
@@ -318,7 +369,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
             Container(
               decoration: BoxDecoration(
                 color: AppColors.bgCard,
-                border: const Border(top: BorderSide(color: AppColors.border, width: 1)),
+                border: const Border(
+                  top: BorderSide(color: AppColors.border, width: 1),
+                ),
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x0D000000),
@@ -344,7 +397,10 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                         ),
                         child: Text(
                           AppLocalizations.get('abort'),
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),
@@ -368,10 +424,12 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: const AppLoading(),
+                                child: AppLoading(),
                               )
                             : Text(
-                                _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save_supplier'),
+                                _isSaving
+                                    ? AppLocalizations.get('saving')
+                                    : AppLocalizations.get('save_supplier'),
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,

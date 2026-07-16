@@ -75,9 +75,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: const BoxDecoration(
         color: kAccentSoft,
-        border: Border(
-          bottom: BorderSide(color: kBorder, width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: kBorder, width: 1)),
       ),
       child: Row(
         children: [
@@ -140,7 +138,10 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          sectionLabel(AppLocalizations.get('add_items'), icon: Icons.add_shopping_cart),
+          sectionLabel(
+            AppLocalizations.get('add_items'),
+            icon: Icons.add_shopping_cart,
+          ),
           LayoutBuilder(
             builder: (context, constraints) {
               return Autocomplete<Product>(
@@ -155,26 +156,28 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                   });
                 },
                 displayStringForOption: (Product option) =>
-                    option.itemName.isEmpty ? AppLocalizations.get('unknown_item') : option.itemName,
+                    option.itemName.isEmpty
+                    ? AppLocalizations.get('unknown_item')
+                    : option.itemName,
                 onSelected: onAddProduct,
                 fieldViewBuilder:
                     (context, controller, focusNode, onEditingComplete) {
-                  onAutoCompleteControllerCreated(controller);
-                  return TextFormField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    style: const TextStyle(fontSize: 13),
-                    decoration: inputDeco(
-                      AppLocalizations.get('search_item_hint'),
-                      suffixIcon: const Icon(
-                        Icons.search,
-                        size: 18,
-                        color: kTxtLow,
-                      ),
-                    ),
-                    onEditingComplete: onEditingComplete,
-                  );
-                },
+                      onAutoCompleteControllerCreated(controller);
+                      return TextFormField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        style: const TextStyle(fontSize: 13),
+                        decoration: inputDeco(
+                          AppLocalizations.get('search_item_hint'),
+                          suffixIcon: const Icon(
+                            Icons.search,
+                            size: 18,
+                            color: kTxtLow,
+                          ),
+                        ),
+                        onEditingComplete: onEditingComplete,
+                      );
+                    },
                 optionsViewBuilder: (context, onSelected, options) {
                   return Align(
                     alignment: Alignment.topLeft,
@@ -215,7 +218,9 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                                         children: [
                                           Text(
                                             option.itemName.isEmpty
-                                                ? AppLocalizations.get('unknown_item')
+                                                ? AppLocalizations.get(
+                                                    'unknown_item',
+                                                  )
                                                 : option.itemName,
                                             style: const TextStyle(
                                               fontSize: 13,
@@ -242,7 +247,9 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                                               Text(
                                                 option.isCountStock
                                                     ? '${AppLocalizations.get('stock')}: ${option.stockQty}'
-                                                    : AppLocalizations.get('non_stock'),
+                                                    : AppLocalizations.get(
+                                                        'non_stock',
+                                                      ),
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   color: option.isCountStock
@@ -296,7 +303,10 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-            child: sectionLabel(AppLocalizations.get('purchase_items'), icon: Icons.list_alt),
+            child: sectionLabel(
+              AppLocalizations.get('purchase_items'),
+              icon: Icons.list_alt,
+            ),
           ),
           Container(
             color: kTableHead,
@@ -561,11 +571,7 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: isSaving ? null : onSaveInvoice,
                 icon: isSaving
-                    ? const SizedBox(
-                        width: 14,
-                        height: 14,
-                        child: const AppLoading(),
-                      )
+                    ? const SizedBox(width: 14, height: 14, child: AppLoading())
                     : const Icon(Icons.check, size: 16),
                 label: Text(
                   isSaving ? 'SAVING...' : 'SAVE',
@@ -592,20 +598,20 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
   }
 
   Widget _colHeader(String label, {required int flex}) => Expanded(
-        flex: flex,
-        child: Text(label, style: kColHeader),
-      );
+    flex: flex,
+    child: Text(label, style: kColHeader),
+  );
 
   Widget _colHeaderCenter(String label, {required int flex}) => Expanded(
-        flex: flex,
-        child: Center(child: Text(label, style: kColHeader)),
-      );
+    flex: flex,
+    child: Center(child: Text(label, style: kColHeader)),
+  );
 
   Widget _colHeaderRight(String label, {required int flex}) => Expanded(
-        flex: flex,
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: Text(label, style: kColHeader),
-        ),
-      );
+    flex: flex,
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: Text(label, style: kColHeader),
+    ),
+  );
 }

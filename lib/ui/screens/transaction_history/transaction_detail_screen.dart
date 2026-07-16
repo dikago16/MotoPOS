@@ -11,16 +11,6 @@ import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -125,9 +115,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             _buildTransactionInfo(date),
             Expanded(
               child: _isLoading
-                  ? const Center(
-                      child: const AppLoading(),
-                    )
+                  ? const Center(child: AppLoading())
                   : _buildItemsList(),
             ),
           ],
@@ -153,7 +141,10 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(AppLocalizations.get('vehicle_no'), style: _kColHeader),
+                    Text(
+                      AppLocalizations.get('vehicle_no'),
+                      style: _kColHeader,
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       (widget.transaction.vehicleNo == null ||
@@ -197,18 +188,27 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     _formatRupiah(widget.transaction.cashAmount),
-                    style: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.txtMid,
+                    ),
                   ),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(AppLocalizations.get('change_amount'), style: _kColHeader),
+                  Text(
+                    AppLocalizations.get('change_amount'),
+                    style: _kColHeader,
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     _formatRupiah(widget.transaction.changeAmount),
-                    style: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.txtMid,
+                    ),
                   ),
                 ],
               ),
@@ -329,7 +329,10 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('${AppLocalizations.get('total_amount')}:  ', style: _kColHeader),
+                Text(
+                  '${AppLocalizations.get('total_amount')}:  ',
+                  style: _kColHeader,
+                ),
                 Text(
                   _formatRupiah(widget.transaction.totalAmount),
                   style: const TextStyle(
@@ -404,7 +407,10 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               AppLocalizations.get('cancel'),
-              style: const TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                color: AppColors.txtLow,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           ElevatedButton.icon(
@@ -418,7 +424,11 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(success ? AppLocalizations.get('print_success') : AppLocalizations.get('print_failed')),
+                    content: Text(
+                      success
+                          ? AppLocalizations.get('print_success')
+                          : AppLocalizations.get('print_failed'),
+                    ),
                     backgroundColor: success ? Colors.green : Colors.red,
                     behavior: SnackBarBehavior.floating,
                   ),

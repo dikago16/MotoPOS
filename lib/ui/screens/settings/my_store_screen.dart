@@ -5,15 +5,7 @@ import '../../../data/database_service.dart';
 import '../../../data/models/store_info_model.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
-
-
-
-
-
-
-
-
-
+import '../../../core/utils/validators.dart';
 
 class MyStoreScreen extends StatefulWidget {
   const MyStoreScreen({super.key});
@@ -121,7 +113,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              AppLocalizations.get('store_information').toUpperCase(),
+                              AppLocalizations.get(
+                                'store_information',
+                              ).toUpperCase(),
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
@@ -140,9 +134,10 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                 hint: AppLocalizations.get('e_g_my_store'),
                                 icon: Icons.store_outlined,
                               ),
-                              validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? AppLocalizations.get('required')
-                                  : null,
+                              validator: (v) => AppValidators.required(
+                                v,
+                                AppLocalizations.get('store_name'),
+                              ),
                             ),
 
                             const SizedBox(height: 10),
@@ -157,9 +152,10 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                 hint: AppLocalizations.get('e_g_address'),
                                 icon: Icons.location_on_outlined,
                               ),
-                              validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? AppLocalizations.get('required')
-                                  : null,
+                              validator: (v) => AppValidators.required(
+                                v,
+                                AppLocalizations.get('address'),
+                              ),
                             ),
 
                             const SizedBox(height: 18),
@@ -174,9 +170,10 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                                 hint: AppLocalizations.get('e_g_phone'),
                                 icon: Icons.phone_outlined,
                               ),
-                              validator: (v) => (v == null || v.trim().isEmpty)
-                                  ? AppLocalizations.get('required')
-                                  : null,
+                              validator: (v) => AppValidators.phone(
+                                v,
+                                AppLocalizations.get('phone_number'),
+                              ),
                             ),
                           ],
                         ),
@@ -196,7 +193,9 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              AppLocalizations.get('receipt_preview').toUpperCase(),
+                              AppLocalizations.get(
+                                'receipt_preview',
+                              ).toUpperCase(),
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
@@ -295,9 +294,8 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                           onPressed: _isSaving ? null : _save,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.accent,
-                            disabledBackgroundColor: AppColors.accent.withValues(
-                              alpha: 0.4,
-                            ),
+                            disabledBackgroundColor: AppColors.accent
+                                .withValues(alpha: 0.4),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -307,7 +305,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                               ? const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child: const AppLoading(),
+                                  child: AppLoading(),
                                 )
                               : Text(
                                   AppLocalizations.get('save'),

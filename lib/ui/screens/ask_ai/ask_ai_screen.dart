@@ -7,13 +7,6 @@ import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
 
-
-
-
-
-
-
-
 class AskAiScreen extends StatefulWidget {
   const AskAiScreen({super.key});
 
@@ -28,7 +21,8 @@ class _AskAiScreenState extends State<AskAiScreen> {
   bool _isLoading = false;
   Timer? _typewriterTimer;
 
-  bool get _isAiResponding => _isLoading || (_typewriterTimer != null && _typewriterTimer!.isActive);
+  bool get _isAiResponding =>
+      _isLoading || (_typewriterTimer != null && _typewriterTimer!.isActive);
 
   @override
   void initState() {
@@ -160,7 +154,10 @@ class _AskAiScreenState extends State<AskAiScreen> {
                 Navigator.pop(context);
                 _clearMessages();
               },
-              child: Text(AppLocalizations.get('delete'), style: const TextStyle(color: Colors.red)),
+              child: Text(
+                AppLocalizations.get('delete'),
+                style: const TextStyle(color: Colors.red),
+              ),
             ),
           ],
         );
@@ -205,119 +202,127 @@ class _AskAiScreenState extends State<AskAiScreen> {
             ),
           ],
         ),
-      body: SafeArea(
-        child: Column(
-          children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final isUser = _messages[index]["isUser"];
-                final text = _messages[index]["text"];
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    final isUser = _messages[index]["isUser"];
+                    final text = _messages[index]["text"];
 
-                return Align(
-                  alignment: isUser
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.75,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isUser ? AppColors.accent : AppColors.bgCard,
-                      borderRadius: BorderRadius.circular(12).copyWith(
-                        bottomRight: isUser
-                            ? const Radius.circular(0)
-                            : const Radius.circular(12),
-                        bottomLeft: isUser
-                            ? const Radius.circular(12)
-                            : const Radius.circular(0),
+                    return Align(
+                      alignment: isUser
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.75,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isUser ? AppColors.accent : AppColors.bgCard,
+                          borderRadius: BorderRadius.circular(12).copyWith(
+                            bottomRight: isUser
+                                ? const Radius.circular(0)
+                                : const Radius.circular(12),
+                            bottomLeft: isUser
+                                ? const Radius.circular(12)
+                                : const Radius.circular(0),
+                          ),
+                          border: isUser
+                              ? null
+                              : Border.all(color: AppColors.border),
+                        ),
+                        child: Text(
+                          text,
+                          style: TextStyle(
+                            color: isUser ? Colors.white : AppColors.txtHigh,
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                        ),
                       ),
-                      border: isUser ? null : Border.all(color: AppColors.border),
-                    ),
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        color: isUser ? Colors.white : AppColors.txtHigh,
-                        fontSize: 14,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                width: 24,
-                height: 24,
-                child: const AppLoading(),
+                    );
+                  },
+                ),
               ),
-            ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: const BoxDecoration(
-              color: AppColors.bgCard,
-              border: Border(top: BorderSide(color: AppColors.border)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    enabled: !_isAiResponding,
-                    decoration: InputDecoration(
-                      hintText: _isAiResponding ? AppLocalizations.get('ai_typing') : AppLocalizations.get('type_message'),
-                      hintStyle: const TextStyle(fontSize: 14),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: AppColors.bgPage,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      isDense: true,
-                    ),
-                    onSubmitted: _isAiResponding ? null : (_) => _sendMessage(),
-                  ),
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: SizedBox(width: 24, height: 24, child: AppLoading()),
                 ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: _isAiResponding ? null : _sendMessage,
-                  borderRadius: BorderRadius.circular(24),
-                  child: Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: _isAiResponding ? Colors.grey : AppColors.accent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.send,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
                 ),
-              ],
-            ),
+                decoration: const BoxDecoration(
+                  color: AppColors.bgCard,
+                  border: Border(top: BorderSide(color: AppColors.border)),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        enabled: !_isAiResponding,
+                        decoration: InputDecoration(
+                          hintText: _isAiResponding
+                              ? AppLocalizations.get('ai_typing')
+                              : AppLocalizations.get('type_message'),
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: AppColors.bgPage,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          isDense: true,
+                        ),
+                        onSubmitted: _isAiResponding
+                            ? null
+                            : (_) => _sendMessage(),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: _isAiResponding ? null : _sendMessage,
+                      borderRadius: BorderRadius.circular(24),
+                      child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: _isAiResponding
+                              ? Colors.grey
+                              : AppColors.accent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.send,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-    ),
-    ));
+    );
   }
 }

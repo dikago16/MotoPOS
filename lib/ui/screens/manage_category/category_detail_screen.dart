@@ -1,19 +1,13 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../../../core/utils/validators.dart';
 import '../../../data/models/category_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-
-
-
-
-
-
-
 
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -34,6 +28,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 
   final _categoryCodeCtrl = TextEditingController();
   final _categoryNameCtrl = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -48,7 +43,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   }
 
   Future<void> _fetchNextCode() async {
-    String nextCode = await context.read<DatabaseService>().getNextCategoryCode();
+    String nextCode = await context
+        .read<DatabaseService>()
+        .getNextCategoryCode();
     setState(() {
       _generatedCode = nextCode;
       if (_autoCategoryCode) {
@@ -141,7 +138,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isEdit ? AppLocalizations.get('edit_category') : AppLocalizations.get('new_category'),
+              isEdit
+                  ? AppLocalizations.get('edit_category')
+                  : AppLocalizations.get('new_category'),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -149,7 +148,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
               ),
             ),
             Text(
-              isEdit ? AppLocalizations.get('update_details') : AppLocalizations.get('add_new_category'),
+              isEdit
+                  ? AppLocalizations.get('update_details')
+                  : AppLocalizations.get('add_new_category'),
               style: const TextStyle(
                 color: Color(0xFF90AAC8),
                 fontSize: 10,
@@ -172,69 +173,86 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.border),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _sectionLabel(
-                            AppLocalizations.get('basic_information'),
-                            icon: Icons.info_outline,
-                          ),
-                          if (widget.category == null)
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: Checkbox(
-                                    value: _autoCategoryCode,
-                                    activeColor: AppColors.accent,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        _autoCategoryCode = val ?? true;
-                                        if (_autoCategoryCode) {
-                                          _categoryCodeCtrl.text =
-                                              _generatedCode;
-                                        } else {
-                                          _categoryCodeCtrl.text = '';
-                                        }
-                                      });
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  AppLocalizations.get('auto_code'),
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: AppColors.txtMid,
-                                  ),
-                                ),
-                              ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _sectionLabel(
+                              AppLocalizations.get('basic_information'),
+                              icon: Icons.info_outline,
                             ),
-                        ],
-                      ),
-                      // Category Code
-                      TextFormField(
-                        controller: _categoryCodeCtrl,
-                        readOnly: _autoCategoryCode,
-                        style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
-                        decoration: _inputDeco(AppLocalizations.get('category_code')).copyWith(
-                          errorText: _codeError,
-                          fillColor: _autoCategoryCode ? AppColors.bgPage : AppColors.bgCard,
+                            if (widget.category == null)
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: Checkbox(
+                                      value: _autoCategoryCode,
+                                      activeColor: AppColors.accent,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _autoCategoryCode = val ?? true;
+                                          if (_autoCategoryCode) {
+                                            _categoryCodeCtrl.text =
+                                                _generatedCode;
+                                          } else {
+                                            _categoryCodeCtrl.text = '';
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    AppLocalizations.get('auto_code'),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppColors.txtMid,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 12),
+                        // Category Code
+                        TextFormField(
+                          controller: _categoryCodeCtrl,
+                          readOnly: _autoCategoryCode,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.txtMid,
+                          ),
+                          decoration:
+                              _inputDeco(
+                                AppLocalizations.get('category_code'),
+                              ).copyWith(
+                                errorText: _codeError,
+                                fillColor: _autoCategoryCode
+                                    ? AppColors.bgPage
+                                    : AppColors.bgCard,
+                              ),
+                        ),
+                        const SizedBox(height: 12),
 
-                      // Category Name
-                      TextFormField(
-                        controller: _categoryNameCtrl,
-                        style: const TextStyle(fontSize: 13),
-                        decoration: _inputDeco(AppLocalizations.get('category_name')),
-                      ),
-                    ],
+                        // Category Name
+                        TextFormField(
+                          controller: _categoryNameCtrl,
+                          style: const TextStyle(fontSize: 13),
+                          decoration: _inputDeco(
+                            AppLocalizations.get('category_name'),
+                          ),
+                          validator: (v) => AppValidators.required(
+                            v,
+                            AppLocalizations.get('category_name'),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -302,13 +320,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 onPressed: _isSaving
                     ? null
                     : () async {
-                        if (_categoryNameCtrl.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(AppLocalizations.get('category_name_empty')),
-                              backgroundColor: Colors.red.shade600,
-                            ),
-                          );
+                        if (!_formKey.currentState!.validate()) {
                           return;
                         }
 
@@ -321,15 +333,21 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                             categoryName: _categoryNameCtrl.text,
                           );
                           if (widget.category != null) {
-                            await context.read<DatabaseService>().updateCategory(category);
+                            await context
+                                .read<DatabaseService>()
+                                .updateCategory(category);
                           } else {
-                            await context.read<DatabaseService>().insertCategory(category);
+                            await context
+                                .read<DatabaseService>()
+                                .insertCategory(category);
                           }
 
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(AppLocalizations.get('category_saved')),
+                              content: Text(
+                                AppLocalizations.get('category_saved'),
+                              ),
                               backgroundColor: Color(0xFF16A34A),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -340,7 +358,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           setState(() => _isSaving = false);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('${AppLocalizations.get('category_save_failed')}: $e'),
+                              content: Text(
+                                '${AppLocalizations.get('category_save_failed')}: $e',
+                              ),
                               backgroundColor: const Color(0xFFDC2626),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -348,14 +368,12 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         }
                       },
                 icon: _isSaving
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: const AppLoading(),
-                      )
+                    ? const SizedBox(height: 16, width: 16, child: AppLoading())
                     : const Icon(Icons.check, size: 16),
                 label: Text(
-                  _isSaving ? AppLocalizations.get('saving') : AppLocalizations.get('save'),
+                  _isSaving
+                      ? AppLocalizations.get('saving')
+                      : AppLocalizations.get('save'),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

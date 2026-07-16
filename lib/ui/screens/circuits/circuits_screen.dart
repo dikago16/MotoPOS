@@ -43,9 +43,7 @@ class _CircuitsScreenState extends State<CircuitsScreen> {
       body: Consumer<CircuitsProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: const AppLoading(),
-            );
+            return const Center(child: AppLoading());
           }
           if (provider.error.isNotEmpty) {
             return Center(

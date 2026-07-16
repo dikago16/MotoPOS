@@ -10,16 +10,6 @@ import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -102,9 +92,7 @@ class _PurchaseInvoiceDetailScreenState
             _buildInvoiceInfo(date),
             Expanded(
               child: _isLoading
-                  ? const Center(
-                      child: const AppLoading(),
-                    )
+                  ? const Center(child: AppLoading())
                   : _buildItemsList(),
             ),
           ],
@@ -133,7 +121,9 @@ class _PurchaseInvoiceDetailScreenState
                     Text(AppLocalizations.get('supplier'), style: _kColHeader),
                     const SizedBox(height: 4),
                     Text(
-                      widget.invoice.supplierName.isEmpty ? AppLocalizations.get('unknown_supplier') : widget.invoice.supplierName,
+                      widget.invoice.supplierName.isEmpty
+                          ? AppLocalizations.get('unknown_supplier')
+                          : widget.invoice.supplierName,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
