@@ -18,7 +18,7 @@ class BluetoothPrinterService {
   static final List<int> _cmdBoldOn = [0x1B, 0x45, 0x01];
   static final List<int> _cmdBoldOff = [0x1B, 0x45, 0x00];
   static final List<int> _cmdFeedAndCut = [0x1D, 0x56, 0x00]; // Full cut
-  static final List<int> _cmdFeedLines = [0x0A, 0x0A, 0x0A, 0x0A, 0x0A]; // 5 blank lines to push paper past tear bar
+  static final List<int> _cmdFeedLines = [0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A]; // 6 blank lines to push paper past tear bar
   static final List<int> _cmdNewLine = [0x0A]; // Line feed
 
   // ─── Receipt Generation ───────────────────────────────────────────────────
