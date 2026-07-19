@@ -7,7 +7,7 @@ import '../data/models/transaction_item_model.dart';
 /// and managing Bluetooth printer communication.
 class BluetoothPrinterService {
   // ─── ESC/POS Command Constants ────────────────────────────────────────────
-  static const int _lineWidth = 40; // 40 characters for 80mm paper
+  static const int _lineWidth = 48; // 48 characters for 80mm paper
 
   // ESC/POS commands
   static final List<int> _cmdInit = [0x1B, 0x40]; // Initialize printer
@@ -54,8 +54,8 @@ class BluetoothPrinterService {
     bytes.addAll(_cmdNewLine);
 
     // ── Date/Time & Cashier ──
-    final dateTime = DateTime.tryParse(transaction.transactionDate) ??
-        DateTime.now();
+    final dateTime =
+        DateTime.tryParse(transaction.transactionDate) ?? DateTime.now();
     final dateStr = DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
     const cashier = 'Admin';
     bytes.addAll(_textToBytes(_twoColumn(dateStr, cashier)));
@@ -78,8 +78,7 @@ class BluetoothPrinterService {
       bytes.addAll(_cmdNewLine);
 
       // Qty x Price = Subtotal line (right-aligned detail)
-      final qtyPriceStr =
-          '  ${item.quantity} x ${_formatNumber(item.price)}';
+      final qtyPriceStr = '  ${item.quantity} x ${_formatNumber(item.price)}';
       final subtotalStr = _formatRupiah(item.subtotal);
       bytes.addAll(_textToBytes(_twoColumn(qtyPriceStr, subtotalStr)));
       bytes.addAll(_cmdNewLine);
@@ -92,8 +91,9 @@ class BluetoothPrinterService {
     bytes.addAll(_cmdNewLine);
 
     // ── Sub Total ──
-    bytes.addAll(_textToBytes(
-        _twoColumn('Sub Total', _formatRupiah(subTotal))));
+    bytes.addAll(
+      _textToBytes(_twoColumn('Sub Total', _formatRupiah(subTotal))),
+    );
     bytes.addAll(_cmdNewLine);
 
     // ── Separator ──
@@ -102,19 +102,26 @@ class BluetoothPrinterService {
 
     // ── Total ──
     bytes.addAll(_cmdBoldOn);
-    bytes.addAll(_textToBytes(
-        _twoColumn('TOTAL', _formatRupiah(transaction.totalAmount))));
+    bytes.addAll(
+      _textToBytes(_twoColumn('TOTAL', _formatRupiah(transaction.totalAmount))),
+    );
     bytes.addAll(_cmdNewLine);
     bytes.addAll(_cmdBoldOff);
 
     // ── Payment ──
-    bytes.addAll(_textToBytes(
-        _twoColumn('Paid (Cash)', _formatRupiah(transaction.cashAmount))));
+    bytes.addAll(
+      _textToBytes(
+        _twoColumn('Paid (Cash)', _formatRupiah(transaction.cashAmount)),
+      ),
+    );
     bytes.addAll(_cmdNewLine);
 
     // ── Change ──
-    bytes.addAll(_textToBytes(
-        _twoColumn('Change', _formatRupiah(transaction.changeAmount))));
+    bytes.addAll(
+      _textToBytes(
+        _twoColumn('Change', _formatRupiah(transaction.changeAmount)),
+      ),
+    );
     bytes.addAll(_cmdNewLine);
 
     // ── Separator ──
@@ -124,7 +131,7 @@ class BluetoothPrinterService {
     // ── Footer (centered) ──
     bytes.addAll(_cmdAlignCenter);
     bytes.addAll(_cmdNewLine);
-    bytes.addAll(_textToBytes('Terimakasih Telah Berbelanja'));
+    bytes.addAll(_textToBytes('Terimakasih Telah Menggunakan Layanan Kami'));
     bytes.addAll(_cmdNewLine);
 
     // ── Feed & Cut ──
