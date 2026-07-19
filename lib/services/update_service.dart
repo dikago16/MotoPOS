@@ -6,7 +6,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_filex/open_filex.dart';
 
-/// Data class yang merepresentasikan informasi versi terbaru dari server.
 class AppVersionInfo {
   final String versionName;
   final int versionCode;
@@ -33,7 +32,6 @@ class AppVersionInfo {
   }
 }
 
-/// Hasil pengecekan versi.
 class UpdateCheckResult {
   final bool updateAvailable;
   final AppVersionInfo? versionInfo;
@@ -50,12 +48,10 @@ class UpdateCheckResult {
   });
 }
 
-/// Service untuk menangani pengecekan dan download update aplikasi.
 class UpdateService {
   static const String _checkVersionUrl =
       'https://www.dx-bytes.com/mobile/check-version.json';
 
-  /// Mengecek apakah ada versi baru yang tersedia.
   static Future<UpdateCheckResult> checkForUpdate() async {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
@@ -97,8 +93,6 @@ class UpdateService {
     }
   }
 
-  /// Download APK dari server dengan callback progress.
-  /// [onProgress] menerima nilai 0.0 - 1.0.
   static Future<String?> downloadApk(
     String url,
     void Function(double progress) onProgress,
@@ -116,10 +110,18 @@ class UpdateService {
 
       final contentLength = streamedResponse.contentLength ?? 0;
       final dir = await getTemporaryDirectory();
-      final filePath = '${dir.path}/motopos_update.apk';
+
+      String fileName = 'motopos_update.apk';
+      try {
+        final uri = Uri.parse(url);
+        if (uri.pathSegments.isNotEmpty) {
+          fileName = uri.pathSegments.last;
+        }
+      } catch (_) {}
+
+      final filePath = '${dir.path}/$fileName';
       final file = File(filePath);
 
-      // Hapus file lama jika ada
       if (await file.exists()) {
         await file.delete();
       }
@@ -143,7 +145,6 @@ class UpdateService {
     }
   }
 
-  /// Membuka file APK untuk memulai instalasi.
   static Future<bool> installApk(String filePath) async {
     try {
       final result = await OpenFilex.open(filePath);
@@ -154,7 +155,6 @@ class UpdateService {
     }
   }
 
-  /// Mendapatkan informasi versi saat ini.
   static Future<PackageInfo> getCurrentVersion() async {
     return PackageInfo.fromPlatform();
   }

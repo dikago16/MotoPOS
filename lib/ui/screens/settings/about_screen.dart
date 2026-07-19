@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../../services/update_service.dart';
+import '../../widgets/update_dialog.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -13,6 +15,7 @@ class AboutScreen extends StatefulWidget {
 class _AboutScreenState extends State<AboutScreen> {
   String _version = '...';
   String _buildNumber = '...';
+  bool _isCheckingUpdate = false;
 
   @override
   void initState() {
@@ -27,6 +30,33 @@ class _AboutScreenState extends State<AboutScreen> {
       _version = info.version;
       _buildNumber = info.buildNumber;
     });
+  }
+
+  Future<void> _checkForUpdate() async {
+    setState(() => _isCheckingUpdate = true);
+
+    final result = await UpdateService.checkForUpdate();
+
+    if (!mounted) return;
+    setState(() => _isCheckingUpdate = false);
+
+    if (result.updateAvailable && result.versionInfo != null) {
+      UpdateDialog.show(
+        context,
+        versionInfo: result.versionInfo!,
+        currentVersion: result.currentVersion ?? 'v$_version+$_buildNumber',
+      );
+    } else if (result.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result.errorMessage!)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.get('update_not_available')),
+        ),
+      );
+    }
   }
 
   @override
@@ -209,6 +239,35 @@ class _AboutScreenState extends State<AboutScreen> {
                       'support@dx-bytes.com',
                     ),
                   ],
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // ── Check Update Button ──
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _isCheckingUpdate ? null : _checkForUpdate,
+                  icon: _isCheckingUpdate 
+                      ? const SizedBox(
+                          width: 20, 
+                          height: 20, 
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                        )
+                      : const Icon(Icons.system_update),
+                  label: Text(_isCheckingUpdate 
+                      ? AppLocalizations.get('checking_update') 
+                      : AppLocalizations.get('check_update')
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.navy,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
               ),
 
