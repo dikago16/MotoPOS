@@ -57,8 +57,10 @@ class UpdateService {
       final packageInfo = await PackageInfo.fromPlatform();
       final currentBuildNumber = int.tryParse(packageInfo.buildNumber) ?? 0;
 
+      final String cacheBuster = DateTime.now().millisecondsSinceEpoch
+          .toString();
       final response = await http
-          .get(Uri.parse(_checkVersionUrl))
+          .get(Uri.parse('$_checkVersionUrl?t=$cacheBuster'))
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
