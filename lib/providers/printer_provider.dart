@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:bluetooth_classic/bluetooth_classic.dart';
 import 'package:bluetooth_classic/models/device.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../services/bluetooth_printer_service.dart';
 import '../data/models/transaction_model.dart';
 import '../data/models/transaction_item_model.dart';
@@ -35,6 +36,13 @@ class PrinterProvider with ChangeNotifier {
   /// Returns true if Bluetooth is ON and permissions are granted.
   Future<bool> isBluetoothEnabled() async {
     try {
+      // Explicitly request permissions for Android 12+ and earlier versions
+      await [
+        Permission.bluetoothScan,
+        Permission.bluetoothConnect,
+        Permission.locationWhenInUse,
+      ].request();
+
       bool permissionsGranted = await _bluetooth.initPermissions();
       return permissionsGranted;
     } catch (e) {

@@ -140,7 +140,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   style: const TextStyle(fontSize: 13, color: AppColors.txtHigh, height: 1.5),
                   decoration: InputDecoration(
                     hintText: AppLocalizations.get('write_your_note_here'),
-                    hintStyle: const TextStyle(color: AppColors.txtLow, fontSize: 13),
+                    hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
                       borderSide: const BorderSide(color: AppColors.border),

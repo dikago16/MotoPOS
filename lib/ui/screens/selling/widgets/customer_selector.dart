@@ -202,7 +202,7 @@ class _CustomerSelectionBottomSheetState
                     style: const TextStyle(fontSize: 13),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.get('search_customer_hint'),
-                      hintStyle: const TextStyle(color: AppColors.txtMid, fontSize: 13),
+                      hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
                       prefixIcon: const Icon(
                         Icons.search,
                         size: 18,

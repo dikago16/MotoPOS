@@ -65,10 +65,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 12, color: AppColors.txtLow),
-      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+      hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
+      labelStyle: const TextStyle(fontSize: 10, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
-        fontSize: 11,
+        fontSize: 9,
         color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),

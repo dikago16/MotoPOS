@@ -119,10 +119,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hintText,
-      hintStyle: const TextStyle(fontSize: 12, color: AppColors.txtLow),
-      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+      hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
+      labelStyle: const TextStyle(fontSize: 10, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
-        fontSize: 11,
+        fontSize: 9,
         color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
@@ -415,10 +415,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             AppLocalizations.get('buying_price'),
                           ),
                           keyboardType: TextInputType.number,
-                          validator: (v) => AppValidators.numeric(
-                            v,
-                            AppLocalizations.get('buying_price'),
-                          ),
                         ),
                         const SizedBox(height: 8),
 

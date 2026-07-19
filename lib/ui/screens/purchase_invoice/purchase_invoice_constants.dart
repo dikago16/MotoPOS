@@ -46,12 +46,12 @@ class PurchaseItemData {
 InputDecoration inputDeco(String label, {Widget? suffixIcon}) {
   return InputDecoration(
     labelText: label,
-    labelStyle: const TextStyle(fontSize: 12, color: kTxtMid),
+    labelStyle: const TextStyle(fontSize: 10, color: kTxtMid),
     floatingLabelStyle: const TextStyle(
-      fontSize: 11,
-      color: kAccent,
-      fontWeight: FontWeight.w600,
-    ),
+        fontSize: 9,
+        color: kAccent,
+        fontWeight: FontWeight.w600,
+      ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(6),
       borderSide: const BorderSide(color: kBorder),

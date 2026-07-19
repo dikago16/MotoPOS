@@ -343,7 +343,7 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(fontSize: 13, color: AppColors.txtLow),
+      hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
       prefixIcon: Icon(icon, size: 18, color: AppColors.txtMid),
       filled: true,
       fillColor: AppColors.bgPage,

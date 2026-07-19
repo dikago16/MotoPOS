@@ -130,9 +130,9 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
     return InputDecoration(
       labelText: label,
       hintText: hintText,
-      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+      labelStyle: const TextStyle(fontSize: 10, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
-        fontSize: 11,
+        fontSize: 9,
         color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),

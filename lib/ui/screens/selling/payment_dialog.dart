@@ -101,9 +101,13 @@ class _PaymentDialogState extends State<PaymentDialog> {
     return InputDecoration(
       labelText: label,
       labelStyle: const TextStyle(fontSize: 11, color: AppColors.txtMid),
-      floatingLabelStyle: const TextStyle(fontSize: 11, color: AppColors.accent),
+      floatingLabelStyle: const TextStyle(
+        fontSize: 9,
+        color: AppColors.accent,
+        fontWeight: FontWeight.w600,
+      ),
       hintText: hint,
-      hintStyle: const TextStyle(fontSize: 13, color: AppColors.txtLow),
+      hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
       prefixText: prefix,
       prefixStyle: const TextStyle(
         color: AppColors.txtHigh,

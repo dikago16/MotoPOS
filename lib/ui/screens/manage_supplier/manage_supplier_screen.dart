@@ -126,9 +126,9 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
   InputDecoration _inputDeco(String label, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+      labelStyle: const TextStyle(fontSize: 10, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
-        fontSize: 11,
+        fontSize: 9,
         color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),

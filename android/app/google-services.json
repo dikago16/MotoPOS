@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "903901990201-caoetnee74na1255m1ojschqc9e5qqqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dxbytes.motopos",
+            "certificate_hash": "6365c7d0077f754985b0b165efc3df204807c26e"
+          }
+        },
+        {
           "client_id": "903901990201-j4660epcg3rjhj449h9acpo73d5dalh9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
