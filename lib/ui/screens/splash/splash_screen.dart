@@ -1,12 +1,14 @@
 import '../../../core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../core/services/api_service.dart';
+import '../../../services/update_service.dart';
+import '../../../main.dart';
+import '../../widgets/update_dialog.dart';
 import '../activation/activation_screen.dart';
 import '../selling/selling_screen.dart';
 import '../../../core/services/app_localizations.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-
 
 
 
@@ -85,6 +87,9 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const SellingScreen()),
       );
+
+      // Cek pembaruan versi setelah navigasi (non-blocking)
+      _checkForAppUpdate();
     } else {
       if (result['is_invalid'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -98,6 +103,27 @@ class _SplashScreenState extends State<SplashScreen>
         MaterialPageRoute(builder: (_) => const ActivationScreen()),
       );
     }
+  }
+
+  /// Memeriksa versi terbaru di background setelah masuk ke halaman utama.
+  void _checkForAppUpdate() {
+    Future.delayed(const Duration(seconds: 2), () async {
+      try {
+        final result = await UpdateService.checkForUpdate();
+        if (!result.updateAvailable || result.versionInfo == null) return;
+
+        final ctx = MyApp.navigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) {
+          UpdateDialog.show(
+            ctx,
+            versionInfo: result.versionInfo!,
+            currentVersion: result.currentVersion ?? '',
+          );
+        }
+      } catch (_) {
+        // Abaikan error — update check tidak boleh mengganggu alur utama
+      }
+    });
   }
 
   @override

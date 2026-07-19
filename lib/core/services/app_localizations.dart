@@ -396,6 +396,25 @@ class AppLocalizations {
     'restore_failed': 'Failed to restore data.',
     'delete_backup_confirm': 'Are you sure you want to delete this backup file?',
     'backup_deleted': 'Backup file deleted!',
+
+    // ── App Update ──
+    'version': 'Version',
+    'version_info': 'App version information',
+    'current_version': 'Current Version',
+    'build_number': 'Build Number',
+    'check_update': 'Check for Updates',
+    'checking_update': 'Checking for updates...',
+    'update_available': 'Update Available',
+    'update_not_available': 'You are using the latest version.',
+    'update_now': 'Update Now',
+    'later': 'Later',
+    'whats_new': "What's New",
+    'downloading': 'Downloading...',
+    'download_failed': 'Download failed. Please try again.',
+    'preparing_install': 'Preparing installation...',
+    'install_failed': 'Installation failed. Please try again.',
+    'retry': 'Retry',
+    'update_check_failed': 'Failed to check for updates.',
   };
 
   // ─── Indonesian Translations ───────────────────────────────────────────────
@@ -773,5 +792,24 @@ class AppLocalizations {
     'restore_failed': 'Gagal memulihkan data.',
     'delete_backup_confirm': 'Apakah Anda yakin ingin menghapus file cadangan ini?',
     'backup_deleted': 'File cadangan dihapus!',
+
+    // ── Pembaruan Aplikasi ──
+    'version': 'Versi',
+    'version_info': 'Informasi versi aplikasi',
+    'current_version': 'Versi Saat Ini',
+    'build_number': 'Nomor Build',
+    'check_update': 'Periksa Pembaruan',
+    'checking_update': 'Memeriksa pembaruan...',
+    'update_available': 'Pembaruan Tersedia',
+    'update_not_available': 'Anda sudah menggunakan versi terbaru.',
+    'update_now': 'Perbarui Sekarang',
+    'later': 'Nanti Saja',
+    'whats_new': 'Yang Baru',
+    'downloading': 'Mengunduh...',
+    'download_failed': 'Gagal mengunduh. Silakan coba lagi.',
+    'preparing_install': 'Mempersiapkan instalasi...',
+    'install_failed': 'Instalasi gagal. Silakan coba lagi.',
+    'retry': 'Coba Lagi',
+    'update_check_failed': 'Gagal memeriksa pembaruan.',
   };
 }
