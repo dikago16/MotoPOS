@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/services/app_localizations.dart';
 import '../../services/update_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Dialog untuk menampilkan informasi update dan progress download.
 class UpdateDialog extends StatefulWidget {
@@ -35,64 +36,29 @@ class UpdateDialog extends StatefulWidget {
 }
 
 class _UpdateDialogState extends State<UpdateDialog> {
-  bool _isDownloading = false;
-  double _progress = 0.0;
-  String _statusText = '';
-  bool _hasError = false;
-
   Future<void> _startUpdate() async {
-    setState(() {
-      _isDownloading = true;
-      _progress = 0.0;
-      _statusText = AppLocalizations.get('downloading');
-      _hasError = false;
-    });
+    final url = Uri.parse(widget.versionInfo.downloadUrl);
+    final fallbackUrl = Uri.parse('https://play.google.com/store/apps/details?id=com.dxbytes.motopos');
 
-    final filePath = await UpdateService.downloadApk(
-      widget.versionInfo.downloadUrl,
-      (progress) {
-        if (mounted) {
-          setState(() {
-            _progress = progress;
-            _statusText =
-                '${AppLocalizations.get('downloading')} ${(progress * 100).toStringAsFixed(0)}%';
-          });
-        }
-      },
-    );
-
-    if (!mounted) return;
-
-    if (filePath == null) {
-      setState(() {
-        _isDownloading = false;
-        _hasError = true;
-        _statusText = AppLocalizations.get('download_failed');
-      });
-      return;
-    }
-
-    setState(() {
-      _statusText = AppLocalizations.get('preparing_install');
-    });
-
-    final installed = await UpdateService.installApk(filePath);
-
-    if (!mounted) return;
-
-    if (!installed) {
-      setState(() {
-        _isDownloading = false;
-        _hasError = true;
-        _statusText = AppLocalizations.get('install_failed');
-      });
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else if (await canLaunchUrl(fallbackUrl)) {
+        await launchUrl(fallbackUrl, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to open update link')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: !widget.versionInfo.forceUpdate && !_isDownloading,
+      canPop: !widget.versionInfo.forceUpdate,
       child: AlertDialog(
         backgroundColor: AppColors.bgCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -170,37 +136,10 @@ class _UpdateDialogState extends State<UpdateDialog> {
                 ],
               ),
             ),
-
-            // Progress bar (saat download)
-            if (_isDownloading || _hasError) ...[
-              const SizedBox(height: 16),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: _isDownloading ? _progress : 0.0,
-                  backgroundColor: AppColors.border,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(
-                    _hasError ? Colors.red : AppColors.accent,
-                  ),
-                  minHeight: 6,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                _statusText,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: _hasError ? Colors.red : AppColors.txtMid,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
           ],
         ),
         actions: [
-          // Tombol "Nanti saja" (jika bukan force update dan tidak sedang download)
-          if (!widget.versionInfo.forceUpdate && !_isDownloading)
+          if (!widget.versionInfo.forceUpdate)
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
@@ -208,27 +147,21 @@ class _UpdateDialogState extends State<UpdateDialog> {
                 style: const TextStyle(color: AppColors.txtMid),
               ),
             ),
-
-          // Tombol utama
-          if (!_isDownloading)
-            ElevatedButton(
-              onPressed: _startUpdate,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.accent,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          ElevatedButton(
+            onPressed: _startUpdate,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.accent,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(
-                _hasError
-                    ? AppLocalizations.get('retry')
-                    : AppLocalizations.get('update_now'),
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             ),
+            child: Text(
+              AppLocalizations.get('update_now'),
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
         ],
       ),
     );

@@ -6,6 +6,7 @@ import 'license_info_screen.dart';
 import 'my_store_screen.dart';
 import 'backup_restore_screen.dart';
 import 'about_screen.dart';
+import 'privacy_policy_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -75,6 +76,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: AppLocalizations.get('About'),
               subtitle: 'MotoPOS application information',
               screen: const AboutScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.privacy_tip_outlined,
+              title: AppLocalizations.get('privacy_policy'),
+              subtitle: AppLocalizations.get('privacy_policy_desc'),
+              screen: const PrivacyPolicyScreen(),
             ),
           ],
         ),

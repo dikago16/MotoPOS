@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'models/product_model.dart';
@@ -10,6 +11,7 @@ import 'models/purchase_invoice_item_model.dart';
 import 'models/customer_model.dart';
 import 'models/note_model.dart';
 import 'models/store_info_model.dart';
+
 class DatabaseService {
   Database? _db;
   static const int _version = 11;
@@ -36,8 +38,7 @@ class DatabaseService {
       path,
       version: _version,
       onCreate: (db, version) async {
-        await db.execute(
-          '''
+        await db.execute('''
           CREATE TABLE $_tableName(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             itemCode TEXT,
@@ -55,19 +56,15 @@ class DatabaseService {
             isCountStock INTEGER,
             stockQty INTEGER
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_categoryTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             categoryCode TEXT,
             categoryName TEXT
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_transactionTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             transactionDate TEXT,
@@ -78,10 +75,8 @@ class DatabaseService {
             customerId INTEGER,
             customerName TEXT
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_transactionItemsTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             transactionId INTEGER,
@@ -91,10 +86,8 @@ class DatabaseService {
             quantity INTEGER,
             subtotal REAL
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_supplierTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             supplierCode TEXT,
@@ -102,10 +95,8 @@ class DatabaseService {
             phone TEXT,
             address TEXT
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_purchaseInvoiceTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             invoiceCode TEXT,
@@ -115,10 +106,8 @@ class DatabaseService {
             totalAmount REAL,
             notes TEXT
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_purchaseInvoiceItemsTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             invoiceId INTEGER,
@@ -129,10 +118,8 @@ class DatabaseService {
             buyingPrice REAL,
             subtotal REAL
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_customerTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customerCode TEXT,
@@ -142,40 +129,33 @@ class DatabaseService {
             vehicleType TEXT,
             address TEXT
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_notesTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             content TEXT,
             createdAt TEXT
           )
-          ''',
-        );
-        await db.execute(
-          '''
+          ''');
+        await db.execute('''
           CREATE TABLE $_storeInfoTable(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             storeName TEXT,
             address TEXT,
             phone TEXT
           )
-          ''',
-        );
+          ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_categoryTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               categoryCode TEXT,
               categoryName TEXT
             )
-            ''',
-          );
+            ''');
         }
         if (oldVersion < 3) {
           await db.execute(
@@ -183,8 +163,7 @@ class DatabaseService {
           );
         }
         if (oldVersion < 4) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_transactionTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               transactionDate TEXT,
@@ -193,10 +172,8 @@ class DatabaseService {
               changeAmount REAL,
               vehicleNo TEXT
             )
-            ''',
-          );
-          await db.execute(
-            '''
+            ''');
+          await db.execute('''
             CREATE TABLE $_transactionItemsTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               transactionId INTEGER,
@@ -206,8 +183,7 @@ class DatabaseService {
               quantity INTEGER,
               subtotal REAL
             )
-            ''',
-          );
+            ''');
         }
         if (oldVersion < 5) {
           await db.execute(
@@ -215,8 +191,7 @@ class DatabaseService {
           );
         }
         if (oldVersion < 6) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_supplierTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               supplierCode TEXT,
@@ -224,12 +199,10 @@ class DatabaseService {
               phone TEXT,
               address TEXT
             )
-            ''',
-          );
+            ''');
         }
         if (oldVersion < 7) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_purchaseInvoiceTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               invoiceCode TEXT,
@@ -239,10 +212,8 @@ class DatabaseService {
               totalAmount REAL,
               notes TEXT
             )
-            ''',
-          );
-          await db.execute(
-            '''
+            ''');
+          await db.execute('''
             CREATE TABLE $_purchaseInvoiceItemsTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               invoiceId INTEGER,
@@ -253,12 +224,10 @@ class DatabaseService {
               buyingPrice REAL,
               subtotal REAL
             )
-            ''',
-          );
+            ''');
         }
         if (oldVersion < 8) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_customerTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               customerCode TEXT,
@@ -268,36 +237,35 @@ class DatabaseService {
               vehicleType TEXT,
               address TEXT
             )
-            ''',
-          );
+            ''');
         }
         if (oldVersion < 9) {
-          await db.execute('ALTER TABLE $_transactionTable ADD COLUMN customerId INTEGER');
-          await db.execute('ALTER TABLE $_transactionTable ADD COLUMN customerName TEXT');
+          await db.execute(
+            'ALTER TABLE $_transactionTable ADD COLUMN customerId INTEGER',
+          );
+          await db.execute(
+            'ALTER TABLE $_transactionTable ADD COLUMN customerName TEXT',
+          );
         }
         if (oldVersion < 10) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_notesTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               title TEXT,
               content TEXT,
               createdAt TEXT
             )
-            ''',
-          );
+            ''');
         }
         if (oldVersion < 11) {
-          await db.execute(
-            '''
+          await db.execute('''
             CREATE TABLE $_storeInfoTable(
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               storeName TEXT,
               address TEXT,
               phone TEXT
             )
-            ''',
-          );
+            ''');
         }
       },
     );
@@ -306,120 +274,195 @@ class DatabaseService {
   // --- Products ---
 
   Future<int> insertProduct(Product product) async {
-    final dbClient = await db;
-    return await dbClient.insert(
-      _tableName,
-      product.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.insert(
+        _tableName,
+        product.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in insertProduct: $e');
+      rethrow;
+    }
   }
 
   Future<int> updateProduct(Product product) async {
-    final dbClient = await db;
-    return await dbClient.update(
-      _tableName,
-      product.toMap(),
-      where: 'id = ?',
-      whereArgs: [product.id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        _tableName,
+        product.toMap(),
+        where: 'id = ?',
+        whereArgs: [product.id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in updateProduct: $e');
+      rethrow;
+    }
   }
 
   Future<int> deleteProduct(int id) async {
-    final dbClient = await db;
-    return await dbClient.delete(
-      _tableName,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.delete(
+        _tableName,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteProduct: $e');
+      rethrow;
+    }
   }
 
   Future<List<Product>> getProducts() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(_tableName);
-    return List.generate(maps.length, (i) {
-      return Product.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(_tableName);
+      return List.generate(maps.length, (i) {
+        return Product.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getProducts: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Product>> searchProducts(String query) async {
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _tableName,
+        where: 'itemName LIKE ? OR itemCode LIKE ?',
+        whereArgs: ['%$query%', '%$query%'],
+        limit: 20, // Batasi hasil pencarian agar performa UI tetap ringan
+      );
+      return List.generate(maps.length, (i) {
+        return Product.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in searchProducts: $e');
+      return [];
+    }
   }
 
   Future<String> getNextItemCode() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
-        'SELECT itemCode FROM $_tableName WHERE itemCode LIKE "ITEM%" ORDER BY id DESC LIMIT 1');
-    if (result.isEmpty) {
-      return 'ITEM00001';
-    } else {
-      String lastCode = result.first['itemCode'] as String;
-      String numberPart = lastCode.substring(4);
-      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
-      return 'ITEM${nextNumber.toString().padLeft(5, '0')}';
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT itemCode FROM $_tableName WHERE itemCode LIKE "ITEM%" ORDER BY id DESC LIMIT 1',
+      );
+      if (result.isEmpty) {
+        return 'ITEM00001';
+      } else {
+        String lastCode = result.first['itemCode'] as String;
+        String numberPart = lastCode.substring(4);
+        int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+        return 'ITEM${nextNumber.toString().padLeft(5, '0')}';
+      }
+    } catch (e) {
+      debugPrint('DatabaseService error in getNextItemCode: $e');
+      rethrow;
     }
   }
 
   // --- Categories ---
 
   Future<int> insertCategory(CategoryModel category) async {
-    final dbClient = await db;
-    return await dbClient.insert(
-      _categoryTable,
-      category.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.insert(
+        _categoryTable,
+        category.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in insertCategory: $e');
+      rethrow;
+    }
   }
 
   Future<int> updateCategory(CategoryModel category) async {
-    final dbClient = await db;
-    return await dbClient.update(
-      _categoryTable,
-      category.toMap(),
-      where: 'id = ?',
-      whereArgs: [category.id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        _categoryTable,
+        category.toMap(),
+        where: 'id = ?',
+        whereArgs: [category.id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in updateCategory: $e');
+      rethrow;
+    }
   }
 
   Future<int> deleteCategory(int id) async {
-    final dbClient = await db;
-    return await dbClient.delete(
-      _categoryTable,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.delete(
+        _categoryTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteCategory: $e');
+      rethrow;
+    }
   }
 
   Future<List<CategoryModel>> getCategories() async {
     final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(_categoryTable);
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _categoryTable,
+    );
     return List.generate(maps.length, (i) {
       return CategoryModel.fromMap(maps[i]);
     });
   }
 
   Future<String> getNextCategoryCode() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
-        'SELECT categoryCode FROM $_categoryTable WHERE categoryCode LIKE "CAT%" ORDER BY id DESC LIMIT 1');
-    if (result.isEmpty) {
-      return 'CAT00001';
-    } else {
-      String lastCode = result.first['categoryCode'] as String;
-      String numberPart = lastCode.substring(3);
-      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
-      return 'CAT${nextNumber.toString().padLeft(5, '0')}';
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT categoryCode FROM $_categoryTable WHERE categoryCode LIKE "CAT%" ORDER BY id DESC LIMIT 1',
+      );
+      if (result.isEmpty) {
+        return 'CAT00001';
+      } else {
+        String lastCode = result.first['categoryCode'] as String;
+        String numberPart = lastCode.substring(3);
+        int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+        return 'CAT${nextNumber.toString().padLeft(5, '0')}';
+      }
+    } catch (e) {
+      debugPrint('DatabaseService error in getNextCategoryCode: $e');
+      rethrow;
     }
   }
 
   // --- Transactions ---
 
-  Future<int> saveTransaction(TransactionModel transaction, List<TransactionItemModel> items) async {
-    final dbClient = await db;
-    return await dbClient.transaction((txn) async {
-      int id = await txn.insert(_transactionTable, transaction.toMap());
-      for (var item in items) {
-        var itemMap = item.toMap();
-        itemMap['transactionId'] = id;
-        await txn.insert(_transactionItemsTable, itemMap);
-      }
-      return id;
-    });
+  Future<int> saveTransaction(
+    TransactionModel transaction,
+    List<TransactionItemModel> items,
+  ) async {
+    try {
+      final dbClient = await db;
+      return await dbClient.transaction((txn) async {
+        int id = await txn.insert(_transactionTable, transaction.toMap());
+        for (var item in items) {
+          var itemMap = item.toMap();
+          itemMap['transactionId'] = id;
+          await txn.insert(_transactionItemsTable, itemMap);
+        }
+        return id;
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in saveTransaction: $e');
+      rethrow;
+    }
   }
 
   Future<List<TransactionModel>> getAllTransactions() async {
@@ -431,14 +474,19 @@ class DatabaseService {
     return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
   }
 
-  Future<List<TransactionItemModel>> getTransactionItems(int transactionId) async {
+  Future<List<TransactionItemModel>> getTransactionItems(
+    int transactionId,
+  ) async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps = await dbClient.query(
       _transactionItemsTable,
       where: 'transactionId = ?',
       whereArgs: [transactionId],
     );
-    return List.generate(maps.length, (i) => TransactionItemModel.fromMap(maps[i]));
+    return List.generate(
+      maps.length,
+      (i) => TransactionItemModel.fromMap(maps[i]),
+    );
   }
 
   // --- Daily Report ---
@@ -454,9 +502,12 @@ class DatabaseService {
     return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
   }
 
-  Future<List<Map<String, dynamic>>> getDailyCategorySummary(String date) async {
+  Future<List<Map<String, dynamic>>> getDailyCategorySummary(
+    String date,
+  ) async {
     final dbClient = await db;
-    return await dbClient.rawQuery('''
+    return await dbClient.rawQuery(
+      '''
       SELECT 
         ti.category,
         COUNT(DISTINCT t.id) AS transactionCount,
@@ -467,28 +518,36 @@ class DatabaseService {
       WHERE t.transactionDate LIKE ?
       GROUP BY ti.category
       ORDER BY totalAmount DESC
-    ''', ['$date%']);
+    ''',
+      ['$date%'],
+    );
   }
 
   Future<Map<String, dynamic>> getDailySummary(String date) async {
     final dbClient = await db;
-    final result = await dbClient.rawQuery('''
+    final result = await dbClient.rawQuery(
+      '''
       SELECT 
         COUNT(*) AS totalTransactions,
         COALESCE(SUM(totalAmount), 0) AS totalRevenue,
         COALESCE(AVG(totalAmount), 0) AS avgTransaction
       FROM $_transactionTable
       WHERE transactionDate LIKE ?
-    ''', ['$date%']);
+    ''',
+      ['$date%'],
+    );
     if (result.isNotEmpty) {
       return result.first;
     }
     return {'totalTransactions': 0, 'totalRevenue': 0.0, 'avgTransaction': 0.0};
   }
 
-  Future<List<Map<String, dynamic>>> getTransactionDetailsByDate(String date) async {
+  Future<List<Map<String, dynamic>>> getTransactionDetailsByDate(
+    String date,
+  ) async {
     final dbClient = await db;
-    return await dbClient.rawQuery('''
+    return await dbClient.rawQuery(
+      '''
       SELECT 
         t.id,
         t.transactionDate,
@@ -503,58 +562,83 @@ class DatabaseService {
       INNER JOIN $_transactionItemsTable ti ON t.id = ti.transactionId
       WHERE t.transactionDate LIKE ?
       ORDER BY t.id DESC
-    ''', ['$date%']);
+    ''',
+      ['$date%'],
+    );
   }
 
   // --- Suppliers ---
 
   Future<int> insertSupplier(SupplierModel supplier) async {
-    final dbClient = await db;
-    return await dbClient.insert(
-      _supplierTable,
-      supplier.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.insert(
+        _supplierTable,
+        supplier.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in insertSupplier: $e');
+      rethrow;
+    }
   }
 
   Future<int> updateSupplier(SupplierModel supplier) async {
-    final dbClient = await db;
-    return await dbClient.update(
-      _supplierTable,
-      supplier.toMap(),
-      where: 'id = ?',
-      whereArgs: [supplier.id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        _supplierTable,
+        supplier.toMap(),
+        where: 'id = ?',
+        whereArgs: [supplier.id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in updateSupplier: $e');
+      rethrow;
+    }
   }
 
   Future<int> deleteSupplier(int id) async {
-    final dbClient = await db;
-    return await dbClient.delete(
-      _supplierTable,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.delete(
+        _supplierTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteSupplier: $e');
+      rethrow;
+    }
   }
 
   Future<List<SupplierModel>> getSuppliers() async {
     final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(_supplierTable);
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _supplierTable,
+    );
     return List.generate(maps.length, (i) {
       return SupplierModel.fromMap(maps[i]);
     });
   }
 
   Future<String> getNextSupplierCode() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
-        'SELECT supplierCode FROM $_supplierTable WHERE supplierCode LIKE "SUPP%" ORDER BY id DESC LIMIT 1');
-    if (result.isEmpty) {
-      return 'SUPP00001';
-    } else {
-      String lastCode = result.first['supplierCode'] as String;
-      String numberPart = lastCode.substring(4);
-      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
-      return 'SUPP${nextNumber.toString().padLeft(5, '0')}';
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT supplierCode FROM $_supplierTable WHERE supplierCode LIKE "SUPP%" ORDER BY id DESC LIMIT 1',
+      );
+      if (result.isEmpty) {
+        return 'SUPP00001';
+      } else {
+        String lastCode = result.first['supplierCode'] as String;
+        String numberPart = lastCode.substring(4);
+        int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+        return 'SUPP${nextNumber.toString().padLeft(5, '0')}';
+      }
+    } catch (e) {
+      debugPrint('DatabaseService error in getNextSupplierCode: $e');
+      rethrow;
     }
   }
 
@@ -564,46 +648,54 @@ class DatabaseService {
     PurchaseInvoiceModel invoice,
     List<PurchaseInvoiceItemModel> items,
   ) async {
-    final dbClient = await db;
-    return await dbClient.transaction((txn) async {
-      int invoiceId = await txn.insert(_purchaseInvoiceTable, invoice.toMap());
-      for (var item in items) {
-        var itemMap = item.toMap();
-        itemMap['invoiceId'] = invoiceId;
-        await txn.insert(_purchaseInvoiceItemsTable, itemMap);
-
-        // Update stock and buying price for products
-        final productRows = await txn.query(
-          _tableName,
-          where: 'id = ?',
-          whereArgs: [item.productId],
+    try {
+      final dbClient = await db;
+      return await dbClient.transaction((txn) async {
+        int invoiceId = await txn.insert(
+          _purchaseInvoiceTable,
+          invoice.toMap(),
         );
-        if (productRows.isNotEmpty) {
-          final product = Product.fromMap(productRows.first);
-          Map<String, dynamic> updateData = {};
-          
-          // Update buying price to the latest one if it's > 0
-          if (item.buyingPrice > 0) {
-            updateData['buyingPrice'] = item.buyingPrice;
-          }
+        for (var item in items) {
+          var itemMap = item.toMap();
+          itemMap['invoiceId'] = invoiceId;
+          await txn.insert(_purchaseInvoiceItemsTable, itemMap);
 
-          // Update stock if it's a stockable item
-          if (product.isCountStock) {
-            updateData['stockQty'] = product.stockQty + item.quantity;
-          }
+          // Update stock and buying price for products
+          final productRows = await txn.query(
+            _tableName,
+            where: 'id = ?',
+            whereArgs: [item.productId],
+          );
+          if (productRows.isNotEmpty) {
+            final product = Product.fromMap(productRows.first);
+            Map<String, dynamic> updateData = {};
 
-          if (updateData.isNotEmpty) {
-            await txn.update(
-              _tableName,
-              updateData,
-              where: 'id = ?',
-              whereArgs: [item.productId],
-            );
+            // Update buying price to the latest one if it's > 0
+            if (item.buyingPrice > 0) {
+              updateData['buyingPrice'] = item.buyingPrice;
+            }
+
+            // Update stock if it's a stockable item
+            if (product.isCountStock) {
+              updateData['stockQty'] = product.stockQty + item.quantity;
+            }
+
+            if (updateData.isNotEmpty) {
+              await txn.update(
+                _tableName,
+                updateData,
+                where: 'id = ?',
+                whereArgs: [item.productId],
+              );
+            }
           }
         }
-      }
-      return invoiceId;
-    });
+        return invoiceId;
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in savePurchaseInvoice: $e');
+      rethrow;
+    }
   }
 
   Future<List<PurchaseInvoiceModel>> getPurchaseInvoices() async {
@@ -632,105 +724,151 @@ class DatabaseService {
   }
 
   Future<String> getNextPurchaseInvoiceCode() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
-      'SELECT invoiceCode FROM $_purchaseInvoiceTable WHERE invoiceCode LIKE "PINV%" ORDER BY id DESC LIMIT 1',
-    );
-    if (result.isEmpty) {
-      return 'PINV00001';
-    } else {
-      String lastCode = result.first['invoiceCode'] as String;
-      String numberPart = lastCode.substring(4);
-      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
-      return 'PINV${nextNumber.toString().padLeft(5, '0')}';
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT invoiceCode FROM $_purchaseInvoiceTable WHERE invoiceCode LIKE "PINV%" ORDER BY id DESC LIMIT 1',
+      );
+      if (result.isEmpty) {
+        return 'PINV00001';
+      } else {
+        String lastCode = result.first['invoiceCode'] as String;
+        String numberPart = lastCode.substring(4);
+        int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+        return 'PINV${nextNumber.toString().padLeft(5, '0')}';
+      }
+    } catch (e) {
+      debugPrint('DatabaseService error in getNextPurchaseInvoiceCode: $e');
+      rethrow;
     }
   }
 
   // --- Customers ---
 
   Future<int> insertCustomer(CustomerModel customer) async {
-    final dbClient = await db;
-    return await dbClient.insert(
-      _customerTable,
-      customer.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.insert(
+        _customerTable,
+        customer.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in insertCustomer: $e');
+      rethrow;
+    }
   }
 
   Future<int> updateCustomer(CustomerModel customer) async {
-    final dbClient = await db;
-    return await dbClient.update(
-      _customerTable,
-      customer.toMap(),
-      where: 'id = ?',
-      whereArgs: [customer.id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        _customerTable,
+        customer.toMap(),
+        where: 'id = ?',
+        whereArgs: [customer.id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in updateCustomer: $e');
+      rethrow;
+    }
   }
 
   Future<int> deleteCustomer(int id) async {
-    final dbClient = await db;
-    return await dbClient.delete(
-      _customerTable,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.delete(
+        _customerTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteCustomer: $e');
+      rethrow;
+    }
   }
 
   Future<List<CustomerModel>> getCustomers() async {
     final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(_customerTable);
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _customerTable,
+    );
     return List.generate(maps.length, (i) {
       return CustomerModel.fromMap(maps[i]);
     });
   }
 
   Future<String> getNextCustomerCode() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> result = await dbClient.rawQuery(
-        'SELECT customerCode FROM $_customerTable WHERE customerCode LIKE "CUST%" ORDER BY id DESC LIMIT 1');
-    if (result.isEmpty) {
-      return 'CUST00001';
-    } else {
-      String lastCode = result.first['customerCode'] as String;
-      String numberPart = lastCode.substring(4);
-      int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
-      return 'CUST${nextNumber.toString().padLeft(5, '0')}';
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> result = await dbClient.rawQuery(
+        'SELECT customerCode FROM $_customerTable WHERE customerCode LIKE "CUST%" ORDER BY id DESC LIMIT 1',
+      );
+      if (result.isEmpty) {
+        return 'CUST00001';
+      } else {
+        String lastCode = result.first['customerCode'] as String;
+        String numberPart = lastCode.substring(4);
+        int nextNumber = (int.tryParse(numberPart) ?? 0) + 1;
+        return 'CUST${nextNumber.toString().padLeft(5, '0')}';
+      }
+    } catch (e) {
+      debugPrint('DatabaseService error in getNextCustomerCode: $e');
+      rethrow;
     }
   }
 
   // --- Notes ---
 
   Future<int> insertNote(NoteModel note) async {
-    final dbClient = await db;
-    return await dbClient.insert(
-      _notesTable,
-      note.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.insert(
+        _notesTable,
+        note.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in insertNote: $e');
+      rethrow;
+    }
   }
 
   Future<int> updateNote(NoteModel note) async {
-    final dbClient = await db;
-    return await dbClient.update(
-      _notesTable,
-      note.toMap(),
-      where: 'id = ?',
-      whereArgs: [note.id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        _notesTable,
+        note.toMap(),
+        where: 'id = ?',
+        whereArgs: [note.id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in updateNote: $e');
+      rethrow;
+    }
   }
 
   Future<int> deleteNote(int id) async {
-    final dbClient = await db;
-    return await dbClient.delete(
-      _notesTable,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.delete(
+        _notesTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteNote: $e');
+      rethrow;
+    }
   }
 
   Future<List<NoteModel>> getNotes() async {
     final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(_notesTable, orderBy: 'createdAt DESC');
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      _notesTable,
+      orderBy: 'createdAt DESC',
+    );
     return List.generate(maps.length, (i) {
       return NoteModel.fromMap(maps[i]);
     });
@@ -739,26 +877,45 @@ class DatabaseService {
   // --- Store Info ---
 
   Future<StoreInfoModel> getStoreInfo() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(_storeInfoTable, limit: 1);
-    if (maps.isNotEmpty) {
-      return StoreInfoModel.fromMap(maps.first);
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _storeInfoTable,
+        limit: 1,
+      );
+      if (maps.isNotEmpty) {
+        return StoreInfoModel.fromMap(maps.first);
+      }
+      return StoreInfoModel.defaults();
+    } catch (e) {
+      debugPrint('DatabaseService error in getStoreInfo: $e');
+      rethrow;
     }
-    return StoreInfoModel.defaults();
   }
 
   Future<int> saveStoreInfo(StoreInfoModel info) async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> existing = await dbClient.query(_storeInfoTable, limit: 1);
-    if (existing.isNotEmpty) {
-      return await dbClient.update(
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> existing = await dbClient.query(
         _storeInfoTable,
-        info.toMap()..remove('id'),
-        where: 'id = ?',
-        whereArgs: [existing.first['id']],
+        limit: 1,
       );
-    } else {
-      return await dbClient.insert(_storeInfoTable, info.toMap()..remove('id'));
+      if (existing.isNotEmpty) {
+        return await dbClient.update(
+          _storeInfoTable,
+          info.toMap()..remove('id'),
+          where: 'id = ?',
+          whereArgs: [existing.first['id']],
+        );
+      } else {
+        return await dbClient.insert(
+          _storeInfoTable,
+          info.toMap()..remove('id'),
+        );
+      }
+    } catch (e) {
+      debugPrint('DatabaseService error in saveStoreInfo: $e');
+      rethrow;
     }
   }
 
@@ -774,7 +931,9 @@ class DatabaseService {
     data[_transactionItemsTable] = await dbClient.query(_transactionItemsTable);
     data[_supplierTable] = await dbClient.query(_supplierTable);
     data[_purchaseInvoiceTable] = await dbClient.query(_purchaseInvoiceTable);
-    data[_purchaseInvoiceItemsTable] = await dbClient.query(_purchaseInvoiceItemsTable);
+    data[_purchaseInvoiceItemsTable] = await dbClient.query(
+      _purchaseInvoiceItemsTable,
+    );
     data[_customerTable] = await dbClient.query(_customerTable);
     data[_notesTable] = await dbClient.query(_notesTable);
     data[_storeInfoTable] = await dbClient.query(_storeInfoTable);
@@ -783,29 +942,39 @@ class DatabaseService {
   }
 
   Future<void> clearAllTables(Transaction txn) async {
-    await txn.delete(_tableName);
-    await txn.delete(_categoryTable);
-    await txn.delete(_transactionTable);
-    await txn.delete(_transactionItemsTable);
-    await txn.delete(_supplierTable);
-    await txn.delete(_purchaseInvoiceTable);
-    await txn.delete(_purchaseInvoiceItemsTable);
-    await txn.delete(_customerTable);
-    await txn.delete(_notesTable);
-    await txn.delete(_storeInfoTable);
+    try {
+      await txn.delete(_tableName);
+      await txn.delete(_categoryTable);
+      await txn.delete(_transactionTable);
+      await txn.delete(_transactionItemsTable);
+      await txn.delete(_supplierTable);
+      await txn.delete(_purchaseInvoiceTable);
+      await txn.delete(_purchaseInvoiceItemsTable);
+      await txn.delete(_customerTable);
+      await txn.delete(_notesTable);
+      await txn.delete(_storeInfoTable);
+    } catch (e) {
+      debugPrint('DatabaseService error in clearAllTables: $e');
+      rethrow;
+    }
   }
 
   Future<void> importAllData(Map<String, dynamic> data) async {
-    final dbClient = await db;
-    await dbClient.transaction((txn) async {
-      await clearAllTables(txn);
+    try {
+      final dbClient = await db;
+      await dbClient.transaction((txn) async {
+        await clearAllTables(txn);
 
-      for (String table in data.keys) {
-        List<dynamic> rows = data[table] ?? [];
-        for (var row in rows) {
-          await txn.insert(table, Map<String, dynamic>.from(row));
+        for (String table in data.keys) {
+          List<dynamic> rows = data[table] ?? [];
+          for (var row in rows) {
+            await txn.insert(table, Map<String, dynamic>.from(row));
+          }
         }
-      }
-    });
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in importAllData: $e');
+      rethrow;
+    }
   }
 }

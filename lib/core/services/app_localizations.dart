@@ -127,6 +127,8 @@ class AppLocalizations {
     'license_info': 'License Info',
     'language': 'Language',
     'choose_language': 'Choose your language',
+    'privacy_policy': 'Privacy Policy',
+    'privacy_policy_desc': 'Your data and privacy',
 
     // ── My Store ──
     'store_details': 'STORE DETAILS',
@@ -523,6 +525,8 @@ class AppLocalizations {
     'license_info': 'Info Lisensi',
     'language': 'Bahasa',
     'choose_language': 'Pilih bahasa Anda',
+    'privacy_policy': 'Kebijakan Privasi',
+    'privacy_policy_desc': 'Data dan privasi Anda',
 
     // ── My Store ──
     'store_details': 'DETAIL TOKO',

@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:open_filex/open_filex.dart';
 
 class AppVersionInfo {
   final String versionName;
@@ -92,68 +90,6 @@ class UpdateService {
         updateAvailable: false,
         errorMessage: 'Gagal memeriksa pembaruan.',
       );
-    }
-  }
-
-  static Future<String?> downloadApk(
-    String url,
-    void Function(double progress) onProgress,
-  ) async {
-    try {
-      final request = http.Request('GET', Uri.parse(url));
-      final streamedResponse = await request.send().timeout(
-        const Duration(minutes: 10),
-      );
-
-      if (streamedResponse.statusCode != 200) {
-        debugPrint('Download failed: ${streamedResponse.statusCode}');
-        return null;
-      }
-
-      final contentLength = streamedResponse.contentLength ?? 0;
-      final dir = await getTemporaryDirectory();
-
-      String fileName = 'motopos_update.apk';
-      try {
-        final uri = Uri.parse(url);
-        if (uri.pathSegments.isNotEmpty) {
-          fileName = uri.pathSegments.last;
-        }
-      } catch (_) {}
-
-      final filePath = '${dir.path}/$fileName';
-      final file = File(filePath);
-
-      if (await file.exists()) {
-        await file.delete();
-      }
-
-      final sink = file.openWrite();
-      int receivedBytes = 0;
-
-      await for (final chunk in streamedResponse.stream) {
-        sink.add(chunk);
-        receivedBytes += chunk.length;
-        if (contentLength > 0) {
-          onProgress(receivedBytes / contentLength);
-        }
-      }
-
-      await sink.close();
-      return filePath;
-    } catch (e) {
-      debugPrint('UpdateService.downloadApk error: $e');
-      return null;
-    }
-  }
-
-  static Future<bool> installApk(String filePath) async {
-    try {
-      final result = await OpenFilex.open(filePath);
-      return result.type == ResultType.done;
-    } catch (e) {
-      debugPrint('UpdateService.installApk error: $e');
-      return false;
     }
   }
 

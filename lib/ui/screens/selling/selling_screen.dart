@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../data/database_service.dart';
-import '../../../data/models/product_model.dart';
-import '../../widgets/app_loading.dart';
 
-// New Widget Imports
 import 'widgets/selling_app_bar.dart';
 import 'widgets/customer_selector.dart';
 import 'widgets/product_form_card.dart';
@@ -20,41 +15,11 @@ class SellingScreen extends StatefulWidget {
 }
 
 class _SellingScreenState extends State<SellingScreen> {
-  List<Product> _products = [];
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchProducts();
-  }
-
-  Future<void> _fetchProducts() async {
-    setState(() => _isLoading = true);
-    final products = await context.read<DatabaseService>().getProducts();
-    if (mounted) {
-      setState(() {
-        _products = products;
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return Scaffold(
-        backgroundColor: AppColors.bgPage,
-        appBar: SellingAppBar(onProductsChanged: () {}),
-        body: const AppLoading(isFullScreen: true),
-      );
-    }
-
     return Scaffold(
       backgroundColor: AppColors.bgPage,
-      appBar: SellingAppBar(
-        onProductsChanged: _fetchProducts,
-      ),
+      appBar: SellingAppBar(onProductsChanged: () {}),
       body: SafeArea(
         child: Column(
           children: [
@@ -69,7 +34,7 @@ class _SellingScreenState extends State<SellingScreen> {
                   children: [
                     const CustomerSelector(),
                     const SizedBox(height: 10),
-                    ProductFormCard(products: _products),
+                    const ProductFormCard(),
                     const SizedBox(height: 10),
                     const CartItemsTable(),
                     const SizedBox(height: 8),

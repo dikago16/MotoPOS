@@ -1,5 +1,5 @@
 name: motopos
-description: "A new Flutter project."
+description: "MotoPOS Application"
 publish_to: 'none'
 
 # The following defines the version and build number for your application.
@@ -113,4 +113,6 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon.png"
   remove_alpha_ios: true

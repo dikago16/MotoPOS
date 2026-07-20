@@ -5,14 +5,13 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/app_localizations.dart';
 import '../../../../data/models/product_model.dart';
+import '../../../../data/database_service.dart';
 import '../../../../data/models/sale_item_model.dart';
 import '../../../../providers/selling_provider.dart';
 import '../../scanner/scanner_screen.dart';
 
 class ProductFormCard extends StatefulWidget {
-  final List<Product> products;
-
-  const ProductFormCard({super.key, required this.products});
+  const ProductFormCard({super.key});
 
   @override
   State<ProductFormCard> createState() => _ProductFormCardState();
@@ -74,18 +73,17 @@ class _ProductFormCardState extends State<ProductFormCard> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return Autocomplete<Product>(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
+                      optionsBuilder: (TextEditingValue textEditingValue) async {
                         if (textEditingValue.text.isEmpty) {
                           return const Iterable<Product>.empty();
                         }
-                        final query = textEditingValue.text.toLowerCase();
-                        return widget.products.where((Product product) {
-                          final matchQuery =
-                              product.itemName.toLowerCase().contains(query) ||
-                              product.itemCode.toLowerCase().contains(query);
-                          final hasStock =
-                              !product.isCountStock || product.stockQty > 0;
-                          return matchQuery && hasStock;
+                        
+                        final query = textEditingValue.text;
+                        final products = await DatabaseService().searchProducts(query);
+                        
+                        // Filter hanya produk yang ada stok atau bukan barang stok
+                        return products.where((product) {
+                          return !product.isCountStock || product.stockQty > 0;
                         });
                       },
                       displayStringForOption: (Product option) =>
