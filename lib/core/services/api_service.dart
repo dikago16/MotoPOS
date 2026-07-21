@@ -10,6 +10,7 @@ import '../../data/database_service.dart';
 class ActivationService {
   static const String baseUrl = "https://api.dx-bytes.com/api/v1";
   static const String _licenseKeyPref = "saved_license_key";
+  static const String _lastOnlineValidPref = "last_online_valid_time";
 
   // Memformat ID menjadi 16 digit hex dengan pemisah minus per 4 karakter
   static String _formatDeviceId(String rawId) {
@@ -57,7 +58,7 @@ class ActivationService {
           "Accept": "application/json",
         },
         body: jsonEncode({"license_key": licenseKey, "device_id": deviceId}),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       final data = jsonDecode(response.body);
 
@@ -65,6 +66,7 @@ class ActivationService {
         // Simpan key jika aktivasi berhasil
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(_licenseKeyPref, licenseKey);
+        await prefs.setString(_lastOnlineValidPref, DateTime.now().toIso8601String());
         return {
           "success": true,
           "message": data['message'] ?? "Aktivasi Berhasil",
@@ -107,11 +109,12 @@ class ActivationService {
           "Accept": "application/json",
         },
         body: jsonEncode({"license_key": licenseKey, "device_id": deviceId}),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
+        await prefs.setString(_lastOnlineValidPref, DateTime.now().toIso8601String());
         return {"success": true, "message": data['message'] ?? "Lisensi Valid"};
       } else if (response.statusCode == 403 || response.statusCode == 404) {
         // Lisensi invalid (expired/banned/device mismatch/not found)
@@ -128,25 +131,31 @@ class ActivationService {
         };
       }
     } on SocketException catch (_) {
-      // Jika ingin STRICT OFFLINE BLOCK (tidak bisa dipakai tanpa internet sama sekali):
-      // Ubah nilai success di bawah ini menjadi false dan is_offline menjadi false.
-      //
-      // Contoh Strict Block:
-      // return {"success": false, "message": "Koneksi internet diperlukan untuk validasi lisensi."};
-      return {
-        "success": true,
-        "message": "Offline mode: Lisensi dilewati sementara.",
-        "is_offline": true,
-      };
+      return _checkOfflineGracePeriod(prefs);
     } catch (e) {
       // Jika terjadi error jaringan lain
       debugPrint("API ERROR (validateLicense): $e");
-      return {
-        "success": true,
-        "message": "Offline mode (Error): Lisensi dilewati.",
-        "is_offline": true,
-      };
+      return _checkOfflineGracePeriod(prefs);
     }
+  }
+
+  static Map<String, dynamic> _checkOfflineGracePeriod(SharedPreferences prefs) {
+    final String? lastOnlineStr = prefs.getString(_lastOnlineValidPref);
+    if (lastOnlineStr != null) {
+      final DateTime lastOnline = DateTime.parse(lastOnlineStr);
+      final int offlineDays = DateTime.now().difference(lastOnline).inDays;
+      if (offlineDays >= 3) {
+        return {
+          "success": false,
+          "message": "Anda telah offline > 3 hari. Harap hubungkan ke internet untuk memvalidasi lisensi.",
+        };
+      }
+    }
+    return {
+      "success": true,
+      "message": "Offline mode: Lisensi dilewati sementara.",
+      "is_offline": true,
+    };
   }
 
   // Cek lisensi harian secara diam-diam (background)
@@ -167,9 +176,11 @@ class ActivationService {
             },
             body: jsonEncode({"license_key": licenseKey, "device_id": deviceId}),
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 30));
 
-      if (response.statusCode == 403) {
+      if (response.statusCode == 200) {
+        await prefs.setString(_lastOnlineValidPref, DateTime.now().toIso8601String());
+      } else if (response.statusCode == 403) {
         final data = jsonDecode(response.body);
         if (data['is_invalid'] == true) {
           // Lisensi tidak valid atau expired, hapus dari perangkat
@@ -193,7 +204,7 @@ class ActivationService {
           "Accept": "application/json",
         },
         body: jsonEncode({"license_key": licenseKey}),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       final data = jsonDecode(response.body);
 
@@ -242,14 +253,12 @@ class AiService {
           "Accept": "application/json",
         },
         body: jsonEncode({"prompt": prompt, "device_id": deviceId, "store_name": storeName}),
-      );
+      ).timeout(const Duration(seconds: 30));
 
       final data = jsonDecode(response.body);
-      debugPrint("RESPONSE DATA: $data");
       if (response.statusCode == 200) {
         return {"success": true, "answer": data['ai_answer']};
       } else {
-        debugPrint(data['ai_answer']);
         return {
           "success": false,
           "message": data['ai_answer'] ?? "Terjadi kesalahan",

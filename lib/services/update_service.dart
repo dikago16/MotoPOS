@@ -7,14 +7,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 class AppVersionInfo {
   final String versionName;
   final int versionCode;
-  final String downloadUrl;
+  final String storeUrl;
   final String releaseNotes;
   final bool forceUpdate;
 
   AppVersionInfo({
     required this.versionName,
     required this.versionCode,
-    required this.downloadUrl,
+    required this.storeUrl,
     required this.releaseNotes,
     required this.forceUpdate,
   });
@@ -23,7 +23,7 @@ class AppVersionInfo {
     return AppVersionInfo(
       versionName: json['version_name'] ?? '0.0.0',
       versionCode: json['version_code'] ?? 0,
-      downloadUrl: json['download_url'] ?? '',
+      storeUrl: json['store_url'] ?? 'https://play.google.com/store/apps/details?id=com.dxbytes.motopos',
       releaseNotes: json['release_notes'] ?? '',
       forceUpdate: json['force_update'] ?? false,
     );
@@ -59,7 +59,7 @@ class UpdateService {
           .toString();
       final response = await http
           .get(Uri.parse('$_checkVersionUrl?t=$cacheBuster'))
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
         return UpdateCheckResult(

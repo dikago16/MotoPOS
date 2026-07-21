@@ -37,7 +37,7 @@ class UpdateDialog extends StatefulWidget {
 
 class _UpdateDialogState extends State<UpdateDialog> {
   Future<void> _startUpdate() async {
-    final url = Uri.parse(widget.versionInfo.downloadUrl);
+    final url = Uri.parse(widget.versionInfo.storeUrl);
     final fallbackUrl = Uri.parse('https://play.google.com/store/apps/details?id=com.dxbytes.motopos');
 
     try {

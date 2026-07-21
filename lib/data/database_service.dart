@@ -13,6 +13,14 @@ import 'models/note_model.dart';
 import 'models/store_info_model.dart';
 
 class DatabaseService {
+  static final DatabaseService _instance = DatabaseService._internal();
+  
+  factory DatabaseService() {
+    return _instance;
+  }
+  
+  DatabaseService._internal();
+
   Database? _db;
   static const int _version = 11;
   static const String _tableName = 'products';
@@ -332,10 +340,16 @@ class DatabaseService {
   Future<List<Product>> searchProducts(String query) async {
     try {
       final dbClient = await db;
+      // Sanitize input to escape SQLite LIKE wildcards
+      final sanitizedQuery = query
+          .replaceAll('\\', '\\\\')
+          .replaceAll('%', '\\%')
+          .replaceAll('_', '\\_');
+
       final List<Map<String, dynamic>> maps = await dbClient.query(
         _tableName,
-        where: 'itemName LIKE ? OR itemCode LIKE ?',
-        whereArgs: ['%$query%', '%$query%'],
+        where: 'itemName LIKE ? ESCAPE \'\\\' OR itemCode LIKE ? ESCAPE \'\\\'',
+        whereArgs: ['%$sanitizedQuery%', '%$sanitizedQuery%'],
         limit: 20, // Batasi hasil pencarian agar performa UI tetap ringan
       );
       return List.generate(maps.length, (i) {
@@ -413,13 +427,18 @@ class DatabaseService {
   }
 
   Future<List<CategoryModel>> getCategories() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _categoryTable,
-    );
-    return List.generate(maps.length, (i) {
-      return CategoryModel.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _categoryTable,
+      );
+      return List.generate(maps.length, (i) {
+        return CategoryModel.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getCategories: $e');
+      rethrow;
+    }
   }
 
   Future<String> getNextCategoryCode() async {
@@ -466,27 +485,37 @@ class DatabaseService {
   }
 
   Future<List<TransactionModel>> getAllTransactions() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _transactionTable,
-      orderBy: 'id DESC',
-    );
-    return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _transactionTable,
+        orderBy: 'id DESC',
+      );
+      return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
+    } catch (e) {
+      debugPrint('DatabaseService error in getAllTransactions: $e');
+      rethrow;
+    }
   }
 
   Future<List<TransactionItemModel>> getTransactionItems(
     int transactionId,
   ) async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _transactionItemsTable,
-      where: 'transactionId = ?',
-      whereArgs: [transactionId],
-    );
-    return List.generate(
-      maps.length,
-      (i) => TransactionItemModel.fromMap(maps[i]),
-    );
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _transactionItemsTable,
+        where: 'transactionId = ?',
+        whereArgs: [transactionId],
+      );
+      return List.generate(
+        maps.length,
+        (i) => TransactionItemModel.fromMap(maps[i]),
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in getTransactionItems: $e');
+      rethrow;
+    }
   }
 
   // --- Daily Report ---
@@ -613,13 +642,18 @@ class DatabaseService {
   }
 
   Future<List<SupplierModel>> getSuppliers() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _supplierTable,
-    );
-    return List.generate(maps.length, (i) {
-      return SupplierModel.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _supplierTable,
+      );
+      return List.generate(maps.length, (i) {
+        return SupplierModel.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getSuppliers: $e');
+      rethrow;
+    }
   }
 
   Future<String> getNextSupplierCode() async {
@@ -699,28 +733,38 @@ class DatabaseService {
   }
 
   Future<List<PurchaseInvoiceModel>> getPurchaseInvoices() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _purchaseInvoiceTable,
-      orderBy: 'id DESC',
-    );
-    return List.generate(maps.length, (i) {
-      return PurchaseInvoiceModel.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _purchaseInvoiceTable,
+        orderBy: 'id DESC',
+      );
+      return List.generate(maps.length, (i) {
+        return PurchaseInvoiceModel.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getPurchaseInvoices: $e');
+      rethrow;
+    }
   }
 
   Future<List<PurchaseInvoiceItemModel>> getPurchaseInvoiceItems(
     int invoiceId,
   ) async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _purchaseInvoiceItemsTable,
-      where: 'invoiceId = ?',
-      whereArgs: [invoiceId],
-    );
-    return List.generate(maps.length, (i) {
-      return PurchaseInvoiceItemModel.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _purchaseInvoiceItemsTable,
+        where: 'invoiceId = ?',
+        whereArgs: [invoiceId],
+      );
+      return List.generate(maps.length, (i) {
+        return PurchaseInvoiceItemModel.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getPurchaseInvoiceItems: $e');
+      rethrow;
+    }
   }
 
   Future<String> getNextPurchaseInvoiceCode() async {
@@ -789,13 +833,18 @@ class DatabaseService {
   }
 
   Future<List<CustomerModel>> getCustomers() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _customerTable,
-    );
-    return List.generate(maps.length, (i) {
-      return CustomerModel.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _customerTable,
+      );
+      return List.generate(maps.length, (i) {
+        return CustomerModel.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getCustomers: $e');
+      rethrow;
+    }
   }
 
   Future<String> getNextCustomerCode() async {
@@ -864,14 +913,19 @@ class DatabaseService {
   }
 
   Future<List<NoteModel>> getNotes() async {
-    final dbClient = await db;
-    final List<Map<String, dynamic>> maps = await dbClient.query(
-      _notesTable,
-      orderBy: 'createdAt DESC',
-    );
-    return List.generate(maps.length, (i) {
-      return NoteModel.fromMap(maps[i]);
-    });
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _notesTable,
+        orderBy: 'createdAt DESC',
+      );
+      return List.generate(maps.length, (i) {
+        return NoteModel.fromMap(maps[i]);
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in getNotes: $e');
+      rethrow;
+    }
   }
 
   // --- Store Info ---
@@ -922,23 +976,28 @@ class DatabaseService {
   // --- Backup & Restore ---
 
   Future<Map<String, dynamic>> exportAllData() async {
-    final dbClient = await db;
-    final Map<String, dynamic> data = {};
+    try {
+      final dbClient = await db;
+      final Map<String, dynamic> data = {};
 
-    data[_tableName] = await dbClient.query(_tableName);
-    data[_categoryTable] = await dbClient.query(_categoryTable);
-    data[_transactionTable] = await dbClient.query(_transactionTable);
-    data[_transactionItemsTable] = await dbClient.query(_transactionItemsTable);
-    data[_supplierTable] = await dbClient.query(_supplierTable);
-    data[_purchaseInvoiceTable] = await dbClient.query(_purchaseInvoiceTable);
-    data[_purchaseInvoiceItemsTable] = await dbClient.query(
-      _purchaseInvoiceItemsTable,
-    );
-    data[_customerTable] = await dbClient.query(_customerTable);
-    data[_notesTable] = await dbClient.query(_notesTable);
-    data[_storeInfoTable] = await dbClient.query(_storeInfoTable);
+      data[_tableName] = await dbClient.query(_tableName);
+      data[_categoryTable] = await dbClient.query(_categoryTable);
+      data[_transactionTable] = await dbClient.query(_transactionTable);
+      data[_transactionItemsTable] = await dbClient.query(_transactionItemsTable);
+      data[_supplierTable] = await dbClient.query(_supplierTable);
+      data[_purchaseInvoiceTable] = await dbClient.query(_purchaseInvoiceTable);
+      data[_purchaseInvoiceItemsTable] = await dbClient.query(
+        _purchaseInvoiceItemsTable,
+      );
+      data[_customerTable] = await dbClient.query(_customerTable);
+      data[_notesTable] = await dbClient.query(_notesTable);
+      data[_storeInfoTable] = await dbClient.query(_storeInfoTable);
 
-    return data;
+      return data;
+    } catch (e) {
+      debugPrint('DatabaseService error in exportAllData: $e');
+      rethrow;
+    }
   }
 
   Future<void> clearAllTables(Transaction txn) async {

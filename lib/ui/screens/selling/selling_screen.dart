@@ -15,11 +15,19 @@ class SellingScreen extends StatefulWidget {
 }
 
 class _SellingScreenState extends State<SellingScreen> {
+  int _refreshCount = 0;
+
+  void _refreshProducts() {
+    setState(() {
+      _refreshCount++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgPage,
-      appBar: SellingAppBar(onProductsChanged: () {}),
+      appBar: SellingAppBar(onProductsChanged: _refreshProducts),
       body: SafeArea(
         child: Column(
           children: [
@@ -34,7 +42,7 @@ class _SellingScreenState extends State<SellingScreen> {
                   children: [
                     const CustomerSelector(),
                     const SizedBox(height: 10),
-                    const ProductFormCard(),
+                    ProductFormCard(key: ValueKey(_refreshCount)),
                     const SizedBox(height: 10),
                     const CartItemsTable(),
                     const SizedBox(height: 8),
