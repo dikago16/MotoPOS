@@ -5,6 +5,7 @@ import '../../../core/services/api_service.dart';
 import '../selling/selling_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../../core/services/trial_service.dart';
 import '../../widgets/app_loading.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
@@ -110,6 +111,14 @@ class _ActivationScreenState extends State<ActivationScreen>
     );
   }
 
+  Future<void> _startTrial() async {
+    await TrialService.startTrial();
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const SellingScreen()),
+    );
+  }
+
   // ── Build ────────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
@@ -189,6 +198,8 @@ class _ActivationScreenState extends State<ActivationScreen>
                               _buildLicenseInput(),
                               const SizedBox(height: 10),
                               _buildActivateButton(),
+                              const SizedBox(height: 10),
+                              _buildTrialSection(),
                               const SizedBox(height: 10),
                               _buildInfoNote(),
                               const SizedBox(height: 10),
@@ -610,6 +621,74 @@ class _ActivationScreenState extends State<ActivationScreen>
                 ),
               ),
       ),
+    );
+  }
+
+  // ── Trial Section ────────────────────────────────────────────────────────────
+  Widget _buildTrialSection() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 1,
+                color: AppColors.border.withValues(alpha: 0.3),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                AppLocalizations.get('or_try_free'),
+                style: TextStyle(
+                  fontSize: 8,
+                  color: AppColors.muted,
+                  letterSpacing: 2.5,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 1,
+                color: AppColors.border.withValues(alpha: 0.3),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 46,
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: _isLoading ? null : _startTrial,
+            icon: const Icon(Icons.play_arrow_rounded, size: 16, color: Colors.white),
+            label: Text(
+              AppLocalizations.get('start_free_trial'),
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                letterSpacing: 2.0,
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: AppColors.border.withValues(alpha: 0.6)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          AppLocalizations.get('trial_limits_desc'),
+          style: TextStyle(
+            fontSize: 9,
+            color: AppColors.txtLow,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 

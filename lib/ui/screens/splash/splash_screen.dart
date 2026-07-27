@@ -7,6 +7,7 @@ import '../../widgets/update_dialog.dart';
 import '../activation/activation_screen.dart';
 import '../selling/selling_screen.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../../core/services/trial_service.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -99,9 +100,21 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         );
       }
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const ActivationScreen()),
-      );
+
+      // Check if trial is active
+      final isTrial = await TrialService.isTrialActive();
+      if (!mounted) return;
+
+      if (isTrial) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const SellingScreen()),
+        );
+        _checkForAppUpdate();
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ActivationScreen()),
+        );
+      }
     }
   }
 

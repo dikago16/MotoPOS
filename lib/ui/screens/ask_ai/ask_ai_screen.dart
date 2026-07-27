@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../../core/services/trial_service.dart';
 import '../../widgets/app_loading.dart';
+import '../../widgets/trial_limit_dialog.dart';
 
 class AskAiScreen extends StatefulWidget {
   const AskAiScreen({super.key});
@@ -21,6 +23,9 @@ class _AskAiScreenState extends State<AskAiScreen> {
   bool _isLoading = false;
   Timer? _typewriterTimer;
 
+  bool _isTrial = false;
+  int _remainingChats = 0;
+
   bool get _isAiResponding =>
       _isLoading || (_typewriterTimer != null && _typewriterTimer!.isActive);
 
@@ -28,6 +33,18 @@ class _AskAiScreenState extends State<AskAiScreen> {
   void initState() {
     super.initState();
     _loadMessages();
+    _checkTrialStatus();
+  }
+
+  Future<void> _checkTrialStatus() async {
+    final isTrial = await TrialService.isTrialActive();
+    if (isTrial) {
+      final remaining = await TrialService.getRemainingAiChats();
+      setState(() {
+        _isTrial = isTrial;
+        _remainingChats = remaining;
+      });
+    }
   }
 
   Future<void> _loadMessages() async {
@@ -75,6 +92,20 @@ class _AskAiScreenState extends State<AskAiScreen> {
     if (_isLoading ||
         (_typewriterTimer != null && _typewriterTimer!.isActive)) {
       return;
+    }
+
+    if (_isTrial) {
+      if (!await TrialService.canUseAiChat()) {
+        if (!mounted) return;
+        TrialLimitDialog.show(
+          context,
+          title: AppLocalizations.get('trial_ai_limit_title'),
+          message: AppLocalizations.get('trial_ai_limit_msg'),
+        );
+        return;
+      }
+      await TrialService.incrementAiUsage();
+      _checkTrialStatus(); // Update badge
     }
 
     final prompt = _controller.text.trim();
@@ -205,6 +236,27 @@ class _AskAiScreenState extends State<AskAiScreen> {
         body: SafeArea(
           child: Column(
             children: [
+              if (_isTrial)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  color: AppColors.accent.withValues(alpha: 0.1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.info_outline, size: 14, color: AppColors.accent),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${AppLocalizations.get('trial_ai_count')}: $_remainingChats/3 ${AppLocalizations.get('trial_remaining')}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.accent,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               Expanded(
                 child: ListView.builder(
                   controller: _scrollController,

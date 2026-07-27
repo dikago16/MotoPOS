@@ -417,6 +417,22 @@ class AppLocalizations {
     'install_failed': 'Installation failed. Please try again.',
     'retry': 'Retry',
     'update_check_failed': 'Failed to check for updates.',
+
+    // ── Trial Mode ──
+    'start_free_trial': 'START FREE TRIAL',
+    'trial_mode': 'TRIAL MODE',
+    'trial_description': 'Try MotoPOS with limited features',
+    'trial_limits_desc': '3 items · 3 AI chats',
+    'trial_item_limit_title': 'Item Limit Reached',
+    'trial_item_limit_msg': 'You can only save up to 3 items in trial mode. Activate a license to unlock unlimited items.',
+    'trial_ai_limit_title': 'AI Chat Limit Reached',
+    'trial_ai_limit_msg': 'You have used all 3 AI chats in trial mode. Activate a license to unlock unlimited AI chats.',
+    'activate_license_now': 'ACTIVATE LICENSE',
+    'trial_upgrade': 'UPGRADE',
+    'or_try_free': 'OR TRY FOR FREE',
+    'trial_remaining': 'remaining',
+    'trial_items_count': 'Items',
+    'trial_ai_count': 'AI Chat',
   };
 
   // ─── Indonesian Translations ───────────────────────────────────────────────
@@ -815,5 +831,21 @@ class AppLocalizations {
     'install_failed': 'Instalasi gagal. Silakan coba lagi.',
     'retry': 'Coba Lagi',
     'update_check_failed': 'Gagal memeriksa pembaruan.',
+
+    // ── Trial Mode ──
+    'start_free_trial': 'MULAI TRIAL GRATIS',
+    'trial_mode': 'MODE TRIAL',
+    'trial_description': 'Coba MotoPOS dengan fitur terbatas',
+    'trial_limits_desc': '3 item · 3 AI chat',
+    'trial_item_limit_title': 'Batas Item Tercapai',
+    'trial_item_limit_msg': 'Anda hanya bisa menyimpan 3 item di mode trial. Aktivasi lisensi untuk membuka fitur tanpa batas.',
+    'trial_ai_limit_title': 'Batas AI Chat Tercapai',
+    'trial_ai_limit_msg': 'Anda sudah menggunakan 3 AI chat di mode trial. Aktivasi lisensi untuk membuka fitur tanpa batas.',
+    'activate_license_now': 'AKTIVASI LISENSI',
+    'trial_upgrade': 'UPGRADE',
+    'or_try_free': 'ATAU COBA GRATIS',
+    'trial_remaining': 'tersisa',
+    'trial_items_count': 'Item',
+    'trial_ai_count': 'AI Chat',
   };
 }

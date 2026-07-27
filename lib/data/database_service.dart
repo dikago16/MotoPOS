@@ -324,6 +324,17 @@ class DatabaseService {
     }
   }
 
+  Future<int> getProductCount() async {
+    try {
+      final dbClient = await db;
+      final result = await dbClient.rawQuery('SELECT COUNT(*) as count FROM $_tableName');
+      return Sqflite.firstIntValue(result) ?? 0;
+    } catch (e) {
+      debugPrint('DatabaseService error in getProductCount: $e');
+      return 0;
+    }
+  }
+
   Future<List<Product>> getProducts() async {
     try {
       final dbClient = await db;

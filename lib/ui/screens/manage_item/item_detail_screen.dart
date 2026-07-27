@@ -7,7 +7,9 @@ import '../../../data/models/category_model.dart';
 import '../../../data/database_service.dart';
 import '../scanner/scanner_screen.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../../core/services/trial_service.dart';
 import '../../widgets/app_loading.dart';
+import '../../widgets/trial_limit_dialog.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -720,9 +722,28 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           return;
                         }
 
+                        final db = context.read<DatabaseService>();
                         setState(() => _isSaving = true);
 
                         try {
+                          // Trial limit check for NEW items
+                          if (widget.product == null) {
+                            final isTrial = await TrialService.isTrialActive();
+                            if (isTrial) {
+                              final currentCount = await db.getProductCount();
+                              if (!TrialService.canAddItem(currentCount)) {
+                                if (!mounted) return;
+                                setState(() => _isSaving = false);
+                                TrialLimitDialog.show(
+                                  context,
+                                  title: AppLocalizations.get('trial_item_limit_title'),
+                                  message: AppLocalizations.get('trial_item_limit_msg'),
+                                );
+                                return;
+                              }
+                            }
+                          }
+
                           final product = Product(
                             id: widget.product?.id,
                             itemCode: _itemCodeCtrl.text,
@@ -748,11 +769,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             stockQty: int.tryParse(_stockQtyCtrl.text) ?? 0,
                           );
                           if (widget.product != null) {
-                            await context.read<DatabaseService>().updateProduct(
+                            await db.updateProduct(
                               product,
                             );
                           } else {
-                            await context.read<DatabaseService>().insertProduct(
+                            await db.insertProduct(
                               product,
                             );
                           }

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
 import '../../data/database_service.dart';
+import 'trial_service.dart';
 
 class ActivationService {
   static const String baseUrl = "https://api.dx-bytes.com/api/v1";
@@ -67,6 +68,10 @@ class ActivationService {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(_licenseKeyPref, licenseKey);
         await prefs.setString(_lastOnlineValidPref, DateTime.now().toIso8601String());
+        
+        // Hapus mode trial jika sebelumnya aktif
+        await TrialService.deactivateTrial();
+        
         return {
           "success": true,
           "message": data['message'] ?? "Aktivasi Berhasil",
