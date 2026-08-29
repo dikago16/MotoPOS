@@ -26,22 +26,42 @@ class ManageCategoryScreen extends StatefulWidget {
 }
 
 class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
+  List<CategoryModel> _allCategories = [];
   List<CategoryModel> _categories = [];
   bool _isLoading = true;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _fetchCategories();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _categories = _allCategories.where((category) {
+        return category.categoryName.toLowerCase().contains(query);
+      }).toList();
+    });
   }
 
   Future<void> _fetchCategories() async {
     setState(() => _isLoading = true);
     final categories = await context.read<DatabaseService>().getCategories();
     setState(() {
-      _categories = categories;
+      _allCategories = categories;
+      _categories = List.from(categories);
       _isLoading = false;
     });
+    _onSearchChanged();
   }
 
   @override
@@ -204,8 +224,9 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: _searchController,
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco(AppLocalizations.get('code_name')),
+                  decoration: _inputDeco(AppLocalizations.get('category_name')),
                 ),
               ),
               const SizedBox(width: 8),

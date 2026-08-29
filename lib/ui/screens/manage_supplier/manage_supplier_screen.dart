@@ -26,22 +26,43 @@ class ManageSupplierScreen extends StatefulWidget {
 }
 
 class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
+  List<SupplierModel> _allSuppliers = [];
   List<SupplierModel> _suppliers = [];
   bool _isLoading = true;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _fetchSuppliers();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _suppliers = _allSuppliers.where((supplier) {
+        return supplier.supplierName.toLowerCase().contains(query) ||
+               supplier.phone.toLowerCase().contains(query);
+      }).toList();
+    });
   }
 
   Future<void> _fetchSuppliers() async {
     setState(() => _isLoading = true);
     final suppliers = await context.read<DatabaseService>().getSuppliers();
     setState(() {
-      _suppliers = suppliers;
+      _allSuppliers = suppliers;
+      _suppliers = List.from(suppliers);
       _isLoading = false;
     });
+    _onSearchChanged();
   }
 
   @override
@@ -204,8 +225,9 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: _searchController,
                   style: const TextStyle(fontSize: 13),
-                  decoration: _inputDeco(AppLocalizations.get('code_name')),
+                  decoration: _inputDeco(AppLocalizations.get('code_name_phone')),
                 ),
               ),
               const SizedBox(width: 8),

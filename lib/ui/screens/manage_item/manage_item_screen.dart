@@ -7,6 +7,7 @@ import 'item_detail_screen.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
+import '../../../core/utils/currency_util.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -26,22 +27,43 @@ class ManageItemScreen extends StatefulWidget {
 }
 
 class _ManageItemScreenState extends State<ManageItemScreen> {
+  List<Product> _allProducts = [];
   List<Product> _products = [];
   bool _isLoading = true;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _fetchProducts();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _products = _allProducts.where((product) {
+        return product.itemName.toLowerCase().contains(query) ||
+               product.itemCode.toLowerCase().contains(query);
+      }).toList();
+    });
   }
 
   Future<void> _fetchProducts() async {
     setState(() => _isLoading = true);
     final products = await context.read<DatabaseService>().getProducts();
     setState(() {
-      _products = products;
+      _allProducts = products;
+      _products = List.from(products);
       _isLoading = false;
     });
+    _onSearchChanged();
   }
 
   @override
@@ -202,6 +224,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: _searchController,
                   style: const TextStyle(fontSize: 13),
                   decoration: _inputDeco(AppLocalizations.get('code_name')),
                 ),
@@ -344,7 +367,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Rp ${item.sellingPrice.toStringAsFixed(0)}',
+                              CurrencyUtil.formatRupiah(item.sellingPrice),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -354,7 +377,7 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
                             const SizedBox(height: 2),
                             Text(
                               item.buyingPrice > 0
-                                  ? 'Buy: Rp ${item.buyingPrice.toStringAsFixed(0)}'
+                                  ? 'Buy: ${CurrencyUtil.formatRupiah(item.buyingPrice)}'
                                   : AppLocalizations.get('not_set'),
                               style: const TextStyle(
                                 fontSize: 9,

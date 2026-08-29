@@ -22,7 +22,7 @@ class AppValidators {
     final req = required(value, fieldName);
     if (req != null) return req;
 
-    final number = num.tryParse(value!.replaceAll(',', '').trim());
+    final number = num.tryParse(value!.replaceAll(RegExp(r'[,.]'), '').trim());
     if (number == null) {
       return '$fieldName ${AppLocalizations.get('must_be_a_valid_number')}';
     }

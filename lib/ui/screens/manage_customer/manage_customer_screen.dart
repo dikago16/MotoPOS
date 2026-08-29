@@ -10,15 +10,6 @@ import 'customer_detail_screen.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
-
-
-
-
-
-
-
-
-
 const _kColHeader = TextStyle(
   fontSize: 9,
   fontWeight: FontWeight.w700,
@@ -208,12 +199,19 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel(AppLocalizations.get('search_customer'), icon: Icons.search),
+          _sectionLabel(
+            AppLocalizations.get('search_customer'),
+            icon: Icons.search,
+          ),
           TextFormField(
             style: const TextStyle(fontSize: 13),
             decoration: _inputDeco(
               AppLocalizations.get('code_name'),
-              suffixIcon: const Icon(Icons.search, size: 18, color: AppColors.txtLow),
+              suffixIcon: const Icon(
+                Icons.search,
+                size: 18,
+                color: AppColors.txtLow,
+              ),
             ),
             onChanged: (val) {
               setState(() {
@@ -238,19 +236,31 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: _sectionLabel(AppLocalizations.get('customers_list'), icon: Icons.people),
+            child: _sectionLabel(
+              AppLocalizations.get('customers_list'),
+              icon: Icons.people,
+            ),
           ),
           Container(
             color: AppColors.tableHead,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
             child: Row(
               children: [
-                Expanded(flex: 5, child: Text(AppLocalizations.get('customer'), style: _kColHeader)),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    AppLocalizations.get('customer'),
+                    style: _kColHeader,
+                  ),
+                ),
                 Expanded(
                   flex: 3,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.get('vehicle'), style: _kColHeader),
+                    child: Text(
+                      AppLocalizations.get('vehicle'),
+                      style: _kColHeader,
+                    ),
                   ),
                 ),
               ],
@@ -300,7 +310,9 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${cust.name.isEmpty ? AppLocalizations.get('unknown_customer') : cust.name} (${cust.vehicleNo})',
+                                cust.name.isEmpty
+                                    ? AppLocalizations.get('unknown_customer')
+                                    : cust.name,
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,

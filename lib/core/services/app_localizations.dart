@@ -58,7 +58,8 @@ class AppLocalizations {
     'activate': 'ACTIVATE',
     'activating': 'ACTIVATING...',
     'device_id': 'Device ID',
-    'activation_info_note': 'Enter your license key to activate this application. Contact support if you need assistance.',
+    'activation_info_note':
+        'Enter your license key to activate this application. Contact support if you need assistance.',
 
     // ── Selling Screen ──
     'edit_quantity': 'Edit Quantity',
@@ -81,7 +82,8 @@ class AppLocalizations {
     'stock_label': 'Stock',
     'non_stock': 'Non Stock',
     'remove_item': 'Remove Item',
-    'remove_item_confirm': 'Are you sure you want to remove this item from the cart?',
+    'remove_item_confirm':
+        'Are you sure you want to remove this item from the cart?',
     'item': 'ITEM',
     'qty': 'QTY',
     'price': 'PRICE',
@@ -89,15 +91,18 @@ class AppLocalizations {
     'no_items_added': 'No items added yet',
     'total': 'TOTAL :',
     'bluetooth_off': 'Bluetooth Off',
-    'bluetooth_off_message': 'Bluetooth on your device is not active.\n\nPlease enable Bluetooth first through your device settings, then try again.',
+    'bluetooth_off_message':
+        'Bluetooth on your device is not active.\n\nPlease enable Bluetooth first through your device settings, then try again.',
     'printer_connected': 'Printer Connected',
     'disconnect': 'DISCONNECT',
     'transaction_saved_printed': 'Transaction saved & receipt printed',
-    'transaction_saved_print_failed': 'Transaction saved, but failed to print receipt',
+    'transaction_saved_print_failed':
+        'Transaction saved, but failed to print receipt',
     'transaction_saved': 'Transaction Saved',
     'select_printer': 'Select Printer',
     'saved_bluetooth_devices': 'Saved Bluetooth devices',
-    'no_saved_devices': 'No saved devices.\n\nPair a printer through\nyour device\'s Bluetooth settings.',
+    'no_saved_devices':
+        'No saved devices.\n\nPair a printer through\nyour device\'s Bluetooth settings.',
     'connected_to': 'Connected to',
     'failed_to_connect': 'Failed to connect to',
     'select_customer': 'Select Customer',
@@ -152,7 +157,8 @@ class AppLocalizations {
     // ── Language ──
     'english': 'English',
     'bahasa_indonesia': 'Bahasa Indonesia',
-    'language_changed': 'Language changed. Please close and reopen the app for changes to take effect.',
+    'language_changed':
+        'Language changed. Please close and reopen the app for changes to take effect.',
 
     // ── Manage Items ──
     'manage_items': 'Manage Items',
@@ -194,7 +200,7 @@ class AppLocalizations {
 
     // ── Manage Categories ──
     'manage_categories': 'Manage Categories',
-    'add_edit_catalogue': 'Add / Edit Item Catalogue',
+    'add_edit_catalogue': 'Add / Edit Category',
     'search_category': 'Search Category',
     'category_catalog': 'Category Catalog',
     'no_categories_found': 'No categories found',
@@ -282,7 +288,8 @@ class AppLocalizations {
     'ask_ai_title': 'Ask AI',
     'type_message': 'Type a message...',
     'clear_chat_title': 'Clear Chat?',
-    'clear_chat_message': 'Are you sure you want to clear all chat history with AI?',
+    'clear_chat_message':
+        'Are you sure you want to clear all chat history with AI?',
     'delete_chat': 'Delete Chat',
     'ai_typing': 'AI is typing...',
 
@@ -328,15 +335,17 @@ class AppLocalizations {
     'scanner': 'Scanner',
     'align_barcode': 'Align barcode within the frame',
     'scan_barcode': 'Scan Barcode',
-    
+
     // ── Activation & Splash ──
     'device_information': 'DEVICE INFORMATION',
     'your_device_id': 'YOUR DEVICE ID',
     'required_for_license': 'REQUIRED FOR LICENSE',
-    'share_device_id_desc': 'Share this Device ID with DX-BYTES support to obtain a license.',
+    'share_device_id_desc':
+        'Share this Device ID with DX-BYTES support to obtain a license.',
     'license_format_desc': 'Format: XXXX-XXXX-XXXX-XXXX · Case insensitive',
     'activate_license': 'ACTIVATE LICENSE',
-    'license_support_desc': 'This is a licensed enterprise software. Contact WhatsApp 0851-1722-2788 for support or click link below.',
+    'license_support_desc':
+        'This is a licensed enterprise software. Contact WhatsApp 0851-1722-2788 for support or click link below.',
     'whatsapp_support': 'WhatsApp Support',
 
     // ── Supplier ──
@@ -366,7 +375,8 @@ class AppLocalizations {
     'txn': 'Txn',
     'cash_amount': 'Cash Amount',
     'change_amount': 'Change Amount',
-    'print_confirm_msg': 'Are you sure you want to print the receipt for this transaction?',
+    'print_confirm_msg':
+        'Are you sure you want to print the receipt for this transaction?',
     'print_success': 'Receipt printed successfully',
     'print_failed': 'Failed to print receipt',
     'print': 'PRINT',
@@ -392,11 +402,13 @@ class AppLocalizations {
     'restore': 'Restore',
     'delete_backup': 'Delete',
     'restore_confirm_title': 'Restore Data?',
-    'restore_confirm_msg': 'All local data will be replaced with this backup. This action cannot be undone. Are you sure?',
+    'restore_confirm_msg':
+        'All local data will be replaced with this backup. This action cannot be undone. Are you sure?',
     'restore_in_progress': 'Restoring data...',
     'restore_success': 'Data restored successfully!',
     'restore_failed': 'Failed to restore data.',
-    'delete_backup_confirm': 'Are you sure you want to delete this backup file?',
+    'delete_backup_confirm':
+        'Are you sure you want to delete this backup file?',
     'backup_deleted': 'Backup file deleted!',
 
     // ── App Update ──
@@ -424,9 +436,11 @@ class AppLocalizations {
     'trial_description': 'Try MotoPOS with limited features',
     'trial_limits_desc': '3 items · 3 AI chats',
     'trial_item_limit_title': 'Item Limit Reached',
-    'trial_item_limit_msg': 'You can only save up to 3 items in trial mode. Activate a license to unlock unlimited items.',
+    'trial_item_limit_msg':
+        'You can only save up to 3 items in trial mode. Activate a license to unlock unlimited items.',
     'trial_ai_limit_title': 'AI Chat Limit Reached',
-    'trial_ai_limit_msg': 'You have used all 3 AI chats in trial mode. Activate a license to unlock unlimited AI chats.',
+    'trial_ai_limit_msg':
+        'You have used all 3 AI chats in trial mode. Activate a license to unlock unlimited AI chats.',
     'activate_license_now': 'ACTIVATE LICENSE',
     'trial_upgrade': 'UPGRADE',
     'or_try_free': 'OR TRY FOR FREE',
@@ -472,7 +486,8 @@ class AppLocalizations {
     'activate': 'AKTIVASI',
     'activating': 'MENGAKTIFKAN...',
     'device_id': 'ID Perangkat',
-    'activation_info_note': 'Masukkan kunci lisensi Anda untuk mengaktifkan aplikasi ini. Hubungi dukungan jika Anda memerlukan bantuan.',
+    'activation_info_note':
+        'Masukkan kunci lisensi Anda untuk mengaktifkan aplikasi ini. Hubungi dukungan jika Anda memerlukan bantuan.',
 
     // ── Selling Screen ──
     'edit_quantity': 'Ubah Jumlah',
@@ -495,7 +510,8 @@ class AppLocalizations {
     'stock_label': 'Stok',
     'non_stock': 'Non Stok',
     'remove_item': 'Hapus Barang',
-    'remove_item_confirm': 'Apakah Anda yakin ingin menghapus barang ini dari keranjang?',
+    'remove_item_confirm':
+        'Apakah Anda yakin ingin menghapus barang ini dari keranjang?',
     'item': 'BARANG',
     'qty': 'JML',
     'price': 'HARGA',
@@ -503,20 +519,25 @@ class AppLocalizations {
     'no_items_added': 'Belum ada barang ditambahkan',
     'total': 'TOTAL :',
     'bluetooth_off': 'Bluetooth Mati',
-    'bluetooth_off_message': 'Bluetooth pada perangkat Anda belum aktif.\n\nSilakan aktifkan Bluetooth terlebih dahulu melalui pengaturan perangkat, kemudian coba lagi.',
+    'bluetooth_off_message':
+        'Bluetooth pada perangkat Anda belum aktif.\n\nSilakan aktifkan Bluetooth terlebih dahulu melalui pengaturan perangkat, kemudian coba lagi.',
     'printer_connected': 'Printer Tersambung',
     'disconnect': 'PUTUSKAN',
     'transaction_saved_printed': 'Transaksi disimpan & nota dicetak',
-    'transaction_saved_print_failed': 'Transaksi disimpan, tapi gagal mencetak nota',
+    'transaction_saved_print_failed':
+        'Transaksi disimpan, tapi gagal mencetak nota',
     'transaction_saved': 'Transaksi Disimpan',
     'select_printer': 'Pilih Printer',
     'saved_bluetooth_devices': 'Perangkat Bluetooth tersimpan',
-    'no_saved_devices': 'Tidak ada perangkat tersimpan.\n\nSambungkan printer melalui\npengaturan Bluetooth perangkat Anda.',
+    'no_saved_devices':
+        'Tidak ada perangkat tersimpan.\n\nSambungkan printer melalui\npengaturan Bluetooth perangkat Anda.',
     'connected_to': 'Tersambung ke',
     'failed_to_connect': 'Gagal tersambung ke',
     'select_customer': 'Pilih Pelanggan',
-    'search_customer_hint': 'Cari berdasarkan nama, telepon, atau no kendaraan...',
-    'no_customers_found': 'Pelanggan tidak ditemukan.\nSilakan tambahkan Pelanggan terlebih dahulu.',
+    'search_customer_hint':
+        'Cari berdasarkan nama, telepon, atau no kendaraan...',
+    'no_customers_found':
+        'Pelanggan tidak ditemukan.\nSilakan tambahkan Pelanggan terlebih dahulu.',
     'unknown_device': 'Perangkat Tidak Dikenal',
 
     // ── Payment Dialog ──
@@ -566,7 +587,8 @@ class AppLocalizations {
     // ── Language ──
     'english': 'English',
     'bahasa_indonesia': 'Bahasa Indonesia',
-    'language_changed': 'Bahasa berhasil diubah. Silakan tutup dan buka kembali aplikasi agar perubahan diterapkan di semua halaman.',
+    'language_changed':
+        'Bahasa berhasil diubah. Silakan tutup dan buka kembali aplikasi agar perubahan diterapkan di semua halaman.',
 
     // ── Manage Items ──
     'manage_items': 'Kelola Barang',
@@ -696,7 +718,8 @@ class AppLocalizations {
     'ask_ai_title': 'Tanya AI',
     'type_message': 'Ketik pesan...',
     'clear_chat_title': 'Hapus Percakapan?',
-    'clear_chat_message': 'Apakah Anda yakin ingin menghapus semua riwayat percakapan dengan AI?',
+    'clear_chat_message':
+        'Apakah Anda yakin ingin menghapus semua riwayat percakapan dengan AI?',
     'delete_chat': 'Hapus Percakapan',
     'ai_typing': 'AI sedang mengetik...',
 
@@ -742,15 +765,18 @@ class AppLocalizations {
     'scanner': 'Pemindai',
     'align_barcode': 'Arahkan barcode ke dalam bingkai',
     'scan_barcode': 'Pindai Barcode',
-    
+
     // ── Activation & Splash ──
     'device_information': 'INFORMASI PERANGKAT',
     'your_device_id': 'ID PERANGKAT ANDA',
     'required_for_license': 'DIBUTUHKAN UNTUK LISENSI',
-    'share_device_id_desc': 'Bagikan Device ID ini ke dukungan DX-BYTES untuk mendapatkan lisensi.',
-    'license_format_desc': 'Format: XXXX-XXXX-XXXX-XXXX · Huruf besar/kecil tidak masalah',
+    'share_device_id_desc':
+        'Bagikan Device ID ini ke dukungan DX-BYTES untuk mendapatkan lisensi.',
+    'license_format_desc':
+        'Format: XXXX-XXXX-XXXX-XXXX · Huruf besar/kecil tidak masalah',
     'activate_license': 'AKTIFKAN LISENSI',
-    'license_support_desc': 'Ini adalah perangkat lunak enterprise berlisensi. Hubungi WhatsApp 0851-1722-2788 untuk dukungan atau klik tautan di bawah.',
+    'license_support_desc':
+        'Ini adalah perangkat lunak enterprise berlisensi. Hubungi WhatsApp 0851-1722-2788 untuk dukungan atau klik tautan di bawah.',
     'whatsapp_support': 'Dukungan WhatsApp',
 
     // ── Supplier ──
@@ -780,7 +806,8 @@ class AppLocalizations {
     'txn': 'Txn',
     'cash_amount': 'Jumlah Tunai',
     'change_amount': 'Jumlah Kembalian',
-    'print_confirm_msg': 'Apakah Anda yakin ingin mencetak nota untuk transaksi ini?',
+    'print_confirm_msg':
+        'Apakah Anda yakin ingin mencetak nota untuk transaksi ini?',
     'print_success': 'Nota berhasil dicetak',
     'print_failed': 'Gagal mencetak nota',
     'print': 'CETAK',
@@ -806,11 +833,13 @@ class AppLocalizations {
     'restore': 'Pulihkan',
     'delete_backup': 'Hapus',
     'restore_confirm_title': 'Pulihkan Data?',
-    'restore_confirm_msg': 'Semua data lokal akan diganti dengan cadangan ini. Tindakan ini tidak dapat dibatalkan. Anda yakin?',
+    'restore_confirm_msg':
+        'Semua data lokal akan diganti dengan cadangan ini. Tindakan ini tidak dapat dibatalkan. Anda yakin?',
     'restore_in_progress': 'Memulihkan data...',
     'restore_success': 'Data berhasil dipulihkan!',
     'restore_failed': 'Gagal memulihkan data.',
-    'delete_backup_confirm': 'Apakah Anda yakin ingin menghapus file cadangan ini?',
+    'delete_backup_confirm':
+        'Apakah Anda yakin ingin menghapus file cadangan ini?',
     'backup_deleted': 'File cadangan dihapus!',
 
     // ── Pembaruan Aplikasi ──
@@ -838,9 +867,11 @@ class AppLocalizations {
     'trial_description': 'Coba MotoPOS dengan fitur terbatas',
     'trial_limits_desc': '3 item · 3 AI chat',
     'trial_item_limit_title': 'Batas Item Tercapai',
-    'trial_item_limit_msg': 'Anda hanya bisa menyimpan 3 item di mode trial. Aktivasi lisensi untuk membuka fitur tanpa batas.',
+    'trial_item_limit_msg':
+        'Anda hanya bisa menyimpan 3 item di mode trial. Aktivasi lisensi untuk membuka fitur tanpa batas.',
     'trial_ai_limit_title': 'Batas AI Chat Tercapai',
-    'trial_ai_limit_msg': 'Anda sudah menggunakan 3 AI chat di mode trial. Aktivasi lisensi untuk membuka fitur tanpa batas.',
+    'trial_ai_limit_msg':
+        'Anda sudah menggunakan 3 AI chat di mode trial. Aktivasi lisensi untuk membuka fitur tanpa batas.',
     'activate_license_now': 'AKTIVASI LISENSI',
     'trial_upgrade': 'UPGRADE',
     'or_try_free': 'ATAU COBA GRATIS',

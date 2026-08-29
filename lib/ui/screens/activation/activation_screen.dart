@@ -18,6 +18,31 @@ const _kAccentLt = Color(0xFF60A5FA);
 const _kDanger = Color(0xFFEF4444);
 // ──────────────────────────────────────────────────────────────────────────────
 
+class _LicenseKeyFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text.replaceAll('-', '').toUpperCase();
+    if (text.length > 16) return oldValue;
+    
+    final buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      if ((i + 1) % 4 == 0 && i != text.length - 1) {
+        buffer.write('-');
+      }
+    }
+    
+    final formatted = buffer.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+}
+
 class ActivationScreen extends StatefulWidget {
   const ActivationScreen({super.key});
 
@@ -545,6 +570,7 @@ class _ActivationScreenState extends State<ActivationScreen>
             focusNode: _focusNode,
             enabled: !_isLoading,
             textCapitalization: TextCapitalization.characters,
+            inputFormatters: [_LicenseKeyFormatter()],
             style: const TextStyle(
               color: Colors.white,
               fontFamily: 'monospace',

@@ -10,6 +10,8 @@ import '../../../core/services/app_localizations.dart';
 import '../../../core/services/trial_service.dart';
 import '../../widgets/app_loading.dart';
 import '../../widgets/trial_limit_dialog.dart';
+import '../../../core/utils/currency_util.dart';
+import '../../../core/utils/thousands_formatter.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -55,14 +57,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       _itemCodeCtrl.text = widget.product!.itemCode;
       _itemNameCtrl.text = widget.product!.itemName;
       _selectedCategory = widget.product!.category;
-      _buyingPriceCtrl.text = widget.product!.buyingPrice.toStringAsFixed(0);
-      _packetBuyPriceCtrl.text = widget.product!.packetBuyPrice.toStringAsFixed(
-        0,
-      );
+      _buyingPriceCtrl.text = CurrencyUtil.formatNumber(widget.product!.buyingPrice);
+      _packetBuyPriceCtrl.text = CurrencyUtil.formatNumber(widget.product!.packetBuyPrice);
       _packetBuyQtyCtrl.text = widget.product!.packetBuyQty.toString();
-      _sellingPriceCtrl.text = widget.product!.sellingPrice.toStringAsFixed(0);
-      _packetSellPriceCtrl.text = widget.product!.packetSellPrice
-          .toStringAsFixed(0);
+      _sellingPriceCtrl.text = CurrencyUtil.formatNumber(widget.product!.sellingPrice);
+      _packetSellPriceCtrl.text = CurrencyUtil.formatNumber(widget.product!.packetSellPrice);
       _packetSellQtyCtrl.text = widget.product!.packetSellQty.toString();
       _discountType = widget.product!.discountType;
       _discountValueCtrl.text = widget.product!.discountValue.toStringAsFixed(
@@ -417,6 +416,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             AppLocalizations.get('buying_price'),
                           ),
                           keyboardType: TextInputType.number,
+                          inputFormatters: [ThousandsFormatter()],
                         ),
                         const SizedBox(height: 8),
 
@@ -432,6 +432,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   AppLocalizations.get('packet_buy_price'),
                                 ),
                                 keyboardType: TextInputType.number,
+                                inputFormatters: [ThousandsFormatter()],
                               ),
                             ),
                             const Padding(
@@ -467,6 +468,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             AppLocalizations.get('selling_price'),
                           ),
                           keyboardType: TextInputType.number,
+                          inputFormatters: [ThousandsFormatter()],
                           validator: (v) => AppValidators.numeric(
                             v,
                             AppLocalizations.get('selling_price'),
@@ -486,6 +488,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   AppLocalizations.get('packet_sell_price'),
                                 ),
                                 keyboardType: TextInputType.number,
+                                inputFormatters: [ThousandsFormatter()],
                               ),
                             ),
                             const Padding(
@@ -750,15 +753,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             itemName: _itemNameCtrl.text,
                             category: _selectedCategory,
                             buyingPrice:
-                                double.tryParse(_buyingPriceCtrl.text) ?? 0,
+                                double.tryParse(_buyingPriceCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
                             packetBuyPrice:
-                                double.tryParse(_packetBuyPriceCtrl.text) ?? 0,
+                                double.tryParse(_packetBuyPriceCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
                             packetBuyQty:
                                 int.tryParse(_packetBuyQtyCtrl.text) ?? 0,
                             sellingPrice:
-                                double.tryParse(_sellingPriceCtrl.text) ?? 0,
+                                double.tryParse(_sellingPriceCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
                             packetSellPrice:
-                                double.tryParse(_packetSellPriceCtrl.text) ?? 0,
+                                double.tryParse(_packetSellPriceCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
                             packetSellQty:
                                 int.tryParse(_packetSellQtyCtrl.text) ?? 0,
                             discountType: _discountType,
