@@ -19,9 +19,6 @@ class ThousandsFormatter extends TextInputFormatter {
     final int value = int.parse(digitsOnly);
     final String formattedText = NumberFormat('#,###', 'id_ID').format(value);
 
-    // Calculate the new cursor position
-    int selectionIndex = newValue.selection.end;
-    
     // We just put the cursor at the end for simplicity
     return newValue.copyWith(
       text: formattedText,

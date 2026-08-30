@@ -6,22 +6,7 @@ import '../../widgets/app_loading.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 
-// ─── Enterprise Design Tokens ─────────────────────────────────────────────────
-
-
-
-
-
-
-
-
-
-
-
-
-
 const _kAmber = Color(0xFFF59E0B);
-// ──────────────────────────────────────────────────────────────────────────────
 
 class DailyReportScreen extends StatefulWidget {
   const DailyReportScreen({super.key});
@@ -127,7 +112,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today, color: Colors.white, size: 18),
+            icon: const Icon(
+              Icons.calendar_today,
+              color: Colors.white,
+              size: 18,
+            ),
             onPressed: _pickDate,
             tooltip: 'Pick Date',
           ),
@@ -195,29 +184,15 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Icon(Icons.trending_up, color: Colors.white, size: 16),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    AppLocalizations.get('total_revenue').toUpperCase(),
-                    style: const TextStyle(
-                      color: Color(0xFF90AAC8),
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                ],
+              Text(
+                DateFormat('dd MMMM yyyy').format(_selectedDate),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.5),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 4),
               Text(
                 _formatRupiah(totalRevenue),
                 style: const TextStyle(
@@ -225,15 +200,6 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                DateFormat('dd MMMM yyyy').format(_selectedDate),
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -245,9 +211,6 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
           children: [
             Expanded(
               child: _buildMetricCard(
-                icon: Icons.receipt_long,
-                iconColor: AppColors.accent,
-                iconBg: AppColors.accentSoft,
                 label: AppLocalizations.get('transactions'),
                 value: '$totalTrx',
               ),
@@ -255,9 +218,6 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: _buildMetricCard(
-                icon: Icons.analytics_outlined,
-                iconColor: AppColors.green,
-                iconBg: const Color(0xFFF0FDF4),
                 label: AppLocalizations.get('avg_per_transaction'),
                 value: _formatRupiah(avgTrx),
               ),
@@ -265,9 +225,6 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: _buildMetricCard(
-                icon: Icons.category_outlined,
-                iconColor: _kAmber,
-                iconBg: const Color(0xFFFFFBEB),
                 label: AppLocalizations.get('categories'),
                 value: '${_categorySummary.length}',
               ),
@@ -278,13 +235,7 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
     );
   }
 
-  Widget _buildMetricCard({
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBg,
-    required String label,
-    required String value,
-  }) {
+  Widget _buildMetricCard({required String label, required String value}) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -293,17 +244,8 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Icon(icon, color: iconColor, size: 14),
-          ),
-          const SizedBox(height: 8),
           Text(
             value,
             style: const TextStyle(
@@ -333,13 +275,10 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
   // ── Category Breakdown ────────────────────────────────────────────────────
 
   Widget _buildCategoryBreakdown() {
-    final totalAll = _categorySummary.fold<double>(
-      0.0,
-      (sum, c) {
-        final amt = c['totalAmount'];
-        return sum + ((amt is int) ? amt.toDouble() : (amt as double?) ?? 0.0);
-      },
-    );
+    final totalAll = _categorySummary.fold<double>(0.0, (sum, c) {
+      final amt = c['totalAmount'];
+      return sum + ((amt is int) ? amt.toDouble() : (amt as double?) ?? 0.0);
+    });
 
     return Container(
       decoration: BoxDecoration(
@@ -364,7 +303,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     color: AppColors.accentSoft,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Icon(Icons.pie_chart_outline, color: AppColors.accent, size: 14),
+                  child: const Icon(
+                    Icons.pie_chart_outline,
+                    color: AppColors.accent,
+                    size: 14,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -386,231 +329,271 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.inbox_outlined, size: 28, color: AppColors.txtLow),
+                    const Icon(
+                      Icons.inbox_outlined,
+                      size: 28,
+                      color: AppColors.txtLow,
+                    ),
                     const SizedBox(height: 6),
                     Text(
                       AppLocalizations.get('no_transactions_today'),
-                      style: const TextStyle(fontSize: 12, color: AppColors.txtLow),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.txtLow,
+                      ),
                     ),
                   ],
                 ),
               ),
             )
           else
-            // Table header
-            ...[
-              Container(
-                color: AppColors.tableHead,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                child: Row(
-                  children: [
-                    Expanded(flex: 4, child: _ColHeader(AppLocalizations.get('category').toUpperCase())),
-                    Expanded(flex: 2, child: _ColHeaderCenter(AppLocalizations.get('qty').toUpperCase())),
-                    Expanded(flex: 2, child: _ColHeaderCenter(AppLocalizations.get('trx').toUpperCase())),
-                    Expanded(flex: 3, child: _ColHeaderRight(AppLocalizations.get('amount').toUpperCase())),
-                    Expanded(flex: 2, child: _ColHeaderRight('%')),
-                  ],
-                ),
+          // Table header
+          ...[
+            Container(
+              color: AppColors.tableHead,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: _ColHeader(
+                      AppLocalizations.get('category').toUpperCase(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: _ColHeaderCenter(
+                      AppLocalizations.get('qty').toUpperCase(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: _ColHeaderCenter(
+                      AppLocalizations.get('trx').toUpperCase(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: _ColHeaderRight(
+                      AppLocalizations.get('amount').toUpperCase(),
+                    ),
+                  ),
+                  Expanded(flex: 2, child: _ColHeaderRight('%')),
+                ],
               ),
-              const Divider(height: 1, color: AppColors.border),
-              ...List.generate(_categorySummary.length, (idx) {
-                final cat = _categorySummary[idx];
-                final catName = (cat['category'] as String?) ?? 'Uncategorized';
-                final qty = (cat['totalQty'] as int?) ?? 0;
-                final trxCount = (cat['transactionCount'] as int?) ?? 0;
-                final amount = (cat['totalAmount'] is int)
-                    ? (cat['totalAmount'] as int).toDouble()
-                    : (cat['totalAmount'] as double?) ?? 0.0;
-                final pct = totalAll > 0 ? (amount / totalAll * 100) : 0.0;
-                final isAlt = idx % 2 == 1;
+            ),
+            const Divider(height: 1, color: AppColors.border),
+            ...List.generate(_categorySummary.length, (idx) {
+              final cat = _categorySummary[idx];
+              final catName = (cat['category'] as String?) ?? 'Uncategorized';
+              final qty = (cat['totalQty'] as int?) ?? 0;
+              final trxCount = (cat['transactionCount'] as int?) ?? 0;
+              final amount = (cat['totalAmount'] is int)
+                  ? (cat['totalAmount'] as int).toDouble()
+                  : (cat['totalAmount'] as double?) ?? 0.0;
+              final pct = totalAll > 0 ? (amount / totalAll * 100) : 0.0;
+              final isAlt = idx % 2 == 1;
 
-                return Column(
-                  children: [
-                    Container(
-                      color: isAlt ? AppColors.rowAlt : AppColors.bgCard,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 3,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                    color: _getCategoryColor(idx),
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                ),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    catName.isEmpty ? AppLocalizations.get('uncategorized') : catName,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.txtHigh,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Center(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              return Column(
+                children: [
+                  Container(
+                    color: isAlt ? AppColors.rowAlt : AppColors.bgCard,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 9,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 3,
+                                height: 20,
                                 decoration: BoxDecoration(
-                                  color: AppColors.accentSoft,
-                                  borderRadius: BorderRadius.circular(3),
+                                  color: _getCategoryColor(idx),
+                                  borderRadius: BorderRadius.circular(2),
                                 ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
                                 child: Text(
-                                  '$qty',
+                                  catName.isEmpty
+                                      ? AppLocalizations.get('uncategorized')
+                                      : catName,
                                   style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.accent,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.txtHigh,
                                   ),
-                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Center(
-                              child: Text(
-                                '$trxCount',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: AppColors.txtMid,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Center(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
                               ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Align(
-                              alignment: Alignment.centerRight,
+                              decoration: BoxDecoration(
+                                color: AppColors.accentSoft,
+                                borderRadius: BorderRadius.circular(3),
+                              ),
                               child: Text(
-                                _formatRupiah(amount),
+                                '$qty',
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.txtHigh,
+                                  color: AppColors.accent,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Center(
+                            child: Text(
+                              '$trxCount',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: AppColors.txtMid,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              _formatRupiah(amount),
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.txtHigh,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _getCategoryColor(
+                                  idx,
+                                ).withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Text(
+                                '${pct.toStringAsFixed(1)}%',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: _getCategoryColor(idx),
                                 ),
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: _getCategoryColor(idx).withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                child: Text(
-                                  '${pct.toStringAsFixed(1)}%',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                    color: _getCategoryColor(idx),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (idx < _categorySummary.length - 1)
+                    const Divider(height: 1, color: AppColors.border),
+                ],
+              );
+            }),
+            // Category total footer
+            Container(
+              color: AppColors.tableHead,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Text(
+                      AppLocalizations.get('total').toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.txtHigh,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                    if (idx < _categorySummary.length - 1)
-                      const Divider(height: 1, color: AppColors.border),
-                  ],
-                );
-              }),
-              // Category total footer
-              Container(
-                color: AppColors.tableHead,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Center(
                       child: Text(
-                        AppLocalizations.get('total').toUpperCase(),
+                        '${_categorySummary.fold<int>(0, (s, c) => s + ((c['totalQty'] as int?) ?? 0))}',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        '${(_summary['totalTransactions'] ?? 0)}',
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                           color: AppColors.txtHigh,
-                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
-                          '${_categorySummary.fold<int>(0, (s, c) => s + ((c['totalQty'] as int?) ?? 0))}',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.accent,
-                          ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        _formatRupiah(totalAll),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.accent,
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Text(
-                          '${(_summary['totalTransactions'] ?? 0)}',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.txtHigh,
-                          ),
+                  ),
+                  const Expanded(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '100%',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.txtMid,
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          _formatRupiah(totalAll),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.accent,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      flex: 2,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '100%',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.txtMid,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
+          ],
         ],
       ),
     );
@@ -664,7 +647,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                     color: const Color(0xFFF0FDF4),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Icon(Icons.list_alt, color: AppColors.green, size: 14),
+                  child: const Icon(
+                    Icons.list_alt,
+                    color: AppColors.green,
+                    size: 14,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -678,7 +665,10 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.bgPage,
                     borderRadius: BorderRadius.circular(4),
@@ -703,11 +693,18 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.receipt_long_outlined, size: 28, color: AppColors.txtLow),
+                    const Icon(
+                      Icons.receipt_long_outlined,
+                      size: 28,
+                      color: AppColors.txtLow,
+                    ),
                     const SizedBox(height: 6),
                     Text(
                       AppLocalizations.get('no_transactions_recorded'),
-                      style: const TextStyle(fontSize: 12, color: AppColors.txtLow),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.txtLow,
+                      ),
                     ),
                   ],
                 ),
@@ -737,7 +734,8 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
 
               return Column(
                 children: [
-                  if (idx > 0) const Divider(height: 1, color: AppColors.border),
+                  if (idx > 0)
+                    const Divider(height: 1, color: AppColors.border),
                   Container(
                     padding: const EdgeInsets.all(12),
                     child: Column(
@@ -748,7 +746,10 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 3,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.navy,
                                 borderRadius: BorderRadius.circular(4),
@@ -765,16 +766,27 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                             const SizedBox(width: 6),
                             if (vehicleNo != null && vehicleNo.isNotEmpty)
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppColors.accentSoft,
                                   borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
+                                  border: Border.all(
+                                    color: AppColors.accent.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  ),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(Icons.two_wheeler, size: 10, color: AppColors.accent),
+                                    const Icon(
+                                      Icons.two_wheeler,
+                                      size: 10,
+                                      color: AppColors.accent,
+                                    ),
                                     const SizedBox(width: 3),
                                     Text(
                                       vehicleNo,
@@ -792,7 +804,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.access_time, size: 10, color: AppColors.txtLow),
+                                  const Icon(
+                                    Icons.access_time,
+                                    size: 10,
+                                    color: AppColors.txtLow,
+                                  ),
                                   const SizedBox(width: 3),
                                   Text(
                                     timeStr,
@@ -826,8 +842,11 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                           child: Column(
                             children: List.generate(items.length, (i) {
                               final item = items[i];
-                              final itemName = (item['itemName'] as String?) ?? AppLocalizations.get('unknown_item');
-                              final category = (item['category'] as String?) ?? '';
+                              final itemName =
+                                  (item['itemName'] as String?) ??
+                                  AppLocalizations.get('unknown_item');
+                              final category =
+                                  (item['category'] as String?) ?? '';
                               final qty = (item['quantity'] as int?) ?? 0;
                               final subtotal = (item['subtotal'] is int)
                                   ? (item['subtotal'] as int).toDouble()
@@ -836,13 +855,17 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                               return Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 7,
+                                    ),
                                     child: Row(
                                       children: [
                                         Expanded(
                                           flex: 5,
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 itemName,
@@ -892,7 +915,10 @@ class _DailyReportScreenState extends State<DailyReportScreen> {
                                     ),
                                   ),
                                   if (i < items.length - 1)
-                                    const Divider(height: 1, color: AppColors.border),
+                                    const Divider(
+                                      height: 1,
+                                      color: AppColors.border,
+                                    ),
                                 ],
                               );
                             }),

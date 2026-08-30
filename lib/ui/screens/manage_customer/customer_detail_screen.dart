@@ -6,6 +6,7 @@ import '../../../data/models/customer_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
+import 'package:flutter/services.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -348,7 +349,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                 AppLocalizations.get('phone_number'),
                                 hintText: 'e.g. 081234567890',
                               ),
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               validator: (v) => AppValidators.phone(
                                 v,
                                 AppLocalizations.get('phone_number'),

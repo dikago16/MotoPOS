@@ -6,6 +6,7 @@ import '../../../data/models/store_info_model.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
 import '../../../core/utils/validators.dart';
+import 'package:flutter/services.dart';
 
 class MyStoreScreen extends StatefulWidget {
   const MyStoreScreen({super.key});
@@ -165,7 +166,8 @@ class _MyStoreScreenState extends State<MyStoreScreen> {
                             const SizedBox(height: 6),
                             TextFormField(
                               controller: _phoneCtrl,
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               decoration: _inputDecoration(
                                 hint: AppLocalizations.get('e_g_phone'),
                                 icon: Icons.phone_outlined,

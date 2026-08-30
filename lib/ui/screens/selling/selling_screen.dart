@@ -52,7 +52,7 @@ class _SellingScreenState extends State<SellingScreen> {
     setState(() {
       _refreshCount++;
     });
-    _checkTrialStatus(); // Update badge when product added
+    _checkTrialStatus();
   }
 
   @override
@@ -66,12 +66,18 @@ class _SellingScreenState extends State<SellingScreen> {
             if (_isTrial)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
                 color: AppColors.accent.withValues(alpha: 0.1),
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.accent,
                         borderRadius: BorderRadius.circular(4),
@@ -99,11 +105,16 @@ class _SellingScreenState extends State<SellingScreen> {
                     InkWell(
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const ActivationScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const ActivationScreen(),
+                          ),
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.accent),
                           borderRadius: BorderRadius.circular(4),

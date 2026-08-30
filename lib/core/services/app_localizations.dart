@@ -113,7 +113,7 @@ class AppLocalizations {
     // ── Payment Dialog ──
     'payment': 'Payment',
     'complete_transaction': 'Complete your transaction',
-    'amount_due': 'AMOUNT DUE',
+    'amount_due': 'TOTAL',
     'vehicle_no_optional': 'Vehicle No (Optional)',
     'cash_received': 'Cash Received',
     'exact': 'EXACT',
@@ -543,7 +543,7 @@ class AppLocalizations {
     // ── Payment Dialog ──
     'payment': 'Pembayaran',
     'complete_transaction': 'Selesaikan transaksi Anda',
-    'amount_due': 'JUMLAH TAGIHAN',
+    'amount_due': 'TOTAL',
     'vehicle_no_optional': 'No Kendaraan (Opsional)',
     'cash_received': 'Uang Diterima',
     'exact': 'PAS',

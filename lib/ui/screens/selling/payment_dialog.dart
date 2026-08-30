@@ -100,18 +100,18 @@ class _PaymentDialogState extends State<PaymentDialog> {
   InputDecoration _inputDeco(String label, {String? prefix, String? hint}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(fontSize: 11, color: AppColors.txtMid),
+      labelStyle: const TextStyle(fontSize: 10, color: AppColors.txtMid),
       floatingLabelStyle: const TextStyle(
-        fontSize: 9,
+        fontSize: 8,
         color: AppColors.accent,
         fontWeight: FontWeight.w600,
       ),
       hintText: hint,
-      hintStyle: const TextStyle(fontSize: 10, color: AppColors.txtLow),
+      hintStyle: const TextStyle(fontSize: 9, color: AppColors.txtLow),
       prefixText: prefix,
       prefixStyle: const TextStyle(
         color: AppColors.txtHigh,
-        fontSize: 15,
+        fontSize: 13,
         fontWeight: FontWeight.w700,
       ),
       border: OutlineInputBorder(
@@ -128,7 +128,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
       ),
       filled: true,
       fillColor: AppColors.bgCard,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       isDense: true,
     );
   }
@@ -161,7 +161,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
             children: [
               // ── Header ──────────────────────────────────────────────────
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 14, 10, 14),
+                padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [AppColors.navy, Color(0xFF1B2D45)],
@@ -176,18 +176,18 @@ class _PaymentDialogState extends State<PaymentDialog> {
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Icon(
                         Icons.point_of_sale,
                         color: Colors.white,
-                        size: 18,
+                        size: 16,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +195,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                           Text(
                             AppLocalizations.get('payment'),
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
@@ -203,7 +203,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                           Text(
                             AppLocalizations.get('complete_transaction'),
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 9,
                               fontWeight: FontWeight.w400,
                               color: Color(0xFF90AAC8),
                             ),
@@ -228,7 +228,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
               // ── Total Amount Banner ─────────────────────────────────────
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: const BoxDecoration(
                   color: AppColors.bgPage,
                   border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -238,17 +238,17 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     Text(
                       AppLocalizations.get('amount_due'),
                       style: TextStyle(
-                        fontSize: 9,
+                        fontSize: 8,
                         fontWeight: FontWeight.w700,
                         color: AppColors.txtLow,
                         letterSpacing: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       _formatRupiah(widget.totalAmount),
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: AppColors.txtHigh,
                         letterSpacing: -0.5,
@@ -260,7 +260,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
 
               // ── Form Body ───────────────────────────────────────────────
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -268,7 +268,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     TextFormField(
                       controller: _vehicleNoController,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.0,
                       ),
@@ -279,32 +279,32 @@ class _PaymentDialogState extends State<PaymentDialog> {
                             hint: 'e.g. B 1234 ABC',
                           ).copyWith(
                             prefixIcon: const Padding(
-                              padding: EdgeInsets.only(left: 10, right: 6),
+                              padding: EdgeInsets.only(left: 8, right: 6),
                               child: Icon(
                                 Icons.two_wheeler,
-                                size: 16,
+                                size: 14,
                                 color: AppColors.txtLow,
                               ),
                             ),
                             prefixIconConstraints: const BoxConstraints(
-                              minWidth: 32,
+                              minWidth: 28,
                               minHeight: 0,
                             ),
                           ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 10),
 
                     // Cash Amount
                     TextFormField(
                       controller: _cashController,
                       keyboardType: TextInputType.number,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
                       decoration: _inputDeco(AppLocalizations.get('cash_received'), prefix: 'Rp '),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
 
                     // Quick Nominals
                     Row(
@@ -324,7 +324,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     // Change Display
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: isValid ? _kGreenSoft : AppColors.bgPage,
                         borderRadius: BorderRadius.circular(10),
@@ -337,7 +337,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: isValid
                                   ? AppColors.green.withValues(alpha: 0.12)
@@ -348,18 +348,18 @@ class _PaymentDialogState extends State<PaymentDialog> {
                               isValid
                                   ? Icons.check_circle_outline
                                   : Icons.info_outline,
-                              size: 16,
+                              size: 14,
                               color: isValid ? AppColors.green : AppColors.txtLow,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 isValid ? AppLocalizations.get('change') : AppLocalizations.get('insufficient'),
                                 style: TextStyle(
-                                  fontSize: 9,
+                                  fontSize: 8,
                                   fontWeight: FontWeight.w700,
                                   color: isValid ? AppColors.green : AppColors.txtLow,
                                   letterSpacing: 1.0,
@@ -373,7 +373,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                         widget.totalAmount - _cashAmount,
                                       ),
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w800,
                                   color: isValid ? AppColors.green : AppColors.red,
                                 ),
@@ -394,7 +394,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       children: [
                         Expanded(
                           child: SizedBox(
-                            height: 44,
+                            height: 38,
                             child: OutlinedButton(
                               onPressed: () => Navigator.pop(context),
                               style: OutlinedButton.styleFrom(
@@ -407,7 +407,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                               child: Text(
                                 AppLocalizations.get('cancel'),
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 9,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
                                 ),
@@ -419,7 +419,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                         Expanded(
                           flex: 2,
                           child: SizedBox(
-                            height: 44,
+                            height: 38,
                             child: ElevatedButton.icon(
                               onPressed: isValid
                                   ? () {
@@ -430,11 +430,11 @@ class _PaymentDialogState extends State<PaymentDialog> {
                                       });
                                     }
                                   : null,
-                              icon: const Icon(Icons.check, size: 16),
+                              icon: const Icon(Icons.check, size: 14),
                               label: Text(
                                 AppLocalizations.get('confirm_payment'),
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 9,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.5,
                                 ),

@@ -67,7 +67,10 @@ class CartItemsTable extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text(AppLocalizations.get('cancel'), style: const TextStyle(color: AppColors.txtLow)),
+            child: Text(
+              AppLocalizations.get('cancel'),
+              style: const TextStyle(color: AppColors.txtLow),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -101,7 +104,11 @@ class CartItemsTable extends StatelessWidget {
           ),
           title: Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: AppColors.red, size: 24),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: AppColors.red,
+                size: 24,
+              ),
               const SizedBox(width: 8),
               Text(
                 AppLocalizations.get('remove_item'),
@@ -122,7 +129,10 @@ class CartItemsTable extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
               child: Text(
                 AppLocalizations.get('cancel'),
-                style: const TextStyle(color: AppColors.txtLow, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  color: AppColors.txtLow,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             ElevatedButton(
@@ -202,7 +212,11 @@ class CartItemsTable extends StatelessWidget {
               width: double.infinity,
               child: Column(
                 children: [
-                  const Icon(Icons.inbox_outlined, size: 30, color: AppColors.txtLow),
+                  const Icon(
+                    Icons.inbox_outlined,
+                    size: 30,
+                    color: AppColors.txtLow,
+                  ),
                   const SizedBox(height: 7),
                   Text(
                     AppLocalizations.get('no_items_added'),
@@ -238,7 +252,7 @@ class CartItemsTable extends StatelessWidget {
                               Text(
                                 item.name.isEmpty ? 'Unknown Item' : item.name,
                                 style: const TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.txtHigh,
                                 ),
@@ -247,7 +261,7 @@ class CartItemsTable extends StatelessWidget {
                               Text(
                                 item.category,
                                 style: const TextStyle(
-                                  fontSize: 9,
+                                  fontSize: 7,
                                   color: AppColors.txtLow,
                                 ),
                               ),
@@ -271,13 +285,15 @@ class CartItemsTable extends StatelessWidget {
                                   color: AppColors.accentSoft,
                                   borderRadius: BorderRadius.circular(3),
                                   border: Border.all(
-                                    color: AppColors.accent.withValues(alpha: 0.2),
+                                    color: AppColors.accent.withValues(
+                                      alpha: 0.2,
+                                    ),
                                   ),
                                 ),
                                 child: Text(
                                   '${item.quantity}',
                                   style: const TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 10,
                                     color: AppColors.accent,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -296,7 +312,7 @@ class CartItemsTable extends StatelessWidget {
                             child: Text(
                               CurrencyUtil.formatNumber(item.price),
                               style: const TextStyle(
-                                fontSize: 11,
+                                fontSize: 10,
                                 color: AppColors.txtMid,
                               ),
                             ),
@@ -358,7 +374,7 @@ class CartItemsTable extends StatelessWidget {
                       border: Border.all(color: AppColors.borderMid),
                     ),
                     child: Text(
-                      '${items.length} Items${items.length != 1 ? 's' : ''}',
+                      '${items.length} Item${items.length != 1 ? 's' : ''}',
                       style: const TextStyle(
                         fontSize: 10,
                         color: AppColors.txtMid,
@@ -370,7 +386,7 @@ class CartItemsTable extends StatelessWidget {
                   Text(
                     AppLocalizations.get('total'),
                     style: const TextStyle(
-                      fontSize: 9,
+                      fontSize: 10,
                       color: AppColors.txtMid,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.8,
@@ -385,7 +401,6 @@ class CartItemsTable extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(width: 26),
                 ],
               ),
             ),

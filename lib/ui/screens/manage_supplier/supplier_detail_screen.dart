@@ -6,6 +6,7 @@ import '../../../data/models/supplier_model.dart';
 import '../../../data/database_service.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
+import 'package:flutter/services.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -331,7 +332,8 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             ),
                             TextFormField(
                               controller: _phoneCtrl,
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.txtHigh,
