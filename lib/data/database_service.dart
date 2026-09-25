@@ -14,11 +14,11 @@ import 'models/store_info_model.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
-  
+
   factory DatabaseService() {
     return _instance;
   }
-  
+
   DatabaseService._internal();
 
   Database? _db;
@@ -327,7 +327,9 @@ class DatabaseService {
   Future<int> getProductCount() async {
     try {
       final dbClient = await db;
-      final result = await dbClient.rawQuery('SELECT COUNT(*) as count FROM $_tableName');
+      final result = await dbClient.rawQuery(
+        'SELECT COUNT(*) as count FROM $_tableName',
+      );
       return Sqflite.firstIntValue(result) ?? 0;
     } catch (e) {
       debugPrint('DatabaseService error in getProductCount: $e');
@@ -495,6 +497,43 @@ class DatabaseService {
     }
   }
 
+  Future<void> updateTransaction(
+    int transactionId,
+    TransactionModel transaction,
+    List<TransactionItemModel> items,
+  ) async {
+    try {
+      final dbClient = await db;
+      await dbClient.transaction((txn) async {
+        final updateData = transaction.toMap();
+        updateData.remove(
+          'id',
+        ); // Remove id to avoid updating primary key with null
+
+        await txn.update(
+          _transactionTable,
+          updateData,
+          where: 'id = ?',
+          whereArgs: [transactionId],
+        );
+        await txn.delete(
+          _transactionItemsTable,
+          where: 'transactionId = ?',
+          whereArgs: [transactionId],
+        );
+        for (var item in items) {
+          var itemMap = item.toMap();
+          itemMap.remove('id');
+          itemMap['transactionId'] = transactionId;
+          await txn.insert(_transactionItemsTable, itemMap);
+        }
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in updateTransaction: $e');
+      rethrow;
+    }
+  }
+
   Future<List<TransactionModel>> getAllTransactions() async {
     try {
       final dbClient = await db;
@@ -502,7 +541,10 @@ class DatabaseService {
         _transactionTable,
         orderBy: 'id DESC',
       );
-      return List.generate(maps.length, (i) => TransactionModel.fromMap(maps[i]));
+      return List.generate(
+        maps.length,
+        (i) => TransactionModel.fromMap(maps[i]),
+      );
     } catch (e) {
       debugPrint('DatabaseService error in getAllTransactions: $e');
       rethrow;
@@ -994,7 +1036,9 @@ class DatabaseService {
       data[_tableName] = await dbClient.query(_tableName);
       data[_categoryTable] = await dbClient.query(_categoryTable);
       data[_transactionTable] = await dbClient.query(_transactionTable);
-      data[_transactionItemsTable] = await dbClient.query(_transactionItemsTable);
+      data[_transactionItemsTable] = await dbClient.query(
+        _transactionItemsTable,
+      );
       data[_supplierTable] = await dbClient.query(_supplierTable);
       data[_purchaseInvoiceTable] = await dbClient.query(_purchaseInvoiceTable);
       data[_purchaseInvoiceItemsTable] = await dbClient.query(

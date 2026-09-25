@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import '../data/models/transaction_model.dart';
+import '../data/models/transaction_item_model.dart';
 import '../data/models/sale_item_model.dart';
 import '../data/models/customer_model.dart';
 
@@ -6,6 +8,11 @@ class SellingProvider with ChangeNotifier {
   final List<SaleItemModel> _items = [];
   double _cash = 0.0;
   CustomerModel? _selectedCustomer;
+  int? _editingTransactionId;
+  TransactionModel? _editingTransaction;
+
+  int? get editingTransactionId => _editingTransactionId;
+  TransactionModel? get editingTransaction => _editingTransaction;
 
   List<SaleItemModel> get items => _items;
   double get cash => _cash;
@@ -48,10 +55,31 @@ class SellingProvider with ChangeNotifier {
     notifyListeners();
   }
 
+
+  void loadTransactionForEdit(TransactionModel txn, List<TransactionItemModel> txnItems, CustomerModel? customer) {
+    _editingTransactionId = txn.id;
+    _editingTransaction = txn;
+    _selectedCustomer = customer;
+    _cash = txn.cashAmount;
+    _items.clear();
+    for (var ti in txnItems) {
+      _items.add(SaleItemModel(
+        id: ti.id?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        name: ti.itemName,
+        category: ti.category,
+        price: ti.price,
+        quantity: ti.quantity,
+      ));
+    }
+    notifyListeners();
+  }
+
   void clearTransaction() {
     _items.clear();
     _cash = 0.0;
     _selectedCustomer = null;
+    _editingTransactionId = null;
+    _editingTransaction = null;
     notifyListeners();
   }
 

@@ -6,6 +6,8 @@ import '../../../data/models/transaction_model.dart';
 import '../../../data/models/transaction_item_model.dart';
 import '../../../data/database_service.dart';
 import '../../../providers/printer_provider.dart';
+import '../../../providers/selling_provider.dart';
+import '../../../data/models/customer_model.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
 
@@ -90,21 +92,47 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: InkWell(
-              onTap: isPrinterConnected
-                  ? () => _showPrintConfirmationDialog(printerProvider)
-                  : null,
-              borderRadius: BorderRadius.circular(8),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.print,
-                  color: isPrinterConnected
-                      ? const Color(0xFF16A34A)
-                      : const Color(0xFFDC2626),
-                  size: 20,
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    CustomerModel? customer;
+                    if (widget.transaction.customerId != null) {
+                      final customers = await context.read<DatabaseService>().getCustomers();
+                      customer = customers.where((c) => c.id == widget.transaction.customerId).firstOrNull;
+                    }
+                    if (context.mounted) {
+                      context.read<SellingProvider>().loadTransactionForEdit(widget.transaction, _items, customer);
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.edit,
+                      color: Color(0xFF3B82F6),
+                      size: 20,
+                    ),
+                  ),
                 ),
-              ),
+                InkWell(
+                  onTap: isPrinterConnected
+                      ? () => _showPrintConfirmationDialog(printerProvider)
+                      : null,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.print,
+                      color: isPrinterConnected
+                          ? const Color(0xFF16A34A)
+                          : const Color(0xFFDC2626),
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

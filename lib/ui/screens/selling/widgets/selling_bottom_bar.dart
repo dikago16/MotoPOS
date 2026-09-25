@@ -332,9 +332,17 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                     ),
                                   )
                                   .toList();
-                              final transactionId = await context
-                                  .read<DatabaseService>()
-                                  .saveTransaction(trx, items);
+                              int transactionId = 0;
+                              if (provider.editingTransactionId != null) {
+                                await context.read<DatabaseService>().updateTransaction(
+                                  provider.editingTransactionId!, trx, items
+                                );
+                                transactionId = provider.editingTransactionId!;
+                              } else {
+                                transactionId = await context
+                                    .read<DatabaseService>()
+                                    .saveTransaction(trx, items);
+                              }
 
                               if (printReceipt && printerProvider.isConnected) {
                                 final printSuccess = await printerProvider
