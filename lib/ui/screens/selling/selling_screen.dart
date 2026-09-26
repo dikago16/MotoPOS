@@ -5,6 +5,9 @@ import '../../../core/services/app_localizations.dart';
 import '../../../core/services/trial_service.dart';
 import '../../../data/database_service.dart';
 import '../activation/activation_screen.dart';
+import '../../../core/services/api_service.dart';
+import '../../../services/update_service.dart';
+import '../../widgets/update_dialog.dart';
 
 import 'widgets/selling_app_bar.dart';
 import 'widgets/customer_selector.dart';
@@ -29,6 +32,46 @@ class _SellingScreenState extends State<SellingScreen> {
   void initState() {
     super.initState();
     _checkTrialStatus();
+    _runBackgroundStartupChecks();
+  }
+
+  Future<void> _runBackgroundStartupChecks() async {
+    // Jalankan pemeriksaan lisensi secara background jika aplikasi masuk ke SellingScreen lewat jalur bypass
+    final hasLicense = await ActivationService.hasLocalLicense();
+    if (hasLicense) {
+      final result = await ActivationService.validateLicense();
+      if (!mounted) return;
+      if (result['success'] == false && result['is_invalid'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message']),
+            backgroundColor: Colors.red,
+          ),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ActivationScreen()),
+        );
+        return; // Jangan lanjutkan cek update jika lisensi invalid
+      } else if (result['success'] == true && result['is_offline'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result['message'])),
+        );
+      }
+    }
+
+    // Cek pembaruan aplikasi
+    Future.delayed(const Duration(seconds: 2), () async {
+      try {
+        final result = await UpdateService.checkForUpdate();
+        if (!result.updateAvailable || result.versionInfo == null) return;
+        if (!mounted) return;
+        UpdateDialog.show(
+          context,
+          versionInfo: result.versionInfo!,
+          currentVersion: result.currentVersion ?? '',
+        );
+      } catch (_) {}
+    });
   }
 
   Future<void> _checkTrialStatus() async {

@@ -17,6 +17,9 @@ import 'core/services/app_localizations.dart';
 
 import 'data/database_service.dart';
 
+import 'core/services/api_service.dart';
+import 'ui/screens/selling/selling_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -33,6 +36,11 @@ void main() async {
 
   await AppLocalizations.init();
 
+  bool hasLicense = false;
+  try {
+    hasLicense = await ActivationService.hasLocalLicense();
+  } catch (_) {}
+
   runApp(
     MultiProvider(
       providers: [
@@ -44,13 +52,14 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => CircuitsProvider()),
       ],
-      child: const MyApp(),
+      child: MyApp(hasLicense: hasLicense),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool hasLicense;
+  const MyApp({super.key, required this.hasLicense});
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -64,7 +73,7 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       ),
-      home: const SplashScreen(),
+      home: hasLicense ? const SellingScreen() : const SplashScreen(),
       navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
     );
   }

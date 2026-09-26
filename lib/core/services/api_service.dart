@@ -13,6 +13,13 @@ class ActivationService {
   static const String _licenseKeyPref = "saved_license_key";
   static const String _lastOnlineValidPref = "last_online_valid_time";
 
+  // Cek apakah ada lisensi lokal yang tersimpan
+  static Future<bool> hasLocalLicense() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? licenseKey = prefs.getString(_licenseKeyPref);
+    return licenseKey != null && licenseKey.isNotEmpty;
+  }
+
   // Memformat ID menjadi 16 digit hex dengan pemisah minus per 4 karakter
   static String _formatDeviceId(String rawId) {
     final bytes = utf8.encode(rawId);
