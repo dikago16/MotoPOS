@@ -49,7 +49,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to open update link')),
+          SnackBar(content: Text(AppLocalizations.get('failed_to_open_update'))),
         );
       }
     }

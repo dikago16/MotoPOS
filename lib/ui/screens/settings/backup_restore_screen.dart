@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../../services/google_drive_service.dart';
+import '../../../services/local_backup_service.dart';
 import '../../../data/database_service.dart';
 import '../../widgets/app_loading.dart';
 
@@ -17,6 +18,7 @@ class BackupRestoreScreen extends StatefulWidget {
 
 class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
   late final GoogleDriveService _driveService;
+  late final LocalBackupService _localService;
   bool _isLoading = true;
   bool _isActionLoading = false;
   List<drive.File> _backups = [];
@@ -24,7 +26,9 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
   @override
   void initState() {
     super.initState();
-    _driveService = GoogleDriveService(context.read<DatabaseService>());
+    final dbService = context.read<DatabaseService>();
+    _driveService = GoogleDriveService(dbService);
+    _localService = LocalBackupService(dbService);
     _initGoogleSignIn();
   }
 
@@ -60,6 +64,34 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
       _backups = [];
       _isActionLoading = false;
     });
+  }
+
+  Future<void> _handleLocalBackup() async {
+    setState(() => _isActionLoading = true);
+    final success = await _localService.backupData();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.get(success ? 'backup_success' : 'backup_failed')),
+          backgroundColor: success ? Colors.green : Colors.red,
+        ),
+      );
+    }
+    setState(() => _isActionLoading = false);
+  }
+
+  Future<void> _handleLocalRestore() async {
+    setState(() => _isActionLoading = true);
+    final success = await _localService.restoreData();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.get(success ? 'restore_success' : 'restore_failed')),
+          backgroundColor: success ? Colors.green : Colors.red,
+        ),
+      );
+    }
+    setState(() => _isActionLoading = false);
   }
 
   Future<void> _handleBackup() async {
@@ -195,6 +227,17 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                   ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
+                      _buildLocalBackupCard(),
+                      const SizedBox(height: 24),
+                      Text(
+                        AppLocalizations.get('google_drive_label'), // It's better to label this section
+                        style: const TextStyle(
+                          color: AppColors.txtHigh,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       _buildAccountCard(),
                       if (_driveService.currentUser != null) ...[
                         const SizedBox(height: 16),
@@ -220,6 +263,92 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                     ),
                 ],
               ),
+      ),
+    );
+  }
+
+  Widget _buildLocalBackupCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.bgCard,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.sd_storage, color: Colors.orange),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.get('local_backup'),
+                      style: const TextStyle(
+                        color: AppColors.txtHigh,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.get('local_backup_desc'),
+                      style: const TextStyle(
+                        color: AppColors.txtMid,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _handleLocalBackup,
+                  icon: const Icon(Icons.download),
+                  label: Text(AppLocalizations.get('save_local')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.navy,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _handleLocalRestore,
+                  icon: const Icon(Icons.upload),
+                  label: Text(AppLocalizations.get('restore_local')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.navy,
+                    side: const BorderSide(color: AppColors.navy),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

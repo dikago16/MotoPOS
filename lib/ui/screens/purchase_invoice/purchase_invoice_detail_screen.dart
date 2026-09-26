@@ -274,7 +274,7 @@ class _PurchaseInvoiceDetailScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text('TOTAL AMOUNT:  ', style: _kColHeader),
+                Text(AppLocalizations.get('total_amount_upper'), style: _kColHeader),
                 Text(
                   _formatRupiah(widget.invoice.totalAmount),
                   style: const TextStyle(

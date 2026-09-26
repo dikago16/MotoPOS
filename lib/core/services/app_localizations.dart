@@ -447,6 +447,28 @@ class AppLocalizations {
     'trial_remaining': 'remaining',
     'trial_items_count': 'Items',
     'trial_ai_count': 'AI Chat',
+
+    // --- Hardcoded fixes ---
+    'could_not_launch_whatsapp': 'Could not launch WhatsApp',
+    'delete_upper': 'DELETE',
+    'failed_to_connect_to': 'Failed to connect to',
+    'save_local': 'Save',
+    'restore_local': 'Restore',
+    'local_backup': 'Local Backup',
+    'local_backup_desc': 'Backup or restore from device storage',
+    'google_drive_label': 'Google Drive',
+    'phone_cannot_be_empty': 'Phone number cannot be empty',
+    'whatsapp_receipt': 'WhatsApp Receipt',
+    'enter_destination_number': 'Enter destination number (use country code, e.g. 62812...):',
+    'send': 'Send',
+    'failed_to_open_update': 'Failed to open update link',
+    'eg_phone': 'e.g. 081234567890',
+    'eg_vehicle_no': 'e.g. B 1234 ABC',
+    'eg_vehicle_name': 'e.g. Honda Beat 2019',
+    'total_amount_upper': 'TOTAL AMOUNT:  ',
+    'receipt_title': 'MotoPOS Receipt',
+    'receipt_vehicle': 'Vehicle: ',
+    'thank_you_shopping': '\nThank you for shopping!',
   };
 
   // ─── Indonesian Translations ───────────────────────────────────────────────
@@ -878,5 +900,27 @@ class AppLocalizations {
     'trial_remaining': 'tersisa',
     'trial_items_count': 'Item',
     'trial_ai_count': 'AI Chat',
+
+    // --- Hardcoded fixes ---
+    'could_not_launch_whatsapp': 'Tidak dapat membuka WhatsApp',
+    'delete_upper': 'HAPUS',
+    'failed_to_connect_to': 'Gagal terhubung ke',
+    'save_local': 'Simpan',
+    'restore_local': 'Pulihkan',
+    'local_backup': 'Backup Lokal',
+    'local_backup_desc': 'Backup atau pulihkan dari penyimpanan perangkat',
+    'google_drive_label': 'Google Drive',
+    'phone_cannot_be_empty': 'Nomor tidak boleh kosong',
+    'whatsapp_receipt': 'WhatsApp Nota',
+    'enter_destination_number': 'Masukkan nomor tujuan (gunakan kode negara, misal: 62812...):',
+    'send': 'Kirim',
+    'failed_to_open_update': 'Gagal membuka tautan pembaruan',
+    'eg_phone': 'Cth: 081234567890',
+    'eg_vehicle_no': 'Cth: B 1234 ABC',
+    'eg_vehicle_name': 'Cth: Honda Beat 2019',
+    'total_amount_upper': 'TOTAL AMOUNT:  ',
+    'receipt_title': 'MotoPOS Receipt',
+    'receipt_vehicle': 'Kendaraan: ',
+    'thank_you_shopping': '\nTerima kasih telah berbelanja!',
   };
 }

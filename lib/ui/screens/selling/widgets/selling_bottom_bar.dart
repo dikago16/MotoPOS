@@ -71,7 +71,7 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
-                child: const Text('OK'),
+                child: Text(AppLocalizations.get('ok')),
               ),
             ],
           ),

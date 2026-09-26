@@ -804,7 +804,7 @@ class _ActivationScreenState extends State<ActivationScreen>
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not launch WhatsApp')),
+          SnackBar(content: Text(AppLocalizations.get('could_not_launch_whatsapp'))),
         );
       }
     }

@@ -111,7 +111,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text('DELETE'),
+            child: Text(AppLocalizations.get('delete_upper')),
           ),
         ],
       ),

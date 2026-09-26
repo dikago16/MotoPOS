@@ -10,6 +10,7 @@ import '../../../providers/selling_provider.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -95,25 +96,42 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             child: Row(
               children: [
                 InkWell(
+                  onTap: () => _showWhatsAppDialog(),
+                  borderRadius: BorderRadius.circular(8),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons
+                          .chat, // We use a standard chat icon or something similar for WA
+                      color: Color(0xFF25D366), // WhatsApp color
+                      size: 20,
+                    ),
+                  ),
+                ),
+                InkWell(
                   onTap: () async {
                     CustomerModel? customer;
                     if (widget.transaction.customerId != null) {
-                      final customers = await context.read<DatabaseService>().getCustomers();
-                      customer = customers.where((c) => c.id == widget.transaction.customerId).firstOrNull;
+                      final customers = await context
+                          .read<DatabaseService>()
+                          .getCustomers();
+                      customer = customers
+                          .where((c) => c.id == widget.transaction.customerId)
+                          .firstOrNull;
                     }
                     if (context.mounted) {
-                      context.read<SellingProvider>().loadTransactionForEdit(widget.transaction, _items, customer);
+                      context.read<SellingProvider>().loadTransactionForEdit(
+                        widget.transaction,
+                        _items,
+                        customer,
+                      );
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     }
                   },
                   borderRadius: BorderRadius.circular(8),
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.edit,
-                      color: Color(0xFF3B82F6),
-                      size: 20,
-                    ),
+                    child: Icon(Icons.edit, color: Color(0xFF3B82F6), size: 20),
                   ),
                 ),
                 InkWell(
@@ -480,5 +498,165 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
         ],
       ),
     );
+  }
+
+  void _showWhatsAppDialog() {
+    final TextEditingController phoneController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.bgCard,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF25D366).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.chat, color: Color(0xFF25D366), size: 20),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              AppLocalizations.get('whatsapp_receipt'),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.txtHigh,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppLocalizations.get('enter_destination_number'),
+              style: TextStyle(fontSize: 13, color: AppColors.txtMid),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              style: const TextStyle(color: AppColors.txtHigh),
+              decoration: InputDecoration(
+                hintText: '08xxxxxxxx',
+                hintStyle: const TextStyle(color: AppColors.txtLow),
+                filled: true,
+                fillColor: AppColors.bgPage,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              AppLocalizations.get('cancel'),
+              style: const TextStyle(
+                color: AppColors.txtLow,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _sendWhatsApp(phoneController.text.trim());
+            },
+            icon: const Icon(Icons.send, size: 16),
+            label: Text(
+              AppLocalizations.get('send'),
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF25D366),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _sendWhatsApp(String phoneNumber) async {
+    if (phoneNumber.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.get('phone_cannot_be_empty')),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Simple sanitization
+    phoneNumber = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
+    if (phoneNumber.startsWith('0')) {
+      phoneNumber = '62${phoneNumber.substring(1)}';
+    }
+
+    final message = _generateReceiptText();
+    final url = Uri.parse(
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.get('could_not_launch_whatsapp')),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  String _generateReceiptText() {
+    final date = DateTime.parse(widget.transaction.transactionDate);
+    final dateStr = DateFormat('dd MMM yyyy HH:mm').format(date);
+
+    final StringBuffer sb = StringBuffer();
+    sb.writeln(AppLocalizations.get('receipt_title'));
+    sb.writeln('${AppLocalizations.get('txn')}: #${widget.transaction.id}');
+    sb.writeln('${AppLocalizations.get('date')}: $dateStr');
+    if (widget.transaction.vehicleNo != null &&
+        widget.transaction.vehicleNo!.isNotEmpty) {
+      sb.writeln('${AppLocalizations.get('receipt_vehicle')} ${widget.transaction.vehicleNo}');
+    }
+    sb.writeln('--------------------------------');
+
+    for (var item in _items) {
+      sb.writeln(item.itemName);
+      sb.writeln(
+        '${item.quantity} x ${_formatRupiah(item.price)} = ${_formatRupiah(item.subtotal)}',
+      );
+    }
+    sb.writeln('--------------------------------');
+    sb.writeln('${AppLocalizations.get('total_amount')}: ${_formatRupiah(widget.transaction.totalAmount)}');
+    sb.writeln('${AppLocalizations.get('cash_amount')}: ${_formatRupiah(widget.transaction.cashAmount)}');
+    sb.writeln('${AppLocalizations.get('change_amount')}: ${_formatRupiah(widget.transaction.changeAmount)}');
+
+    sb.writeln(AppLocalizations.get('thank_you_shopping'));
+
+    return sb.toString();
   }
 }

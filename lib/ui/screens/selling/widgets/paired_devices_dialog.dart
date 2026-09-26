@@ -49,7 +49,7 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Connected to ${device.name ?? 'printer'}'),
+            content: Text('${AppLocalizations.get('connected_to')} ${device.name ?? 'printer'}'),
             backgroundColor: const Color(0xFF16A34A),
             behavior: SnackBarBehavior.floating,
           ),
@@ -61,7 +61,7 @@ class _PairedDevicesDialogState extends State<PairedDevicesDialog> {
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to connect to ${device.name ?? 'printer'}'),
+            content: Text('${AppLocalizations.get('failed_to_connect_to')} ${device.name ?? 'printer'}'),
             backgroundColor: const Color(0xFFDC2626),
             behavior: SnackBarBehavior.floating,
           ),

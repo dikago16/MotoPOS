@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "903901990201-hmiquauslt9tgdh0ia4kahf0obaebrh9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dxbytes.motopos",
+            "certificate_hash": "d5032762174b24f6a37975f50cccde5e8257c194"
+          }
+        },
+        {
           "client_id": "903901990201-j4660epcg3rjhj449h9acpo73d5dalh9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

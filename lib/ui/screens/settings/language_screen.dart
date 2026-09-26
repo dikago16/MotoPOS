@@ -103,7 +103,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text('OK'),
+            child: Text(AppLocalizations.get('ok')),
           ),
         ],
       ),
