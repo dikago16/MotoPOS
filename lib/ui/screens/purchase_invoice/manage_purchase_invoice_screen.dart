@@ -151,8 +151,8 @@ class _ManagePurchaseInvoiceScreenState
       if (_searchQuery.isNotEmpty) {
         final query = _searchQuery.toLowerCase();
         matchesSearch =
-            invoice.invoiceCode.toLowerCase().contains(query) ||
-            invoice.supplierName.toLowerCase().contains(query);
+            invoice.invoiceCode.toLowerCase().startsWith(query) ||
+            invoice.supplierName.toLowerCase().startsWith(query);
       }
       bool matchesDate = true;
       if (_selectedDate != null) {

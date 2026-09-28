@@ -91,66 +91,69 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () => _showWhatsAppDialog(),
-                  borderRadius: BorderRadius.circular(8),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons
-                          .chat, // We use a standard chat icon or something similar for WA
-                      color: Color(0xFF25D366), // WhatsApp color
-                      size: 20,
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    CustomerModel? customer;
-                    if (widget.transaction.customerId != null) {
-                      final customers = await context
-                          .read<DatabaseService>()
-                          .getCustomers();
-                      customer = customers
-                          .where((c) => c.id == widget.transaction.customerId)
-                          .firstOrNull;
-                    }
-                    if (context.mounted) {
-                      context.read<SellingProvider>().loadTransactionForEdit(
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onSelected: (value) async {
+              if (value == 'edit') {
+                CustomerModel? customer;
+                if (widget.transaction.customerId != null) {
+                  final customers =
+                      await context.read<DatabaseService>().getCustomers();
+                  customer = customers
+                      .where((c) => c.id == widget.transaction.customerId)
+                      .firstOrNull;
+                }
+                if (context.mounted) {
+                  context.read<SellingProvider>().loadTransactionForEdit(
                         widget.transaction,
                         _items,
                         customer,
                       );
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    }
-                  },
-                  borderRadius: BorderRadius.circular(8),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.edit, color: Color(0xFF3B82F6), size: 20),
-                  ),
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              } else if (value == 'print') {
+                if (isPrinterConnected) {
+                  _showPrintConfirmationDialog(printerProvider);
+                }
+              } else if (value == 'wa') {
+                _showWhatsAppDialog();
+              } else if (value == 'delete') {
+                _confirmDeleteTransaction();
+              }
+            },
+            itemBuilder: (context) {
+              String formatLabel(String text) {
+                if (text.isEmpty) return text;
+                return text[0].toUpperCase() + text.substring(1).toLowerCase();
+              }
+              return [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Text(formatLabel(AppLocalizations.get('edit'))),
                 ),
-                InkWell(
-                  onTap: isPrinterConnected
-                      ? () => _showPrintConfirmationDialog(printerProvider)
-                      : null,
-                  borderRadius: BorderRadius.circular(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.print,
-                      color: isPrinterConnected
-                          ? const Color(0xFF16A34A)
-                          : const Color(0xFFDC2626),
-                      size: 20,
+                PopupMenuItem(
+                  value: 'print',
+                  enabled: isPrinterConnected,
+                  child: Text(
+                    formatLabel(AppLocalizations.get('print')),
+                    style: TextStyle(
+                      color: isPrinterConnected ? AppColors.txtHigh : AppColors.txtLow,
                     ),
                   ),
                 ),
-              ],
+                PopupMenuItem(
+                  value: 'wa',
+                  child: Text('Send WA'),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Text(formatLabel(AppLocalizations.get('delete'))),
+                ),
+              ];
+            },
+            color: AppColors.bgCard,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ],
@@ -412,6 +415,67 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
       child: Text(label, style: _kColHeader),
     ),
   );
+
+  void _confirmDeleteTransaction() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.bgCard,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 24),
+            const SizedBox(width: 8),
+            Text(
+              AppLocalizations.get('delete') ,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.txtHigh,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          AppLocalizations.get('delete_confirm_msg') ,
+          style: const TextStyle(fontSize: 13, color: AppColors.txtMid),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              AppLocalizations.get('cancel'),
+              style: const TextStyle(
+                color: AppColors.txtLow,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await context.read<DatabaseService>().deleteTransaction(widget.transaction.id!);
+              if (mounted) {
+                Navigator.pop(context, true); // Pop out of detail screen and return true to refresh
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: Text(
+              AppLocalizations.get('delete') ,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showPrintConfirmationDialog(PrinterProvider printerProvider) {
     showDialog(

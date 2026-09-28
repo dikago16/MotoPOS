@@ -151,10 +151,10 @@ class _CustomerSelectionBottomSheetState
       final lowerQuery = query.toLowerCase();
       setState(() {
         _filteredCustomers = _allCustomers.where((c) {
-          return c.name.toLowerCase().contains(lowerQuery) ||
-              c.customerCode.toLowerCase().contains(lowerQuery) ||
-              c.phone.toLowerCase().contains(lowerQuery) ||
-              c.vehicleNo.toLowerCase().contains(lowerQuery);
+          return c.name.toLowerCase().startsWith(lowerQuery) ||
+              c.customerCode.toLowerCase().startsWith(lowerQuery) ||
+              c.phone.toLowerCase().startsWith(lowerQuery) ||
+              c.vehicleNo.toLowerCase().startsWith(lowerQuery);
         }).toList();
       });
     }

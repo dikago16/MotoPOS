@@ -362,8 +362,8 @@ class DatabaseService {
       final List<Map<String, dynamic>> maps = await dbClient.query(
         _tableName,
         where: 'itemName LIKE ? ESCAPE \'\\\' OR itemCode LIKE ? ESCAPE \'\\\'',
-        whereArgs: ['%$sanitizedQuery%', '%$sanitizedQuery%'],
-        limit: 20, // Batasi hasil pencarian agar performa UI tetap ringan
+        whereArgs: ['$sanitizedQuery%', '$sanitizedQuery%'],
+        limit: 100, // Batasi hasil pencarian agar performa UI tetap ringan
       );
       return List.generate(maps.length, (i) {
         return Product.fromMap(maps[i]);
@@ -530,6 +530,27 @@ class DatabaseService {
       });
     } catch (e) {
       debugPrint('DatabaseService error in updateTransaction: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteTransaction(int transactionId) async {
+    try {
+      final dbClient = await db;
+      await dbClient.transaction((txn) async {
+        await txn.delete(
+          _transactionTable,
+          where: 'id = ?',
+          whereArgs: [transactionId],
+        );
+        await txn.delete(
+          _transactionItemsTable,
+          where: 'transactionId = ?',
+          whereArgs: [transactionId],
+        );
+      });
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteTransaction: $e');
       rethrow;
     }
   }

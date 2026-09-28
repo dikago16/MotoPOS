@@ -48,7 +48,7 @@ class _ManageCategoryScreenState extends State<ManageCategoryScreen> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _categories = _allCategories.where((category) {
-        return category.categoryName.toLowerCase().contains(query);
+        return category.categoryName.toLowerCase().startsWith(query);
       }).toList();
     });
   }

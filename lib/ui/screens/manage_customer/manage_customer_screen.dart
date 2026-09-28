@@ -111,9 +111,9 @@ class _ManageCustomerScreenState extends State<ManageCustomerScreen> {
     final filteredCustomers = _allCustomers.where((cust) {
       if (_searchQuery.isEmpty) return true;
       final q = _searchQuery.toLowerCase();
-      return cust.name.toLowerCase().contains(q) ||
-          cust.vehicleNo.toLowerCase().contains(q) ||
-          cust.customerCode.toLowerCase().contains(q);
+      return cust.name.toLowerCase().startsWith(q) ||
+          cust.vehicleNo.toLowerCase().startsWith(q) ||
+          cust.customerCode.toLowerCase().startsWith(q);
     }).toList();
 
     return Scaffold(

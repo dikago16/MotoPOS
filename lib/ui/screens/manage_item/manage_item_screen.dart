@@ -49,8 +49,8 @@ class _ManageItemScreenState extends State<ManageItemScreen> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _products = _allProducts.where((product) {
-        return product.itemName.toLowerCase().contains(query) ||
-               product.itemCode.toLowerCase().contains(query);
+        return product.itemName.toLowerCase().startsWith(query) ||
+               product.itemCode.toLowerCase().startsWith(query);
       }).toList();
     });
   }

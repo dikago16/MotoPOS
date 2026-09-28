@@ -151,8 +151,8 @@ class PurchaseInvoiceAddItemsView extends StatelessWidget {
                   }
                   final query = textEditingValue.text.toLowerCase();
                   return products.where((Product product) {
-                    return product.itemName.toLowerCase().contains(query) ||
-                        product.itemCode.toLowerCase().contains(query);
+                    return product.itemName.toLowerCase().startsWith(query) ||
+                        product.itemCode.toLowerCase().startsWith(query);
                   });
                 },
                 displayStringForOption: (Product option) =>

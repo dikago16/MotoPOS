@@ -48,8 +48,8 @@ class _ManageSupplierScreenState extends State<ManageSupplierScreen> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _suppliers = _allSuppliers.where((supplier) {
-        return supplier.supplierName.toLowerCase().contains(query) ||
-               supplier.phone.toLowerCase().contains(query);
+        return supplier.supplierName.toLowerCase().startsWith(query) ||
+               supplier.phone.toLowerCase().startsWith(query);
       }).toList();
     });
   }

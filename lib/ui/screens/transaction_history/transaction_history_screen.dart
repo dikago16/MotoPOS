@@ -157,7 +157,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
       bool matchesSearch = true;
       if (_searchQuery.isNotEmpty) {
         final query = _searchQuery.toLowerCase();
-        matchesSearch = (txn.vehicleNo?.toLowerCase() ?? '').contains(query);
+        matchesSearch = (txn.vehicleNo?.toLowerCase() ?? '').startsWith(query);
       }
       bool matchesDate = true;
       if (_selectedDate != null) {
@@ -396,8 +396,8 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                 final txn = filteredTransactions[index];
                 final date = DateTime.parse(txn.transactionDate);
                 return InkWell(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final shouldRefresh = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => TransactionDetailScreen(
@@ -405,6 +405,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                         ),
                       ),
                     );
+                    if (shouldRefresh == true && mounted) {
+                      _fetchTransactions();
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
