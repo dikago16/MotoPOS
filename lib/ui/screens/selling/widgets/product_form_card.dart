@@ -92,7 +92,7 @@ class _ProductFormCardState extends State<ProductFormCard> {
                           : option.itemName,
                       onSelected: (Product selection) {
                         final provider = context.read<SellingProvider>();
-                        provider.addItem(
+                        final added = provider.addItem(
                           SaleItemModel(
                             id: selection.id.toString(),
                             name: selection.itemName.isEmpty
@@ -101,8 +101,22 @@ class _ProductFormCardState extends State<ProductFormCard> {
                             category: selection.category,
                             price: selection.sellingPrice,
                             quantity: 1,
+                            isCountStock: selection.isCountStock,
+                            stockQty: selection.stockQty,
+                            originalPrice: selection.sellingPrice,
                           ),
                         );
+                        if (!added && selection.isCountStock) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '${AppLocalizations.get('stock_insufficient')}: ${selection.itemName} (Maks: ${selection.stockQty})',
+                              ),
+                              backgroundColor: AppColors.red,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
                         Future.delayed(Duration.zero, () {
                           _autoCompleteController?.clear();
                         });

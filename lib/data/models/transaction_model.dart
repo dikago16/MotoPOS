@@ -7,6 +7,8 @@ class TransactionModel {
   final String? vehicleNo;
   final int? customerId;
   final String? customerName;
+  final int? cashierId;
+  final String? cashierName;
 
   TransactionModel({
     this.id,
@@ -17,6 +19,8 @@ class TransactionModel {
     this.vehicleNo,
     this.customerId,
     this.customerName,
+    this.cashierId,
+    this.cashierName,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +33,8 @@ class TransactionModel {
       'vehicleNo': vehicleNo,
       'customerId': customerId,
       'customerName': customerName,
+      'cashierId': cashierId,
+      'cashierName': cashierName,
     };
   }
 
@@ -42,6 +48,8 @@ class TransactionModel {
       vehicleNo: map['vehicleNo'],
       customerId: map['customerId']?.toInt(),
       customerName: map['customerName'],
+      cashierId: map['cashierId']?.toInt(),
+      cashierName: map['cashierName'],
     );
   }
 }

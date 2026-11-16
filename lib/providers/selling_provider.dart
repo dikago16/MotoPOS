@@ -27,14 +27,37 @@ class SellingProvider with ChangeNotifier {
     return change > 0 ? change : 0.0;
   }
 
-  void addItem(SaleItemModel item) {
+  int get totalQuantity {
+    return _items.fold(0, (sum, item) => sum + item.quantity);
+  }
+
+  /// Whether any items in cart have invalid quantity (<= 0) or invalid price (< 0)
+  bool get hasInvalidItems {
+    return _items.isEmpty ||
+        _items.any((item) => item.quantity <= 0 || item.price < 0);
+  }
+
+  /// Add item to cart with stock validation.
+  /// Returns `true` if added successfully, `false` if stock is exceeded.
+  bool addItem(SaleItemModel item) {
+    if (item.quantity <= 0) return false;
+
     final existingIndex = _items.indexWhere((element) => element.id == item.id);
     if (existingIndex != -1) {
-      _items[existingIndex].quantity += item.quantity;
+      final existing = _items[existingIndex];
+      final targetQty = existing.quantity + item.quantity;
+      if (item.isCountStock && targetQty > item.stockQty) {
+        return false;
+      }
+      existing.quantity = targetQty;
     } else {
+      if (item.isCountStock && item.quantity > item.stockQty) {
+        return false;
+      }
       _items.add(item);
     }
     notifyListeners();
+    return true;
   }
 
   void removeItem(SaleItemModel item) {
@@ -42,10 +65,32 @@ class SellingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateQuantity(SaleItemModel item, int newQuantity) {
+  /// Update item quantity with >= 1 and stock limit enforcement.
+  /// Returns `true` if valid, `false` otherwise.
+  bool updateQuantity(SaleItemModel item, int newQuantity) {
+    if (newQuantity <= 0) return false;
+
     final existingIndex = _items.indexWhere((element) => element.id == item.id);
     if (existingIndex != -1) {
+      if (item.isCountStock && newQuantity > item.stockQty) {
+        return false;
+      }
       _items[existingIndex].quantity = newQuantity;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
+  /// Supervisor Price Override: update unit price when authorized by Owner PIN
+  void updateItemPrice(SaleItemModel item, double newPrice) {
+    if (newPrice < 0) return;
+
+    final existingIndex = _items.indexWhere((element) => element.id == item.id);
+    if (existingIndex != -1) {
+      final existing = _items[existingIndex];
+      existing.price = newPrice;
+      existing.isPriceOverridden = (newPrice != existing.originalPrice);
       notifyListeners();
     }
   }
@@ -55,21 +100,27 @@ class SellingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-  void loadTransactionForEdit(TransactionModel txn, List<TransactionItemModel> txnItems, CustomerModel? customer) {
+  void loadTransactionForEdit(
+    TransactionModel txn,
+    List<TransactionItemModel> txnItems,
+    CustomerModel? customer,
+  ) {
     _editingTransactionId = txn.id;
     _editingTransaction = txn;
     _selectedCustomer = customer;
     _cash = txn.cashAmount;
     _items.clear();
     for (var ti in txnItems) {
-      _items.add(SaleItemModel(
-        id: ti.id?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
-        name: ti.itemName,
-        category: ti.category,
-        price: ti.price,
-        quantity: ti.quantity,
-      ));
+      _items.add(
+        SaleItemModel(
+          id: ti.id?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
+          name: ti.itemName,
+          category: ti.category,
+          price: ti.price,
+          quantity: ti.quantity,
+          originalPrice: ti.price,
+        ),
+      );
     }
     notifyListeners();
   }

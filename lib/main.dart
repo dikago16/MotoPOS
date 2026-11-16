@@ -11,6 +11,7 @@ import 'firebase_options.dart';
 import 'providers/selling_provider.dart';
 import 'providers/printer_provider.dart';
 import 'providers/circuits_provider.dart';
+import 'providers/auth_provider.dart';
 import 'core/constants/app_colors.dart';
 import 'ui/screens/splash/splash_screen.dart';
 import 'core/services/app_localizations.dart';
@@ -45,6 +46,10 @@ void main() async {
     MultiProvider(
       providers: [
         Provider<DatabaseService>(create: (_) => DatabaseService()),
+        ChangeNotifierProxyProvider<DatabaseService, AuthProvider>(
+          create: (context) => AuthProvider(context.read<DatabaseService>())..init(),
+          update: (_, db, prev) => prev ?? (AuthProvider(db)..init()),
+        ),
         ChangeNotifierProvider(create: (_) => SellingProvider()),
         ChangeNotifierProxyProvider<DatabaseService, PrinterProvider>(
           create: (context) => PrinterProvider(context.read<DatabaseService>()),

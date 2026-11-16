@@ -10,7 +10,9 @@ import '../../../providers/selling_provider.dart';
 import '../../../data/models/customer_model.dart';
 import '../../../core/services/app_localizations.dart';
 import '../../widgets/app_loading.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_share_plus/whatsapp_share_plus.dart';
+import '../../../services/receipt_image_service.dart';
+import '../../widgets/security_pin_dialog.dart';
 
 // ─── Enterprise Design Tokens ─────────────────────────────────────────────────
 
@@ -95,6 +97,12 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             icon: const Icon(Icons.more_vert, color: Colors.white),
             onSelected: (value) async {
               if (value == 'edit') {
+                final verified = await SecurityPinDialog.verify(
+                  context,
+                  reason: AppLocalizations.get('security_pin_reason_edit_txn'),
+                );
+                if (!verified || !context.mounted) return;
+
                 CustomerModel? customer;
                 if (widget.transaction.customerId != null) {
                   final customers =
@@ -116,8 +124,14 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   _showPrintConfirmationDialog(printerProvider);
                 }
               } else if (value == 'wa') {
-                _showWhatsAppDialog();
+                _showWhatsAppChooser();
               } else if (value == 'delete') {
+                final verified = await SecurityPinDialog.verify(
+                  context,
+                  reason: AppLocalizations.get('security_pin_reason_delete_txn'),
+                );
+                if (!verified || !context.mounted) return;
+
                 _confirmDeleteTransaction();
               }
             },
@@ -222,6 +236,18 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                       color: AppColors.txtMid,
                     ),
                   ),
+                  if (widget.transaction.cashierName != null &&
+                      widget.transaction.cashierName!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      '${AppLocalizations.get('role_cashier')}: ${widget.transaction.cashierName}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.accent,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ],
@@ -564,29 +590,33 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     );
   }
 
-  void _showWhatsAppDialog() {
-    final TextEditingController phoneController = TextEditingController();
-
+  void _showWhatsAppChooser() {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.bgCard,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+        contentPadding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: const Color(0xFF25D366).withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.chat, color: Color(0xFF25D366), size: 20),
+              child: const Icon(
+                Icons.share_rounded,
+                color: Color(0xFF25D366),
+                size: 22,
+              ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Text(
-              AppLocalizations.get('whatsapp_receipt'),
+              AppLocalizations.get('send_via'),
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: AppColors.txtHigh,
               ),
@@ -595,132 +625,178 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              AppLocalizations.get('enter_destination_number'),
-              style: TextStyle(fontSize: 13, color: AppColors.txtMid),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              style: const TextStyle(color: AppColors.txtHigh),
-              decoration: InputDecoration(
-                hintText: '08xxxxxxxx',
-                hintStyle: const TextStyle(color: AppColors.txtLow),
-                filled: true,
-                fillColor: AppColors.bgPage,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+            ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              leading: Container(
+                width: 42,
+                height: 42,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF25D366),
+                  shape: BoxShape.circle,
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
+                child: const Icon(
+                  Icons.chat_bubble_rounded,
+                  color: Colors.white,
+                  size: 22,
                 ),
               ),
+              title: const Text(
+                'WhatsApp',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.txtHigh,
+                ),
+              ),
+              subtitle: Text(
+                AppLocalizations.get('send_wa_subtitle'),
+                style: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                _shareReceiptImage(WhatsAppTarget.standard);
+              },
+            ),
+            const SizedBox(height: 6),
+            ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              leading: Container(
+                width: 42,
+                height: 42,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF128C7E),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Text(
+                    'B',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+              ),
+              title: const Text(
+                'WhatsApp Business',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.txtHigh,
+                ),
+              ),
+              subtitle: Text(
+                AppLocalizations.get('send_wa_business_subtitle'),
+                style: const TextStyle(fontSize: 12, color: AppColors.txtMid),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                _shareReceiptImage(WhatsAppTarget.business);
+              },
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              AppLocalizations.get('cancel'),
-              style: const TextStyle(
-                color: AppColors.txtLow,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pop(ctx);
-              _sendWhatsApp(phoneController.text.trim());
-            },
-            icon: const Icon(Icons.send, size: 16),
-            label: Text(
-              AppLocalizations.get('send'),
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF25D366),
-              foregroundColor: Colors.white,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
 
-  Future<void> _sendWhatsApp(String phoneNumber) async {
-    if (phoneNumber.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.get('phone_cannot_be_empty')),
-          backgroundColor: Colors.red,
+  Future<void> _shareReceiptImage(WhatsAppTarget target) async {
+    final navigator = Navigator.of(context, rootNavigator: true);
+    var dialogClosed = false;
+
+    void closeLoading() {
+      if (!dialogClosed) {
+        dialogClosed = true;
+        navigator.pop();
+      }
+    }
+
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          backgroundColor: AppColors.bgCard,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          content: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Color(0xFF25D366),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.get('generating_receipt'),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.txtHigh,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      );
-      return;
-    }
-
-    // Simple sanitization
-    phoneNumber = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
-    if (phoneNumber.startsWith('0')) {
-      phoneNumber = '62${phoneNumber.substring(1)}';
-    }
-
-    final message = _generateReceiptText();
-    final url = Uri.parse(
-      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+      ),
     );
 
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+    try {
+      final dbService = context.read<DatabaseService>();
+      final storeInfo = await dbService.getStoreInfo();
+
+      final imagePath = await ReceiptImageService.generateReceiptFile(
+        transaction: widget.transaction,
+        items: _items,
+        storeInfo: storeInfo,
+      );
+
+      closeLoading();
+
+      await WhatsAppShare.share(
+        files: [
+          ShareFile.fromPath(imagePath, mimeType: 'image/png'),
+        ],
+        target: target,
+      );
+    } catch (e) {
+      closeLoading();
+
+      String errorMsg = e.toString();
+      if (e is WhatsAppNotInstalledException) {
+        errorMsg = target == WhatsAppTarget.business
+            ? AppLocalizations.get('whatsapp_business_not_installed')
+            : AppLocalizations.get('whatsapp_not_installed');
+      }
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.get('could_not_launch_whatsapp')),
+            content: Text(errorMsg),
             backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
     }
-  }
-
-  String _generateReceiptText() {
-    final date = DateTime.parse(widget.transaction.transactionDate);
-    final dateStr = DateFormat('dd MMM yyyy HH:mm').format(date);
-
-    final StringBuffer sb = StringBuffer();
-    sb.writeln(AppLocalizations.get('receipt_title'));
-    sb.writeln('${AppLocalizations.get('txn')}: #${widget.transaction.id}');
-    sb.writeln('${AppLocalizations.get('date')}: $dateStr');
-    if (widget.transaction.vehicleNo != null &&
-        widget.transaction.vehicleNo!.isNotEmpty) {
-      sb.writeln('${AppLocalizations.get('receipt_vehicle')} ${widget.transaction.vehicleNo}');
-    }
-    sb.writeln('--------------------------------');
-
-    for (var item in _items) {
-      sb.writeln(item.itemName);
-      sb.writeln(
-        '${item.quantity} x ${_formatRupiah(item.price)} = ${_formatRupiah(item.subtotal)}',
-      );
-    }
-    sb.writeln('--------------------------------');
-    sb.writeln('${AppLocalizations.get('total_amount')}: ${_formatRupiah(widget.transaction.totalAmount)}');
-    sb.writeln('${AppLocalizations.get('cash_amount')}: ${_formatRupiah(widget.transaction.cashAmount)}');
-    sb.writeln('${AppLocalizations.get('change_amount')}: ${_formatRupiah(widget.transaction.changeAmount)}');
-
-    sb.writeln(AppLocalizations.get('thank_you_shopping'));
-
-    return sb.toString();
   }
 }

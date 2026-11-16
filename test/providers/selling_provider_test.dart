@@ -126,5 +126,73 @@ void main() {
       expect(sellingProvider.totalAmount, 0.0);
       expect(sellingProvider.changeAmount, 0.0);
     });
+
+    test('Quantity update must reject zero and negative values', () {
+      final item = SaleItemModel(id: '1', name: 'Kampas Rem', price: 35000, quantity: 2);
+      sellingProvider.addItem(item);
+
+      expect(sellingProvider.updateQuantity(item, 0), isFalse);
+      expect(sellingProvider.items.first.quantity, 2);
+
+      expect(sellingProvider.updateQuantity(item, -3), isFalse);
+      expect(sellingProvider.items.first.quantity, 2);
+
+      expect(sellingProvider.updateQuantity(item, 4), isTrue);
+      expect(sellingProvider.items.first.quantity, 4);
+      expect(sellingProvider.totalAmount, 140000.0);
+    });
+
+    test('Stock limit is enforced when isCountStock is true', () {
+      final stockItem = SaleItemModel(
+        id: '2',
+        name: 'Aki Motor',
+        price: 250000,
+        quantity: 1,
+        isCountStock: true,
+        stockQty: 2,
+      );
+
+      // Adding 1 should succeed
+      expect(sellingProvider.addItem(stockItem), isTrue);
+      expect(sellingProvider.items.first.quantity, 1);
+
+      // Adding 1 more should succeed (total 2 = maxStock)
+      expect(sellingProvider.addItem(SaleItemModel(
+        id: '2',
+        name: 'Aki Motor',
+        price: 250000,
+        quantity: 1,
+        isCountStock: true,
+        stockQty: 2,
+      )), isTrue);
+      expect(sellingProvider.items.first.quantity, 2);
+
+      // Adding another should fail because stock is 2
+      expect(sellingProvider.addItem(SaleItemModel(
+        id: '2',
+        name: 'Aki Motor',
+        price: 250000,
+        quantity: 1,
+        isCountStock: true,
+        stockQty: 2,
+      )), isFalse);
+      expect(sellingProvider.items.first.quantity, 2);
+
+      // Updating quantity beyond stock should fail
+      expect(sellingProvider.updateQuantity(stockItem, 5), isFalse);
+      expect(sellingProvider.items.first.quantity, 2);
+    });
+
+    test('Supervisor price override updates unit price and recalculates total', () {
+      final item = SaleItemModel(id: '3', name: 'Jasa Servis Karbu', price: 40000, quantity: 2);
+      sellingProvider.addItem(item);
+      expect(sellingProvider.totalAmount, 80000.0);
+
+      // Owner overrides price to Rp 35.000 (diskon langganan)
+      sellingProvider.updateItemPrice(item, 35000);
+      expect(sellingProvider.items.first.price, 35000.0);
+      expect(sellingProvider.items.first.isPriceOverridden, isTrue);
+      expect(sellingProvider.totalAmount, 70000.0);
+    });
   });
 }

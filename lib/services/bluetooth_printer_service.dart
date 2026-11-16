@@ -57,7 +57,7 @@ class BluetoothPrinterService {
     final dateTime =
         DateTime.tryParse(transaction.transactionDate) ?? DateTime.now();
     final dateStr = DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
-    const cashier = 'Admin';
+    final cashier = transaction.cashierName ?? 'Admin';
     bytes.addAll(_textToBytes(_twoColumn(dateStr, cashier)));
     bytes.addAll(_cmdNewLine);
 

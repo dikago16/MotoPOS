@@ -462,6 +462,12 @@ class AppLocalizations {
     'whatsapp_receipt': 'WhatsApp Receipt',
     'enter_destination_number': 'Enter destination number (use country code, e.g. 62812...):',
     'send': 'Send',
+    'send_via': 'Send Via',
+    'send_wa_subtitle': 'Send receipt image via WhatsApp',
+    'send_wa_business_subtitle': 'Send receipt image via WhatsApp Business',
+    'whatsapp_not_installed': 'WhatsApp is not installed on this device',
+    'whatsapp_business_not_installed': 'WhatsApp Business is not installed on this device',
+    'generating_receipt': 'Preparing receipt image...',
     'failed_to_open_update': 'Failed to open update link',
     'eg_phone': 'e.g. 081234567890',
     'eg_vehicle_no': 'e.g. B 1234 ABC',
@@ -470,6 +476,86 @@ class AppLocalizations {
     'receipt_title': 'MotoPOS Receipt',
     'receipt_vehicle': 'Vehicle: ',
     'thank_you_shopping': '\nThank you for shopping!',
+
+    // ── Security PIN ──
+    'security_pin': 'Security PIN',
+    'security_pin_desc': 'Protect prices, reports, and store settings',
+    'security_pin_title': 'Owner Authorization',
+    'security_pin_enter': 'Enter Owner PIN',
+    'security_pin_incorrect': 'Incorrect PIN. Please try again.',
+    'security_pin_set_title': 'Set Owner Security PIN',
+    'security_pin_set_desc':
+        'Create a 4-6 digit Owner PIN to prevent staff or cashiers from altering prices, deleting sales, or accessing reports.',
+    'security_pin_new': 'New PIN (4-6 digits)',
+    'security_pin_confirm': 'Confirm New PIN',
+    'security_pin_mismatch': 'PIN confirmation does not match',
+    'security_pin_min_digits': 'PIN must be between 4 and 6 digits',
+    'security_pin_saved': 'Security PIN set successfully!',
+    'security_pin_disabled': 'Security PIN has been disabled',
+    'security_pin_changed': 'Security PIN updated successfully!',
+    'security_pin_change': 'Change PIN',
+    'security_pin_disable': 'Disable PIN',
+    'security_pin_old': 'Current PIN',
+    'security_pin_forgot': 'Forgot PIN?',
+    'security_pin_recovery_title': 'Reset Security PIN',
+    'security_pin_recovery_desc':
+        'Enter your License Key or registered Store Phone to reset your PIN.',
+    'security_pin_recovery_hint': 'License Key or Store Phone',
+    'security_pin_recovery_invalid':
+        'Verification failed. License key or phone number does not match.',
+    'security_pin_recovery_success':
+        'Identity verified! Please set a new Security PIN.',
+    'security_pin_status_active': 'Security PIN is Active',
+    'security_pin_status_active_desc':
+        'Master prices, purchase invoices, daily reports, and transaction deletions are secured.',
+    'security_pin_status_inactive': 'Security PIN is Inactive',
+    'security_pin_status_inactive_desc':
+        'Anyone using this device can alter item prices and view store revenue. Set a PIN to secure your workshop.',
+    'security_pin_enable_btn': 'ENABLE SECURITY PIN',
+    'security_pin_reason_manage_item': 'Authorize item & price management',
+    'security_pin_reason_category': 'Authorize category management',
+    'security_pin_reason_supplier': 'Authorize supplier management',
+    'security_pin_reason_purchase_invoice': 'Authorize purchase invoices & cost data',
+    'security_pin_reason_daily_report': 'Authorize revenue & sales report',
+    'security_pin_reason_settings': 'Authorize store settings & backups',
+    'security_pin_reason_edit_txn': 'Authorize transaction modification',
+    'security_pin_reason_delete_txn': 'Authorize transaction deletion',
+
+    // ── Cart & Price Lock ──
+    'price_locked': 'Price Locked',
+    'price_locked_desc':
+        'Unit price is set from the master product catalog. Only the Owner can authorize custom pricing.',
+    'override_price': 'Override Price (Owner Only)',
+    'override_price_title': 'Supervisor Price Override',
+    'override_price_desc':
+        'Set a custom unit price for this item on this transaction only.',
+    'override_price_reason': 'Authorize custom unit price for',
+    'custom_price_applied': 'Custom price applied successfully',
+    'qty_min_one': 'Quantity must be at least 1',
+    'stock_exceeded': 'Quantity exceeds available stock',
+    'stock_insufficient': 'Insufficient stock',
+    'invalid_cart_items':
+        'Cannot checkout: cart contains invalid quantities or prices',
+    'special_price_tag': 'Special',
+
+    // ── Multi-User & Staff ──
+    'manage_users': 'Manage Staff & Cashiers',
+    'manage_users_desc': 'Manage cashier accounts, roles, and PINs',
+    'role_owner': 'Owner',
+    'role_cashier': 'Cashier',
+    'switch_user': 'Switch Cashier',
+    'active_cashier': 'Active Cashier',
+    'add_user': 'Add Staff Member',
+    'edit_user': 'Edit Staff Member',
+    'delete_user': 'Delete Staff Member',
+    'staff_name': 'Staff Name',
+    'staff_pin': 'Staff PIN (4-6 digits)',
+    'staff_role': 'Role',
+    'user_saved': 'Staff account saved successfully!',
+    'user_deleted': 'Staff account deleted!',
+    'cannot_delete_only_owner': 'Cannot delete the only Owner account',
+    'login_as': 'Logged in as',
+    'enter_staff_pin': 'Enter PIN for',
   };
 
   // ─── Indonesian Translations ───────────────────────────────────────────────
@@ -916,6 +1002,12 @@ class AppLocalizations {
     'whatsapp_receipt': 'WhatsApp Nota',
     'enter_destination_number': 'Masukkan nomor tujuan (gunakan kode negara, misal: 62812...):',
     'send': 'Kirim',
+    'send_via': 'Send Via',
+    'send_wa_subtitle': 'Kirim gambar nota via WhatsApp',
+    'send_wa_business_subtitle': 'Kirim gambar nota via WhatsApp Business',
+    'whatsapp_not_installed': 'WhatsApp belum terpasang di perangkat ini',
+    'whatsapp_business_not_installed': 'WhatsApp Business belum terpasang di perangkat ini',
+    'generating_receipt': 'Menyiapkan gambar nota...',
     'failed_to_open_update': 'Gagal membuka tautan pembaruan',
     'eg_phone': 'Cth: 081234567890',
     'eg_vehicle_no': 'Cth: B 1234 ABC',
@@ -924,5 +1016,85 @@ class AppLocalizations {
     'receipt_title': 'MotoPOS Receipt',
     'receipt_vehicle': 'Kendaraan: ',
     'thank_you_shopping': '\nTerima kasih telah berbelanja!',
+
+    // ── Security PIN ──
+    'security_pin': 'PIN Keamanan',
+    'security_pin_desc': 'Lindungi harga, laporan, dan pengaturan toko',
+    'security_pin_title': 'Otorisasi Pemilik',
+    'security_pin_enter': 'Masukkan PIN Pemilik',
+    'security_pin_incorrect': 'PIN salah. Silakan coba lagi.',
+    'security_pin_set_title': 'Atur PIN Keamanan Pemilik',
+    'security_pin_set_desc':
+        'Buat 4-6 digit PIN Pemilik untuk mencegah kasir/karyawan mengubah harga, menghapus transaksi, atau melihat omset.',
+    'security_pin_new': 'PIN Baru (4-6 digit)',
+    'security_pin_confirm': 'Konfirmasi PIN Baru',
+    'security_pin_mismatch': 'Konfirmasi PIN tidak cocok',
+    'security_pin_min_digits': 'PIN harus berisi 4 hingga 6 digit angka',
+    'security_pin_saved': 'PIN Keamanan berhasil disimpan!',
+    'security_pin_disabled': 'PIN Keamanan dinonaktifkan',
+    'security_pin_changed': 'PIN Keamanan berhasil diubah!',
+    'security_pin_change': 'Ubah PIN',
+    'security_pin_disable': 'Nonaktifkan PIN',
+    'security_pin_old': 'PIN Saat Ini',
+    'security_pin_forgot': 'Lupa PIN?',
+    'security_pin_recovery_title': 'Reset PIN Keamanan',
+    'security_pin_recovery_desc':
+        'Masukkan Kunci Lisensi atau Nomor Telepon Toko terdaftar untuk mereset PIN Anda.',
+    'security_pin_recovery_hint': 'Kunci Lisensi atau No. HP Toko',
+    'security_pin_recovery_invalid':
+        'Verifikasi gagal. Kunci lisensi atau nomor HP tidak cocok.',
+    'security_pin_recovery_success':
+        'Identitas terverifikasi! Silakan atur PIN Keamanan baru.',
+    'security_pin_status_active': 'PIN Keamanan Aktif',
+    'security_pin_status_active_desc':
+        'Master harga barang, faktur pembelian modal, laporan omset, dan hapus transaksi terlindungi.',
+    'security_pin_status_inactive': 'PIN Keamanan Belum Aktif',
+    'security_pin_status_inactive_desc':
+        'Siapapun yang memegang perangkat ini bisa mengubah harga dan melihat omset. Buat PIN untuk mengamankan bengkel Anda.',
+    'security_pin_enable_btn': 'AKTIFKAN PIN KEAMANAN',
+    'security_pin_reason_manage_item': 'Otorisasi kelola barang & ubah harga',
+    'security_pin_reason_category': 'Otorisasi kelola kategori barang',
+    'security_pin_reason_supplier': 'Otorisasi kelola data supplier',
+    'security_pin_reason_purchase_invoice': 'Otorisasi faktur pembelian & data modal',
+    'security_pin_reason_daily_report': 'Otorisasi laporan omset & pendapatan',
+    'security_pin_reason_settings': 'Otorisasi pengaturan toko & pencadangan',
+    'security_pin_reason_edit_txn': 'Otorisasi pengubahan transaksi',
+    'security_pin_reason_delete_txn': 'Otorisasi penghapusan transaksi',
+
+    // ── Cart & Price Lock ──
+    'price_locked': 'Harga Terkunci',
+    'price_locked_desc':
+        'Harga satuan mengacu pada katalog resmi master barang. Hanya Pemilik yang dapat mengubah harga.',
+    'override_price': 'Ubah Harga (Khusus Pemilik)',
+    'override_price_title': 'Otorisasi Harga Khusus',
+    'override_price_desc':
+        'Tetapkan harga satuan khusus untuk item ini pada transaksi ini saja.',
+    'override_price_reason': 'Otorisasi ubah harga khusus untuk',
+    'custom_price_applied': 'Harga khusus berhasil diterapkan',
+    'qty_min_one': 'Jumlah barang minimal 1',
+    'stock_exceeded': 'Jumlah melebihi stok yang tersedia',
+    'stock_insufficient': 'Stok tidak mencukupi',
+    'invalid_cart_items':
+        'Tidak dapat memproses: terdapat jumlah atau harga tidak valid di keranjang',
+    'special_price_tag': 'Khusus',
+
+    // ── Multi-User & Staff ──
+    'manage_users': 'Kelola Karyawan & Kasir',
+    'manage_users_desc': 'Atur akun kasir, peran, dan PIN akses',
+    'role_owner': 'Pemilik',
+    'role_cashier': 'Kasir',
+    'switch_user': 'Ganti Kasir',
+    'active_cashier': 'Kasir Aktif',
+    'add_user': 'Tambah Karyawan Baru',
+    'edit_user': 'Ubah Akun Karyawan',
+    'delete_user': 'Hapus Akun Karyawan',
+    'staff_name': 'Nama Karyawan',
+    'staff_pin': 'PIN Karyawan (4-6 digit)',
+    'staff_role': 'Peran',
+    'user_saved': 'Akun karyawan berhasil disimpan!',
+    'user_deleted': 'Akun karyawan berhasil dihapus!',
+    'cannot_delete_only_owner': 'Tidak dapat menghapus satu-satunya akun Pemilik',
+    'login_as': 'Masuk sebagai',
+    'enter_staff_pin': 'Masukkan PIN untuk',
   };
 }

@@ -4,6 +4,8 @@ import '../../../core/services/app_localizations.dart';
 import 'language_screen.dart';
 import 'license_info_screen.dart';
 import 'my_store_screen.dart';
+import 'security_pin_screen.dart';
+import 'manage_users_screen.dart';
 import 'backup_restore_screen.dart';
 import 'about_screen.dart';
 import 'privacy_policy_screen.dart';
@@ -43,6 +45,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: AppLocalizations.get('my_store'),
               subtitle: AppLocalizations.get('store_information'),
               screen: const MyStoreScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.lock_outline,
+              title: AppLocalizations.get('security_pin'),
+              subtitle: AppLocalizations.get('security_pin_desc'),
+              screen: const SecurityPinScreen(),
+            ),
+            const SizedBox(height: 10),
+            _buildMenuTile(
+              context,
+              icon: Icons.badge_outlined,
+              title: AppLocalizations.get('manage_users'),
+              subtitle: AppLocalizations.get('manage_users_desc'),
+              screen: const ManageUsersScreen(),
             ),
             const SizedBox(height: 10),
             _buildMenuTile(

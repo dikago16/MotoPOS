@@ -11,6 +11,7 @@ import 'models/purchase_invoice_item_model.dart';
 import 'models/customer_model.dart';
 import 'models/note_model.dart';
 import 'models/store_info_model.dart';
+import 'models/user_model.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -22,7 +23,7 @@ class DatabaseService {
   DatabaseService._internal();
 
   Database? _db;
-  static const int _version = 11;
+  static const int _version = 12;
   static const String _tableName = 'products';
   static const String _categoryTable = 'categories';
   static const String _transactionTable = 'transactions';
@@ -33,6 +34,7 @@ class DatabaseService {
   static const String _customerTable = 'customers';
   static const String _notesTable = 'notes';
   static const String _storeInfoTable = 'store_info';
+  static const String _usersTable = 'users';
 
   Future<Database> get db async {
     if (_db != null) return _db!;
@@ -81,7 +83,9 @@ class DatabaseService {
             changeAmount REAL,
             vehicleNo TEXT,
             customerId INTEGER,
-            customerName TEXT
+            customerName TEXT,
+            cashierId INTEGER,
+            cashierName TEXT
           )
           ''');
         await db.execute('''
@@ -152,6 +156,16 @@ class DatabaseService {
             storeName TEXT,
             address TEXT,
             phone TEXT
+          )
+          ''');
+        await db.execute('''
+          CREATE TABLE $_usersTable(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT,
+            pin TEXT,
+            role TEXT,
+            isActive INTEGER DEFAULT 1,
+            createdAt TEXT
           )
           ''');
       },
@@ -274,6 +288,24 @@ class DatabaseService {
               phone TEXT
             )
             ''');
+        }
+        if (oldVersion < 12) {
+          await db.execute('''
+            CREATE TABLE $_usersTable(
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              username TEXT,
+              pin TEXT,
+              role TEXT,
+              isActive INTEGER DEFAULT 1,
+              createdAt TEXT
+            )
+            ''');
+          await db.execute(
+            'ALTER TABLE $_transactionTable ADD COLUMN cashierId INTEGER',
+          );
+          await db.execute(
+            'ALTER TABLE $_transactionTable ADD COLUMN cashierName TEXT',
+          );
         }
       },
     );
@@ -1068,6 +1100,7 @@ class DatabaseService {
       data[_customerTable] = await dbClient.query(_customerTable);
       data[_notesTable] = await dbClient.query(_notesTable);
       data[_storeInfoTable] = await dbClient.query(_storeInfoTable);
+      data[_usersTable] = await dbClient.query(_usersTable);
 
       return data;
     } catch (e) {
@@ -1088,6 +1121,7 @@ class DatabaseService {
       await txn.delete(_customerTable);
       await txn.delete(_notesTable);
       await txn.delete(_storeInfoTable);
+      await txn.delete(_usersTable);
     } catch (e) {
       debugPrint('DatabaseService error in clearAllTables: $e');
       rethrow;
@@ -1110,6 +1144,112 @@ class DatabaseService {
     } catch (e) {
       debugPrint('DatabaseService error in importAllData: $e');
       rethrow;
+    }
+  }
+
+  // --- Users / Staff Management ---
+
+  Future<int> insertUser(UserModel user) async {
+    try {
+      final dbClient = await db;
+      return await dbClient.insert(
+        _usersTable,
+        user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in insertUser: $e');
+      rethrow;
+    }
+  }
+
+  Future<int> updateUser(UserModel user) async {
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        _usersTable,
+        user.toMap(),
+        where: 'id = ?',
+        whereArgs: [user.id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in updateUser: $e');
+      rethrow;
+    }
+  }
+
+  Future<int> deleteUser(int id) async {
+    try {
+      final dbClient = await db;
+      return await dbClient.delete(
+        _usersTable,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      debugPrint('DatabaseService error in deleteUser: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<UserModel>> getUsers() async {
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _usersTable,
+        orderBy: 'id ASC',
+      );
+      return List.generate(maps.length, (i) => UserModel.fromMap(maps[i]));
+    } catch (e) {
+      debugPrint('DatabaseService error in getUsers: $e');
+      return [];
+    }
+  }
+
+  Future<List<UserModel>> getActiveUsers() async {
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _usersTable,
+        where: 'isActive = 1',
+        orderBy: 'role DESC, id ASC',
+      );
+      return List.generate(maps.length, (i) => UserModel.fromMap(maps[i]));
+    } catch (e) {
+      debugPrint('DatabaseService error in getActiveUsers: $e');
+      return [];
+    }
+  }
+
+  Future<UserModel?> getUserById(int id) async {
+    try {
+      final dbClient = await db;
+      final List<Map<String, dynamic>> maps = await dbClient.query(
+        _usersTable,
+        where: 'id = ?',
+        whereArgs: [id],
+        limit: 1,
+      );
+      if (maps.isNotEmpty) {
+        return UserModel.fromMap(maps.first);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('DatabaseService error in getUserById: $e');
+      return null;
+    }
+  }
+
+  Future<int> getUserCount() async {
+    try {
+      final dbClient = await db;
+      final result = await dbClient.rawQuery(
+        'SELECT COUNT(*) as count FROM $_usersTable',
+      );
+      return Sqflite.firstIntValue(result) ?? 0;
+    } catch (e) {
+      debugPrint('DatabaseService error in getUserCount: $e');
+      return 0;
     }
   }
 }

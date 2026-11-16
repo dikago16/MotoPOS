@@ -8,6 +8,7 @@ import '../../../../data/models/transaction_model.dart';
 import '../../../../data/models/transaction_item_model.dart';
 import '../../../../providers/printer_provider.dart';
 import '../../../../providers/selling_provider.dart';
+import '../../../../providers/auth_provider.dart';
 import '../payment_dialog.dart';
 import 'paired_devices_dialog.dart';
 
@@ -282,6 +283,17 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                     onPressed: provider.items.isEmpty
                         ? null
                         : () async {
+                            if (provider.hasInvalidItems) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    AppLocalizations.get('invalid_cart_items'),
+                                  ),
+                                  backgroundColor: AppColors.red,
+                                ),
+                              );
+                              return;
+                            }
                             final result =
                                 await showDialog<Map<String, dynamic>>(
                                   context: context,
@@ -309,6 +321,7 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                 printReceipt,
                               );
 
+                              final auth = context.read<AuthProvider>();
                               final trx = TransactionModel(
                                 transactionDate: DateTime.now()
                                     .toIso8601String(),
@@ -318,6 +331,8 @@ class _SellingBottomBarState extends State<SellingBottomBar> {
                                 vehicleNo: vehicleNo.isEmpty ? null : vehicleNo,
                                 customerId: provider.selectedCustomer?.id,
                                 customerName: provider.selectedCustomer?.name,
+                                cashierId: auth.currentUser?.id,
+                                cashierName: auth.currentUser?.username ?? 'Admin',
                               );
 
                               final items = provider.items
